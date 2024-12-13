@@ -50,8 +50,6 @@ public class PlayerModel : Entity
         _playerKickMask = player.statsPlayerHolder.stats.PlayerKickMask;
 
         _playerCamera = Camera.main;
-        rotationX = player.transform.localRotation.eulerAngles.y;
-        rotationY = player.transform.localRotation.eulerAngles.x;
         _playerRigidbody = player.GetComponent<Rigidbody>();
     }
 
