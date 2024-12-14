@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyController : Entity
 {
@@ -12,15 +11,11 @@ public class EnemyController : Entity
     public bool isDead;
 
     private Rigidbody _enemyRigidBody;
+    private Vector3 _currentVelocity;
 
     void Start()
     {
         _enemyRigidBody = GetComponent<Rigidbody>();
-    }
-
-    void Update()
-    {
-        
     }
 
     public override void TakeDamage(float value)
@@ -60,6 +55,23 @@ public class EnemyController : Entity
 
     private void Reset()
     {
-        print("ENEMY Reset");
+        startHP = statsHolder.stats.StartHP;
+        currentHP = startHP;
+    }
+
+    private void OnEnable()
+    {
+        _enemyRigidBody.constraints = RigidbodyConstraints.None;
+        _enemyRigidBody.velocity = _currentVelocity; 
+        enemyAnimator.speed = 1;
+    }
+
+    private void OnDisable()
+    {
+
+        _currentVelocity = _enemyRigidBody.velocity;
+        _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+        _enemyRigidBody.velocity = Vector3.zero;
+        enemyAnimator.speed = 0;
     }
 }

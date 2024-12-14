@@ -28,4 +28,14 @@ public class Player : MonoBehaviour
     {
         _controller.InputFixedUpdate();
     }
+
+    private void OnEnable()
+    {
+        _view.OnEnablePlayer();
+    }
+
+    private void OnDisable()
+    {
+        _view.OnDisablePlayer();
+    }
 }

@@ -34,7 +34,6 @@ public class PlayerModel : Entity
     public event Action OnPlayerKick = delegate { };
     public event Action OnPlayerFlyingKick = delegate { };
 
-
     public PlayerModel(Player player)
     {
         _player = player;
