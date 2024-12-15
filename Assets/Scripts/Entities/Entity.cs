@@ -6,14 +6,9 @@ public abstract class Entity : MonoBehaviour
     protected float startHP;
     [SerializeField] protected float currentHP;
 
-    public virtual void TakeDamage(float value)
-    {
-        currentHP -= value;
-
-        if (currentHP <= 0) Die();
-        
-        if (currentHP > startHP) currentHP = startHP;
-    }
+    public abstract void TakeDamage(float value);
 
     public abstract void Die();
+
+    public abstract void PauseEntity(bool isPaused);
 }

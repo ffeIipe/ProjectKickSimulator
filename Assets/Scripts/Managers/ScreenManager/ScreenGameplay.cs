@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScreenGameplay : IScreen
@@ -11,6 +12,7 @@ public class ScreenGameplay : IScreen
         _root = root;
         _beforeDeactivation = new Dictionary<Behaviour, bool>();
     }
+
     public void Activate()
     {
         foreach(var pair in _beforeDeactivation)
@@ -24,10 +26,8 @@ public class ScreenGameplay : IScreen
         foreach (Behaviour behaviour in _root.GetComponentsInChildren<Behaviour>())
         {
             if (behaviour == Camera.main) return;
-            if (behaviour == behaviour.GetComponent<Rigidbody>()) return;
             _beforeDeactivation[behaviour] = behaviour.enabled;
             behaviour.enabled = false; 
-            //behaviour.gameObject.SetActive(false);
         }
     }
 

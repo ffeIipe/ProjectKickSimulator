@@ -5,16 +5,9 @@ using System;
 
 public class Pool<T>
 {
-    //Delegado que devuelve tipo T, por lo que aca voy a guardar metodo de COMO se crea el objeto
     private Func<T> _factoryMethod;
-
-    //Delegado que toma por parametro tipo T, aca voy a guardar COMO se prende la bala una vez la llame el cliente
     private Action<T> _turnOnCallback;
-    
-    //Delegado que toma por parametro tipo T, aca voy a guardar COMO se apaga la bala una vez se regrese al pool
     private Action<T> _turnOffCallback;
-
-    //Mi "cajon" donde voy a guardar los objetos disponibles para su uso
     private List<T> _currentStock;
 
     public Pool(Func<T> factoryMethod, Action<T> turnOnCallback, Action<T> turnOffCallback, int initialAmount)

@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+        _view = new PlayerView(this);
         _view.OnEnablePlayer();
     }
 

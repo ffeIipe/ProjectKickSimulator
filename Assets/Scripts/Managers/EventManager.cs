@@ -12,12 +12,13 @@ public static class EventManager
     public class EnemyEvents
     {
         public UnityAction OnDead;
-        public UnityAction OnHeadShot;
+        public UnityAction<Entity> OnSpawned;
         public UnityAction<Transform> OnHitPlayer;
     }
 
     public class UIEvents
     {
+        public UnityAction<bool> IsPaused;
         public UnityAction<bool> OnShowInteractMessage;
         public UnityAction<bool> OnShowJumpableMessage;
         public UnityAction<bool> OnShowKickeableMessage;

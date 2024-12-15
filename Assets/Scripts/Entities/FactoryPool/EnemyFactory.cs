@@ -26,7 +26,7 @@ public class EnemyFactory : MonoBehaviour
 
     EnemyController CreateObject()
     {
-        return Instantiate(_enemyPrefab);
+        return Instantiate(_enemyPrefab, transform.parent);
     }
 
     public EnemyController GetObjectFromPool()

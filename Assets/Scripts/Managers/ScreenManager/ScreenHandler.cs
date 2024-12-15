@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScreenHandler : MonoBehaviour
@@ -7,17 +5,27 @@ public class ScreenHandler : MonoBehaviour
     [SerializeField] Transform _mainGameplay;
     [SerializeField] ScreenPause _screenPause;
 
+    private ScreenGameplay _screenGameplay;
+
     void Start()
     {
-        ScreenManager.Instance.Push(new ScreenGameplay(_mainGameplay));
+        _screenGameplay = new ScreenGameplay(_mainGameplay);
+        ScreenManager.Instance.Push(_screenGameplay);
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P) && !_screenPause.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !_screenPause.gameObject.activeSelf )
         {
+            Cursor.lockState = CursorLockMode.None;
+            EventManager.ui.IsPaused?.Invoke(true);
             ScreenManager.Instance.Push(_screenPause);
         }
-        else if (Input.GetKeyDown(KeyCode.Escape)) ScreenManager.Instance.Pop();
+        else if (Input.GetKeyDown(KeyCode.Escape) && _screenPause.gameObject.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            EventManager.ui.IsPaused.Invoke(false);
+            ScreenManager.Instance.Pop();
+        } 
     }
 }

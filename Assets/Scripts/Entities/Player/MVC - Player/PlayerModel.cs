@@ -128,7 +128,11 @@ public class PlayerModel : Entity
 
     public override void TakeDamage(float value)
     {
-        base.TakeDamage(value);
+        currentHP -= value;
+
+        if (currentHP <= 0) Die();
+
+        if (currentHP > startHP) currentHP = startHP;
     }
 
     public override void Die()
@@ -156,5 +160,10 @@ public class PlayerModel : Entity
              
         else return Vector3.zero;
 
+    }
+
+    public override void PauseEntity(bool isPaused)
+    {
+        throw new NotImplementedException();
     }
 }
