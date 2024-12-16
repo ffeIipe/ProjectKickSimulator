@@ -21,7 +21,7 @@ public class IdleState : BaseState
 
     public override void UpdateState()
     {
-        if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) < enemyController.statsHolder.stats.EnemyRangePursuit && !enemyController.isDead)
+        if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) < enemyController.statsHolder.EnemyRangePursuit && !enemyController.isDead)
         {
             stateMachine.ChangeState(new MovementState(stateMachine, enemyController));
         }

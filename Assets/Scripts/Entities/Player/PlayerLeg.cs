@@ -6,7 +6,6 @@ public class PlayerLeg : MonoBehaviour
 {
     private void KickEvent()
     {
-        Debug.Log("EVENT KickEvent()");
         EventManager.player.OnKick.Invoke();
     }
 }

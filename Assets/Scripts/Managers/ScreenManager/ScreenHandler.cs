@@ -24,7 +24,7 @@ public class ScreenHandler : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Escape) && _screenPause.gameObject.activeSelf)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            EventManager.ui.IsPaused.Invoke(false);
+            EventManager.ui.IsPaused?.Invoke(false);
             ScreenManager.Instance.Pop();
         } 
     }

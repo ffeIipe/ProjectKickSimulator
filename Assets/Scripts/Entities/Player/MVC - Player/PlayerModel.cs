@@ -1,34 +1,19 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class PlayerModel : Entity
 {
-    private float _playerSensitivity;
-
-    private float _playerSpeed;
-    private float _playerJumpForce;
-    private Vector3 _playerMovement;
-
-    private float _playerKickDashForce;
-    private float _playerKickForce;
-    private float _playerKickUpForce;
-    private float _playerKickDamage;
-    private float _playerKickDistance;
-    private float _playerKickRange;
-    private Vector3 _kickUpForceDirection;
-    private bool _canDashKick;
-
-    private LayerMask _playerKickMask;
-
-    public Player _player;
+    private Player _player;
+    private StatsPlayerHolder _statsPlayer;
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
     
-    private float rotationX;
-    private float rotationY;
+    private Vector3 _playerMovement;
+    private float _rotationX;
+    private float _rotationY;
 
-    public Vector3 lastEnemyRaycastHit;
+    private bool _canFlyKick;
+    private Vector3 lastEnemyRaycastHit;
 
     public event Action OnPlayerStart = delegate { };
     public event Action OnPlayerKick = delegate { };
@@ -37,17 +22,7 @@ public class PlayerModel : Entity
     public PlayerModel(Player player)
     {
         _player = player;
-        _playerSensitivity = player.statsPlayerHolder.stats.PlayerSensitivity; //cambiar por evento de sensibilidad. El stats holder no puede cambiar la sens en runtime
-        _playerSpeed = player.statsPlayerHolder.stats.PlayerSpeed;
-        _playerJumpForce = player.statsPlayerHolder.stats.PlayerJumpForce;
-        _playerKickDashForce = player.statsPlayerHolder.stats.PlayerKickDashForce;
-        _playerKickForce = player.statsPlayerHolder.stats.PlayerKickForce;
-        _playerKickUpForce = player.statsPlayerHolder.stats.PlayerKickUpForce;
-        _playerKickDamage = player.statsPlayerHolder.stats.KickDamage;
-        _playerKickDistance = player.statsPlayerHolder.stats.PlayerKickDistance;
-        _playerKickRange = player.statsPlayerHolder.stats.PlayerKickRange;
-        _playerKickMask = player.statsPlayerHolder.stats.PlayerKickMask;
-
+        _statsPlayer = player.statsPlayerHolder;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
     }
@@ -58,12 +33,12 @@ public class PlayerModel : Entity
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        rotationX -= mouseY;
-        rotationX = Mathf.Clamp(rotationX, -90f, 90f);
-        _playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+        _rotationX -= mouseY;
+        _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
+        _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
 
-        rotationY += mouseX * _playerSensitivity;
-        _player.transform.localRotation = Quaternion.Euler(0f, rotationY, 0f);
+        _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
+        _player.transform.localRotation = Quaternion.Euler(0f, _rotationY, 0f);
     }
 
     public void Movement(Vector3 playerDirection)
@@ -76,7 +51,7 @@ public class PlayerModel : Entity
         if (playerDirection.magnitude > 0)
         {
             playerDirection.Normalize();
-            _playerMovement = playerDirection * _playerSpeed;
+            _playerMovement = playerDirection * _statsPlayer.PlayerSpeed;
 
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
@@ -87,21 +62,21 @@ public class PlayerModel : Entity
         Vector3 startPosition = Camera.main.transform.position;
         Vector3 direction = Camera.main.transform.forward;
 
-        RaycastHit[] hits = Physics.SphereCastAll(startPosition, _playerKickRange, direction, _playerKickDistance, _playerKickMask);
+        RaycastHit[] hits = Physics.SphereCastAll(startPosition, _statsPlayer.PlayerKickRange, direction, _statsPlayer.PlayerKickDistance, _statsPlayer.PlayerKickMask);
 
         foreach (var hit in hits)
         {
             var enemy = hit.collider.GetComponent<EnemyController>();
             if (enemy != null)
             {
-                enemy.TakeDamage(_playerKickDamage);
+                enemy.TakeDamage(_statsPlayer.PlayerKickDamage);
 
                 var enemyRigidbody = enemy.GetComponent<Rigidbody>();
                 enemyRigidbody.constraints = RigidbodyConstraints.None;
 
                 if (enemyRigidbody != null)
                 {  
-                    Vector3 forceDirection = (_player.transform.forward * _playerKickForce + _player.transform.up * _playerKickUpForce);
+                    Vector3 forceDirection = (_player.transform.forward * _statsPlayer.PlayerKickForce + _player.transform.up * _statsPlayer.PlayerKickUpForce);
                     enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
                 }
             }
@@ -123,7 +98,7 @@ public class PlayerModel : Entity
 
     public void Jump()
     {
-        _playerRigidbody.AddForce(_player.transform.up * _playerJumpForce, ForceMode.Impulse);
+        _playerRigidbody.AddForce(_player.transform.up * _statsPlayer.PlayerJumpForce, ForceMode.Impulse);
     }
 
     public override void TakeDamage(float value)
@@ -152,7 +127,7 @@ public class PlayerModel : Entity
         float maxDistance = 30f;
         RaycastHit hit;
 
-        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, maxDistance, _playerKickMask))
+        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, maxDistance, _statsPlayer.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
             return hit.point;

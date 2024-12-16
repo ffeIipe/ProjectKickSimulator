@@ -18,12 +18,15 @@ public class ScreenPause : MonoBehaviour, IScreen
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             BTN_Resume();
+            
         }
     }
 
     public void BTN_Resume()
     {
         ScreenManager.Instance.Pop();
+        Cursor.lockState = CursorLockMode.Locked;
+        EventManager.ui.IsPaused?.Invoke(false);
     }
     
     public void BTN_Options()

@@ -5,10 +5,22 @@ using UnityEngine;
 
 public class StatsPlayerHolder : ScriptableObject
 {
-    public StatsPlayer stats;
+    [Header("Basic stats")]
+    public float PlayerSensitivity;
+    public int StartHP;
+    public float PlayerSpeed;
 
-    public void ChangeStats(StatsPlayer stats)
-    {
-        this.stats = stats;
-    }
+    [Header("Jump stats")]
+    public float PlayerJumpForce;
+
+    [Header("Kick stats")]
+    public float PlayerKickForce;
+    public float PlayerKickUpForce;
+    public float PlayerKickDamage;
+    public float PlayerKickDistance;
+    public float PlayerKickRange;
+    public LayerMask PlayerKickMask;
+
+    [Header("Dashkick stats")]
+    public float PlayerKickDashForce;
 }

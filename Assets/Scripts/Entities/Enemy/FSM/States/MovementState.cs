@@ -23,12 +23,12 @@ public class MovementState : BaseState
         {
             
 
-            if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) < enemyController.statsHolder.stats.EnemyRangeAttack)
+            if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) < enemyController.statsHolder.EnemyRangeAttack)
             {
                 stateMachine.ChangeState(new AttackState(stateMachine, enemyController));
             }
 
-            if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) > enemyController.statsHolder.stats.EnemyRangePursuit)
+            if (Vector3.Distance(enemyController.transform.position, enemyController.target.position) > enemyController.statsHolder.EnemyRangePursuit)
             {
                 stateMachine.ChangeState(new MovementState(stateMachine, enemyController));
             }

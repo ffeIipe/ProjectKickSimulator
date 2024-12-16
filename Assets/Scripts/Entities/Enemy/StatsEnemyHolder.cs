@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class StatsEnemyHolder : ScriptableObject
 {
-    public StatsEnemy stats;
-
-    public void ChangeStats(StatsEnemy stats)
-    {
-        this.stats = stats;
-    }
+    [field: SerializeField] public int StartHP { get; private set; }
+    [field: SerializeField] public float EnemySpeed { get; private set; }
+    [field: SerializeField] public float EnemyRangePursuit { get; private set; }
+    [field: SerializeField] public float EnemyRangeAttack { get; private set; }
+    [field: SerializeField] public float EnemyDamage { get; private set; }
 }

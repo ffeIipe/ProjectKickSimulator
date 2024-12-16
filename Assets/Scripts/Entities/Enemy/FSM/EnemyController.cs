@@ -61,7 +61,7 @@ public class EnemyController : Entity
 
     private void Reset()
     {
-        startHP = statsHolder.stats.StartHP;
+        startHP = statsHolder.StartHP;
         currentHP = startHP;
     }
 
