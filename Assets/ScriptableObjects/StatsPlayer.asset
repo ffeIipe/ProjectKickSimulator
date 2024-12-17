@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e332f610b68c3346a5b83a9571418d2, type: 3}
   m_Name: StatsPlayer
   m_EditorClassIdentifier: 
-  PlayerSensitivity: 1
+  PlayerSensitivity: 0.97914314
   StartHP: 10
   PlayerSpeed: 5
   PlayerJumpForce: 5
@@ -25,3 +25,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   PlayerKickDashForce: 5
+  kickSound: {fileID: 8300000, guid: be752011b950df345baccdc88876f1ac, type: 3}

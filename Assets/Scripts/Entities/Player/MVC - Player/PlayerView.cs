@@ -6,12 +6,14 @@ using UnityEngine;
 public class PlayerView
 {
     private Player _player;
-    private Animator _playerAnimator; 
+    private Animator _playerAnimator;
+    private AudioSource _audioSource;
 
     public PlayerView(Player player)
     {
         _player = player;
         _playerAnimator = player.GetComponentInChildren<Animator>();
+        _audioSource = player.GetComponent<AudioSource>();
     }
 
     public void LockCursor()
@@ -19,14 +21,16 @@ public class PlayerView
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void KickAnimation()
+    public void KickView()
     {
         _playerAnimator.SetTrigger("Kick");
+
     }
-    
-    public void FlyingKickAnimation()
+
+    public void FlyingKickView()
     {
         _playerAnimator.SetTrigger("FlyingKick");
+
     }
 
     public void OnEnablePlayer()
@@ -39,4 +43,17 @@ public class PlayerView
     {
         _playerAnimator.speed = 0;
     }
+
+    public void KickHitSound()
+    {
+        PlaySound(_player.statsPlayerHolder.kickSound);
+    }
+
+    private void PlaySound(AudioClip clip)
+    {        
+        _audioSource.clip = clip;
+        _audioSource.Play();
+    }
+
+
 }

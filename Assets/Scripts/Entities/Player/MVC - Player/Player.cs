@@ -16,9 +16,10 @@ public class Player : MonoBehaviour
         _controller = new PlayerController(Model);
 
         Model.OnPlayerStart += _view.LockCursor;
-        Model.OnPlayerKick += _view.KickAnimation;
-        Model.OnPlayerFlyingKick += _view.FlyingKickAnimation;
+        Model.OnPlayerKick += _view.KickView;
+        Model.OnPlayerFlyingKick += _view.FlyingKickView;
         EventManager.player.OnKick += Model.BaseKick;
+        Model.OnHitEnemy += _view.KickHitSound;
     }
 
     private void Update()

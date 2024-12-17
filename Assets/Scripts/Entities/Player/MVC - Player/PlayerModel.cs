@@ -20,6 +20,7 @@ public class PlayerModel : Entity
     public event Action OnPlayerStart = delegate { };
     public event Action OnPlayerKick = delegate { };
     public event Action OnPlayerFlyingKick = delegate { };
+    public event Action OnHitEnemy = delegate { };
 
     public PlayerModel(Player player)
     {
@@ -80,7 +81,7 @@ public class PlayerModel : Entity
             if (enemy != null)
             {
                 enemy.TakeDamage(_statsPlayer.PlayerKickDamage);
-
+                OnHitEnemy();
                 var enemyRigidbody = enemy.GetComponent<Rigidbody>();
                 enemyRigidbody.constraints = RigidbodyConstraints.None;
 

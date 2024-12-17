@@ -23,4 +23,8 @@ public class StatsPlayerHolder : ScriptableObject
 
     [Header("Dashkick stats")]
     public float PlayerKickDashForce;
+
+    [Header("Sound Effects")]
+    public AudioClip kickSound;
+
 }
