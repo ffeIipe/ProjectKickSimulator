@@ -19,8 +19,8 @@ MonoBehaviour:
   PlayerKickForce: 5
   PlayerKickUpForce: 5
   PlayerKickDamage: 5
-  PlayerKickDistance: 2
-  PlayerKickRange: 1
+  PlayerKickDistance: 3
+  PlayerKickRange: 2
   PlayerKickMask:
     serializedVersion: 2
     m_Bits: 128
