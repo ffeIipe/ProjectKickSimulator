@@ -25,21 +25,22 @@ public class PlayerModel : Entity
         _statsPlayer = player.statsPlayerHolder;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
-    }
-
-    public void CameraMovement()
-    {
         OnPlayerStart();
-        float mouseX = Input.GetAxisRaw("Mouse X");
-        float mouseY = Input.GetAxisRaw("Mouse Y");
-
-        _rotationX -= mouseY;
-        _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
-        _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
-
-        _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
-        _player.transform.localRotation = Quaternion.Euler(0f, _rotationY, 0f);
     }
+
+    //public void CameraMovement()
+    //{
+    //    
+    //    float mouseX = Input.GetAxisRaw("Mouse X");
+    //    float mouseY = Input.GetAxisRaw("Mouse Y");
+    //
+    //    _rotationX -= mouseY;
+    //    _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
+    //    _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
+    //
+    //    _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
+    //    _player.transform.localRotation = Quaternion.Euler(0f, _rotationY, 0f);
+    //}
 
     public void Movement(Vector3 playerDirection)
     {

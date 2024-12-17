@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
         _view = new PlayerView(this);
         _controller = new PlayerController(Model);
 
-        Model.OnPlayerStart += _view.LockCursor;
+        Cursor.lockState = CursorLockMode.Locked;
+        //Model.OnPlayerStart += _view.LockCursor;
         Model.OnPlayerKick += _view.KickAnimation;
         Model.OnPlayerFlyingKick += _view.FlyingKickAnimation;
         EventManager.player.OnKick += Model.BaseKick;
