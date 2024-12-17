@@ -3,6 +3,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public StatsPlayerHolder statsPlayerHolder;
+    public Transform playerLookAt;
+
     public PlayerModel Model { get; private set; }
     private PlayerView _view;
     private PlayerController _controller;
