@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) _model.Kick();
 
-        //_model.CameraMovement();
+        _model.CameraMovement();
     }
 
     public void InputFixedUpdate()

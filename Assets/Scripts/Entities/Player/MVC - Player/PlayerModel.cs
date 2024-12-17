@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class PlayerModel : Entity
@@ -25,35 +26,34 @@ public class PlayerModel : Entity
         _statsPlayer = player.statsPlayerHolder;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
-        OnPlayerStart();
+        
     }
 
-    //public void CameraMovement()
-    //{
-    //    
-    //    float mouseX = Input.GetAxisRaw("Mouse X");
-    //    float mouseY = Input.GetAxisRaw("Mouse Y");
-    //
-    //    _rotationX -= mouseY;
-    //    _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
-    //    _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
-    //
-    //    _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
-    //    _player.transform.localRotation = Quaternion.Euler(0f, _rotationY, 0f);
-    //}
+    public void CameraMovement()
+    {
+        OnPlayerStart();
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
+        
+        _rotationX -= mouseY;
+        _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
+        _playerCamera.transform.rotation = Quaternion.Euler(_rotationX, 0f, 0f);
+        
+        _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
+        _player.transform.rotation = Quaternion.Euler(0f, _rotationY, 0f);
+    }
 
     public void Movement(Vector3 playerDirection)
     {
         float movementX = Input.GetAxisRaw("Horizontal");
         float movementZ = Input.GetAxisRaw("Vertical");
 
-        playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
+        playerDirection = Camera.main.transform.right * movementX + Camera.main.transform.forward * movementZ;
 
         if (playerDirection.magnitude > 0)
         {
             playerDirection.Normalize();
             _playerMovement = playerDirection * _statsPlayer.PlayerSpeed;
-
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
     }
