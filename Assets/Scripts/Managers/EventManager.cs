@@ -37,7 +37,7 @@ public static class EventManager
 
     public class ConfigsEvents
     {
-        public UnityAction OnSensChanged;
+        public UnityAction<float> OnSensChanged;
     }
 
     public class LevelEvents

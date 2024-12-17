@@ -26,7 +26,9 @@ public class PlayerModel : Entity
         _statsPlayer = player.statsPlayerHolder;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
-        
+        EventManager.configs.OnSensChanged += UpdateSensitivity;
+        UpdateSensitivity(PlayerPrefs.GetFloat("MouseSens", 1f));
+
     }
 
     public void CameraMovement()
@@ -56,6 +58,11 @@ public class PlayerModel : Entity
             _playerMovement = playerDirection * _statsPlayer.PlayerSpeed;
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
+    }
+
+    private void UpdateSensitivity(float newSensitivity)
+    {
+        _statsPlayer.PlayerSensitivity = newSensitivity;
     }
 
     public void BaseKick()

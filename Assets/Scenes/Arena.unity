@@ -2606,6 +2606,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2590819921477709592, guid: f46b94e09c284c94682c5252d828770d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4949077767747260499, guid: f46b94e09c284c94682c5252d828770d,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2706,10 +2711,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5526317591074693479, guid: f46b94e09c284c94682c5252d828770d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7737897462562252022, guid: f46b94e09c284c94682c5252d828770d,
         type: 3}
       propertyPath: m_Name
       value: PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737897462562252022, guid: f46b94e09c284c94682c5252d828770d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
