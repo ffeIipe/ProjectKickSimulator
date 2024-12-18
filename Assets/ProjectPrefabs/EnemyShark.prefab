@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHP: 0
-  statsHolder: {fileID: 11400000, guid: 4b482f7b83dae784985027042891c3d3, type: 2}
+  enemyStats: {fileID: 11400000, guid: 4b482f7b83dae784985027042891c3d3, type: 2}
   enemyAnimator: {fileID: 5823242467719282969}
-  target: {fileID: 0}
+  agent: {fileID: 7470555030654666032}
   isDead: 0
 --- !u!195 &7470555030654666032
 NavMeshAgent:

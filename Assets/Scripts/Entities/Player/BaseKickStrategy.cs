@@ -14,16 +14,15 @@ public abstract class BaseKickStrategy : IKick
 
     public void ExecuteKick(Vector3 startPosition, Vector3 direction, Action onHit)
     {
-        Debug.Log("BaseKickStrategy");
         RaycastHit[] hits = Physics.SphereCastAll(
-            startPosition,
-            _player.playerStats.PlayerKickRange,
-            direction,
-            _player.playerStats.PlayerKickDistance,
-            _player.playerStats.PlayerKickMask);
+        startPosition,
+        _player.playerStats.PlayerKickRange,
+        direction,
+        _player.playerStats.PlayerKickDistance,
+        _player.playerStats.PlayerKickMask);
 
         Debug.Log(hits.Length);
-        
+
         foreach (var hit in hits)
         {
             HandleHit(hit, onHit);

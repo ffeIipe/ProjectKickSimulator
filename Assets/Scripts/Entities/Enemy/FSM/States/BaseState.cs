@@ -1,12 +1,12 @@
 public abstract class BaseState
 {
-    protected StateMachine stateMachine;
-    protected EnemyController enemyController;
+    protected StateMachine _stateMachine;
+    protected EnemyController _enemyController;
 
     public BaseState(StateMachine stateMachine, EnemyController enemyController)
     {
-        this.stateMachine = stateMachine;
-        this.enemyController = enemyController;
+        _stateMachine = stateMachine;
+        _enemyController = enemyController;
     }
 
     public abstract void EnterState();

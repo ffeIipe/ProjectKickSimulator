@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FlyingKick : BaseKickStrategy
 {
@@ -27,7 +28,8 @@ public class FlyingKick : BaseKickStrategy
         if (enemy != null)
         {
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
-            
+            enemy.Stun();
+
             var enemyRigidbody = enemy.GetComponent<Rigidbody>();
             enemyRigidbody.constraints = RigidbodyConstraints.None;
 

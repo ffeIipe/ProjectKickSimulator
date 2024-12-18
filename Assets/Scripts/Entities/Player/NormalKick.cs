@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NormalKick : BaseKickStrategy
 {
@@ -14,8 +15,8 @@ public class NormalKick : BaseKickStrategy
         var enemy = hit.collider.GetComponent<EnemyController>();
         if (enemy != null)
         {
+            enemy.Stun();
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
-            
 
             var enemyRigidbody = enemy.GetComponent<Rigidbody>();
             enemyRigidbody.constraints = RigidbodyConstraints.None;

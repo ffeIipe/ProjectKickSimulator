@@ -16,10 +16,10 @@ MonoBehaviour:
   StartHP: 10
   PlayerSpeed: 5
   PlayerJumpForce: 5
-  PlayerKickForce: 5
-  PlayerKickUpForce: 2
+  PlayerKickForce: 0
+  PlayerKickUpForce: 0
   PlayerKickDamage: 5
-  PlayerKickDistance: 3
+  PlayerKickDistance: 2
   PlayerKickRange: 2
   PlayerFlyingKickMaxDistance: 30
   PlayerKickMask:
