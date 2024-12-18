@@ -1,0 +1,4 @@
+[Dudas del proyecto]
+
+- Vibracion extra;a player
+- Correcta implementacion de MVC y Strategy?

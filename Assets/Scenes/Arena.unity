@@ -1544,7 +1544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270fa5933e87aca47be5cfc139c32ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsPlayerHolder: {fileID: 11400000, guid: e9daf6260e157974790f9bff1e26a422, type: 2}
+  playerStats: {fileID: 11400000, guid: e9daf6260e157974790f9bff1e26a422, type: 2}
   playerLookAt: {fileID: 2094733601}
 --- !u!82 &436285936
 AudioSource:

@@ -46,7 +46,7 @@ public class PlayerView
 
     public void KickHitSound()
     {
-        PlaySound(_player.statsPlayerHolder.kickSound);
+        PlaySound(_player.playerStats.kickSound);
     }
 
     private void PlaySound(AudioClip clip)

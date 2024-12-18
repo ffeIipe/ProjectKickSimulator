@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public StatsPlayerHolder statsPlayerHolder;
+    public StatsPlayerHolder playerStats;
     public Transform playerLookAt;
 
     public PlayerModel Model { get; private set; }
@@ -15,10 +15,11 @@ public class Player : MonoBehaviour
         _view = new PlayerView(this);
         _controller = new PlayerController(Model);
 
+        EventManager.player.OnKick += Model.PerformKick;
+
         Model.OnPlayerStart += _view.LockCursor;
         Model.OnPlayerKick += _view.KickView;
         Model.OnPlayerFlyingKick += _view.FlyingKickView;
-        EventManager.player.OnKick += Model.BaseKick;
         Model.OnHitEnemy += _view.KickHitSound;
     }
 

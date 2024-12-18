@@ -17,18 +17,22 @@ public class PlayerController : MonoBehaviour
     {
         _model.IsGrounded();
 
-        if (_model.IsEnemyInSight() != Vector3.zero)
+        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        {
+            _model.SetKickStrategy(new NormalKick("Kick"));
+        } 
+
+        if (_model.IsEnemyInRange() != Vector3.zero)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                var enemyPos = _model.IsEnemyInSight();
-                _model.FlyingKick(enemyPos, Quaternion.Euler(_model.IsEnemyInSight()));
-            }
+                var enemyPos = _model.IsEnemyInRange();
+                _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), Quaternion.Euler(_model.IsEnemyInRange()), "FlyingKick"));
+            }   
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.Jump();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) _model.Kick();
 
         _model.CameraMovement();
     }

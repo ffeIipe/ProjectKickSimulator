@@ -17,6 +17,8 @@ public class PlayerModel : Entity
     private bool _canFlyKick;
     private Vector3 lastEnemyRaycastHit;
 
+    public BaseKickStrategy currentKick { get; private set; }
+
     public event Action OnPlayerStart = delegate { };
     public event Action OnPlayerKick = delegate { };
     public event Action OnPlayerFlyingKick = delegate { };
@@ -25,12 +27,11 @@ public class PlayerModel : Entity
     public PlayerModel(Player player)
     {
         _player = player;
-        _statsPlayer = player.statsPlayerHolder;
+        _statsPlayer = player.playerStats;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
         EventManager.configs.OnSensChanged += UpdateSensitivity;
         UpdateSensitivity(PlayerPrefs.GetFloat("MouseSens", 1f));
-
     }
 
     public void CameraMovement()
@@ -68,44 +69,55 @@ public class PlayerModel : Entity
         _statsPlayer.PlayerSensitivity = newSensitivity;
     }
 
-    public void BaseKick()
+    public void SetKickStrategy(BaseKickStrategy newKick)
     {
-        Vector3 startPosition = Camera.main.transform.position;
-        Vector3 direction = Camera.main.transform.forward;
-
-        RaycastHit[] hits = Physics.SphereCastAll(startPosition, _statsPlayer.PlayerKickRange, direction, _statsPlayer.PlayerKickDistance, _statsPlayer.PlayerKickMask);
-
-        foreach (var hit in hits)
-        {
-            var enemy = hit.collider.GetComponent<EnemyController>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(_statsPlayer.PlayerKickDamage);
-                OnHitEnemy();
-                var enemyRigidbody = enemy.GetComponent<Rigidbody>();
-                enemyRigidbody.constraints = RigidbodyConstraints.None;
-
-                if (enemyRigidbody != null)
-                {  
-                    Vector3 forceDirection = (_player.transform.forward * _statsPlayer.PlayerKickForce + _player.transform.up * _statsPlayer.PlayerKickUpForce);
-                    enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
-                }
-            }
-        }
+        currentKick = newKick;
+        
     }
 
-    public void Kick()
+    public void PerformKick()
     {
-        BaseKick();
-        OnPlayerKick();
+        currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
     }
 
-    public void FlyingKick(Vector3 enemyPosition, Quaternion playerRotation)
-    {
-        BaseKick();
-        _playerRigidbody.Move(enemyPosition, playerRotation);
-        OnPlayerFlyingKick();
-    }
+    //public void BaseKick()
+    //{
+    //    Vector3 startPosition = Camera.main.transform.position;
+    //    Vector3 direction = Camera.main.transform.forward;
+    //
+    //    RaycastHit[] hits = Physics.SphereCastAll(startPosition, _statsPlayer.PlayerKickRange, direction, _statsPlayer.PlayerKickDistance, _statsPlayer.PlayerKickMask);
+    //
+    //    foreach (var hit in hits)
+    //    {
+    //        var enemy = hit.collider.GetComponent<EnemyController>();
+    //        if (enemy != null)
+    //        {
+    //            enemy.TakeDamage(_statsPlayer.PlayerKickDamage);
+    //            OnHitEnemy();
+    //            var enemyRigidbody = enemy.GetComponent<Rigidbody>();
+    //            enemyRigidbody.constraints = RigidbodyConstraints.None;
+    //
+    //            if (enemyRigidbody != null)
+    //            {  
+    //                Vector3 forceDirection = (_player.transform.forward * _statsPlayer.PlayerKickForce + _player.transform.up * _statsPlayer.PlayerKickUpForce);
+    //                enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
+    //            }
+    //        }
+    //    }
+    //}
+    //
+    //public void Kick()
+    //{
+    //    BaseKick();
+    //    OnPlayerKick();
+    //}
+    //
+    //public void FlyingKick(Vector3 enemyPosition, Quaternion playerRotation)
+    //{
+    //    BaseKick();
+    //    _playerRigidbody.Move(enemyPosition, playerRotation);
+    //    OnPlayerFlyingKick();
+    //}
 
     public void Jump()
     {
@@ -133,19 +145,17 @@ public class PlayerModel : Entity
         return (Physics.Raycast(_player.transform.position, -_player.transform.up, out hit, groundCheckDistance));
     }
 
-    public Vector3 IsEnemyInSight()
+    public Vector3 IsEnemyInRange()
     {
-        float maxDistance = 30f;
         RaycastHit hit;
 
-        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, maxDistance, _statsPlayer.PlayerKickMask))
+        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _statsPlayer.PlayerFlyingKickMaxDistance, _statsPlayer.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
             return hit.point;
         }
              
         else return Vector3.zero;
-
     }
 
     public override void PauseEntity(bool isPaused)

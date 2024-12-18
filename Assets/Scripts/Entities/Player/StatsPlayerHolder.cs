@@ -19,6 +19,7 @@ public class StatsPlayerHolder : ScriptableObject
     public float PlayerKickDamage;
     public float PlayerKickDistance;
     public float PlayerKickRange;
+    public float PlayerFlyingKickMaxDistance;
     public LayerMask PlayerKickMask;
 
     [Header("Dashkick stats")]
