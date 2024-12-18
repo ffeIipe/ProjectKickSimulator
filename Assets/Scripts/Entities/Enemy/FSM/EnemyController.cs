@@ -1,23 +1,32 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyController : Entity
+public abstract class EnemyController : Entity
 {
-    public StatsEnemyHolder statsHolder;
+    public EnemyStats statsHolder;
     public Animator enemyAnimator;
     public Transform target;
     public bool isDead;
 
+    private NavMeshAgent _agent;
     private Rigidbody _enemyRigidBody;
+    private StateMachine _stateMachine;
+
     private Vector3 _currentVelocity;
     private Vector3 _currentPosition;
 
     private CountdownTimer _deadCountdown;
 
-    void Start()
+    protected virtual void Start()
     {
-        _enemyRigidBody = GetComponent<Rigidbody>();
         EventManager.ui.IsPaused += PauseEntity;
+
+        _stateMachine = new StateMachine();
+        _stateMachine.Initialize(new IdleState(_stateMachine, this));
+
+        _agent = GetComponent<NavMeshAgent>();
+        _enemyRigidBody = GetComponent<Rigidbody>();
+
         _deadCountdown = new CountdownTimer(3f);
         _deadCountdown.OnTimerStop += Die;
     }
@@ -35,11 +44,10 @@ public class EnemyController : Entity
         if (currentHP > startHP) currentHP = startHP;
     }
 
-    public override void Die()
+    protected override void Die()
     {
         isDead = true;
         transform.position = Vector3.zero;
-        EnemyFactory.Instance.ReturnObjectToPool(this);
     }
 
     public static void TurnOn(EnemyController enemy)
@@ -53,19 +61,16 @@ public class EnemyController : Entity
         enemy.gameObject.SetActive(false);
     }
 
-    public void SpawnEnemy(Vector3 enemyPosition)
-    {
-        var newEnemy = EnemyFactory.Instance.GetObjectFromPool();
-        newEnemy.transform.position = enemyPosition;
-    }
+    public abstract void SpawnEnemy(Vector3 enemyPosition);
 
     private void Reset()
     {
         startHP = statsHolder.StartHP;
         currentHP = startHP;
+        isDead = false;
     }
 
-    public override void PauseEntity(bool isPaused)
+    protected override void PauseEntity(bool isPaused)
     {
         if (isPaused)
         {

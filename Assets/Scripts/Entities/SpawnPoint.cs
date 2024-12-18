@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    [SerializeField] private EnemyController enemyController;
+    public EnemyController enemyController;
 
     public void SpawnEnemy()
     {

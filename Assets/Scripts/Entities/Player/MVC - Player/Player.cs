@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public StatsPlayerHolder playerStats;
+    public PlayerStats playerStats;
     public Transform playerLookAt;
 
     public PlayerModel Model { get; private set; }

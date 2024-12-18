@@ -8,7 +8,7 @@ public abstract class Entity : MonoBehaviour
 
     public abstract void TakeDamage(float value);
 
-    public abstract void Die();
+    protected abstract void Die();
 
-    public abstract void PauseEntity(bool isPaused);
+    protected abstract void PauseEntity(bool isPaused);
 }

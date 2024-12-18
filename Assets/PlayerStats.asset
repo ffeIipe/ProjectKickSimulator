@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e332f610b68c3346a5b83a9571418d2, type: 3}
-  m_Name: StatsPlayer
+  m_Script: {fileID: 11500000, guid: 79cc9e7ff38729c4ab9f734364495b65, type: 3}
+  m_Name: PlayerStats
   m_EditorClassIdentifier: 
   PlayerSensitivity: 1
   StartHP: 10
   PlayerSpeed: 5
   PlayerJumpForce: 5
-  PlayerKickForce: 2
-  PlayerKickUpForce: 1
+  PlayerKickForce: 5
+  PlayerKickUpForce: 2
   PlayerKickDamage: 5
   PlayerKickDistance: 3
   PlayerKickRange: 2

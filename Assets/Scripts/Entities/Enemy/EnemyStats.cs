@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "StatsEnemy", menuName = "ScriptableObject/StatsEnemyHolder")]
+[CreateAssetMenu(fileName = "EnemyStats", menuName = "ScriptableObject/EnemyStats")]
 
-public class StatsEnemyHolder : ScriptableObject
+public class EnemyStats : ScriptableObject
 {
     [field: SerializeField] public int StartHP { get; private set; }
     [field: SerializeField] public float EnemySpeed { get; private set; }

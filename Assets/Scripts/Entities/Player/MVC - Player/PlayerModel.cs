@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerModel : Entity
 {
     private Player _player;
-    private StatsPlayerHolder _statsPlayer;
+    private PlayerStats _statsPlayer;
 
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
@@ -133,7 +133,7 @@ public class PlayerModel : Entity
         if (currentHP > startHP) currentHP = startHP;
     }
 
-    public override void Die()
+    protected override void Die()
     {
         throw new System.NotImplementedException();
     }
@@ -158,7 +158,7 @@ public class PlayerModel : Entity
         else return Vector3.zero;
     }
 
-    public override void PauseEntity(bool isPaused)
+    protected override void PauseEntity(bool isPaused)
     {
         throw new NotImplementedException();
     }

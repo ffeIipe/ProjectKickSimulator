@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "StatsPlayer", menuName = "ScriptableObject/StatsPlayerHolder")]
+[CreateAssetMenu(fileName = "PlayerStats", menuName = "ScriptableObject/PlayerStats")]
 
-public class StatsPlayerHolder : ScriptableObject
+public class PlayerStats : ScriptableObject
 {
     [Header("Basic stats")]
     public float PlayerSensitivity;

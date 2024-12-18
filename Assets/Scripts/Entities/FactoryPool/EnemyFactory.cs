@@ -2,40 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFactory : MonoBehaviour
+public abstract class EnemyFactory : MonoBehaviour
 {
-    public static EnemyFactory Instance { get; private set; }
-
     [SerializeField] private EnemyController _enemyPrefab;
-    [SerializeField] private int _initialAmount;
+    [SerializeField] protected int _initialAmount;
 
-    private Pool<EnemyController> _myEnemiesPool;
+    protected Pool<EnemyController> _myEnemiesPool;
 
-    void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
-        _myEnemiesPool = new Pool<EnemyController>(CreateObject, EnemyController.TurnOn, EnemyController.TurnOff, _initialAmount);
-    }
-
-    EnemyController CreateObject()
+    protected EnemyController CreateObject()
     {
         return Instantiate(_enemyPrefab, transform.parent);
     }
 
-    public EnemyController GetObjectFromPool()
-    {
-        return _myEnemiesPool.GetObject();
-    }
+    public abstract EnemyController GetObjectFromPool();
 
-    public void ReturnObjectToPool(EnemyController bullet)
-    {
-        _myEnemiesPool.ReturnObject(bullet);
-    }
+    public abstract void ReturnObjectToPool(EnemyController bullet);
 }
