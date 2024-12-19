@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour
     public PlayerModel Model { get; private set; }
     private PlayerView _view;
     private PlayerController _controller;
+
+    public Image HitMarket;
 
     void Start()
     {

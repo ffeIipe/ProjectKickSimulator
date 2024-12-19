@@ -152,10 +152,14 @@ public class PlayerModel : Entity
         if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _statsPlayer.PlayerFlyingKickMaxDistance, _statsPlayer.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
+            _player.HitMarket.enabled = true;
             return hit.point;
         }
-             
-        else return Vector3.zero;
+        else 
+        {
+            _player.HitMarket.enabled = false;
+             return Vector3.zero;
+        }
     }
 
     protected override void PauseEntity(bool isPaused)

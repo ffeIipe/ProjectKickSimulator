@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class PlayerView
 {
     private Player _player;
     private Animator _playerAnimator;
     private AudioSource _audioSource;
+
 
     public PlayerView(Player player)
     {
@@ -46,7 +48,7 @@ public class PlayerView
 
     public void KickHitSound()
     {
-        PlaySound(_player.playerStats.kickSound);
+        PlaySound(_player.playerStats.kickSound);       
     }
 
     private void PlaySound(AudioClip clip)
@@ -54,6 +56,8 @@ public class PlayerView
         _audioSource.clip = clip;
         _audioSource.Play();
     }
+
+
 
 
 }
