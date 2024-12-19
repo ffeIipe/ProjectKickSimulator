@@ -10,4 +10,5 @@ public class EnemyStats : ScriptableObject
     [field: SerializeField] public float EnemyRangePursuit { get; private set; }
     [field: SerializeField] public float EnemyRangeAttack { get; private set; }
     [field: SerializeField] public float EnemyDamage { get; private set; }
+    [field: SerializeField] public float EnemyRangePatrol { get; private set; }
 }

@@ -21,8 +21,6 @@ public abstract class BaseKickStrategy : IKick
         _player.playerStats.PlayerKickDistance,
         _player.playerStats.PlayerKickMask);
 
-        Debug.Log(hits.Length);
-
         foreach (var hit in hits)
         {
             HandleHit(hit, onHit);

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,6 +37,7 @@ public abstract class EnemyController : Entity
         _timerStun.OnTimerStop += RemoveStun;
 
         currentHP = enemyStats.StartHP;
+        agent.speed = enemyStats.EnemySpeed;
     }
 
     public override void TakeDamage(float value)
@@ -70,10 +72,21 @@ public abstract class EnemyController : Entity
 
     public void RemoveStun()
     {
-        Debug.Log("Stun removed");
         _enemyRigidBody.isKinematic = true;
         isStunned = false;
         agent.enabled = true;
+    }
+
+    public void Patrol(Vector3 center)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * enemyStats.EnemyRangePatrol;
+        randomDirection += center;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, enemyStats.EnemyRangePatrol, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
     }
 
     public static void TurnOn(EnemyController enemy)
@@ -128,6 +141,9 @@ public abstract class EnemyController : Entity
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, enemyStats.EnemyRangeAttack);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, enemyStats.EnemyRangePatrol);
         }
     }
     #endregion

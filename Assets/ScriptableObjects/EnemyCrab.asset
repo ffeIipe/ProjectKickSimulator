@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: EnemyCrab
   m_EditorClassIdentifier: 
   <StartHP>k__BackingField: 10
-  <EnemySpeed>k__BackingField: 5
-  <EnemyRangePursuit>k__BackingField: 10
+  <EnemySpeed>k__BackingField: 10
+  <EnemyRangePursuit>k__BackingField: 20
   <EnemyRangeAttack>k__BackingField: 2
   <EnemyDamage>k__BackingField: 2
+  <EnemyRangePatrol>k__BackingField: 10

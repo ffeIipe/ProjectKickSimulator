@@ -17,3 +17,4 @@ MonoBehaviour:
   <EnemyRangePursuit>k__BackingField: 20
   <EnemyRangeAttack>k__BackingField: 2
   <EnemyDamage>k__BackingField: 5
+  <EnemyRangePatrol>k__BackingField: 7
