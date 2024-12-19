@@ -97,7 +97,7 @@ public abstract class EnemyController : Entity
         return Random.Range(enemyStats.EnemyTimeBetweenPatrol.x, enemyStats.EnemyTimeBetweenPatrol.y);
     }
 
-    protected override void ResetEntity()
+    public override void ResetEntity()
     {
         startHP = enemyStats.StartHP;
         currentHP = startHP;

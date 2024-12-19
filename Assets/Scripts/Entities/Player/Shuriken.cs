@@ -6,29 +6,37 @@ public class Shuriken : Entity, IHabilities
 {
     private float _shurikenThrowForce;
     private int _shurikenDamage;
-    private Transform _playerHandPos;
+    private Vector3 _playerHandPos;
     private Rigidbody _shurikenRigidbody;
     private Animator _playerAnimator;
+    private CountdownTimer _shurikenTimer;
 
-    public Shuriken(Transform playerHand, float force, int damage, string animString)
+    public Shuriken(float force, int damage, string animString)
     {
-        _playerAnimator = GameManager.Instance.player.GetComponentInChildren<Animator>();
-        _playerAnimator.SetTrigger(animString);
-
-        _playerHandPos = playerHand;
         _shurikenThrowForce = force;
         _shurikenDamage = damage;
+
+        _playerAnimator = GameManager.Instance.player.GetComponentInChildren<Animator>();
+        _playerAnimator.SetTrigger(animString);
     }
 
     private void Start()
     {
-        
+        _shurikenTimer = new CountdownTimer(1f);
+        _shurikenTimer.OnTimerStop += ReturnObject;
+        _shurikenTimer.Start();
     }
 
-    public void CastHability(Vector3 direction)
+    private void Update()
     {
+        _shurikenTimer.Tick(Time.deltaTime);
+    }
+
+    public void CastHability(Vector3 direction, Vector3 playerHand)
+    {
+        _playerHandPos = playerHand;
         var newShuriken = ShurikenFactory.Instance.GetObjectFromPool();
-        newShuriken.transform.position = _playerHandPos.position;
+        newShuriken.transform.position = playerHand;
 
         _shurikenRigidbody = newShuriken.GetComponent<Rigidbody>();
         _shurikenRigidbody.AddForce(direction * (_shurikenThrowForce * 10), ForceMode.Impulse);
@@ -47,9 +55,22 @@ public class Shuriken : Entity, IHabilities
                 enemy.Stun();
                 enemy.TakeDamage(_shurikenDamage);
             }
-
-            else ShurikenFactory.Instance.ReturnObjectToPool(this);
         }
+    }
+
+    private void ReturnObject()
+    {
+        ShurikenFactory.Instance.ReturnObjectToPool(this);
+        _shurikenTimer.Start();
+    }
+
+    public override void ResetEntity()
+    {
+        base.ResetEntity();
+        _shurikenRigidbody = GetComponent<Rigidbody>();
+        _shurikenRigidbody.velocity = Vector3.zero;
+        transform.position = _playerHandPos;
+        Debug.Log(_playerHandPos);
     }
 
     protected override void PauseEntity(bool isPaused)

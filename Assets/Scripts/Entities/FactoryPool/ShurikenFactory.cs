@@ -16,16 +16,16 @@ public class ShurikenFactory : Factory
 
         Instance = this;
 
-        _myEnemiesPool = new Pool<Entity>(CreateObject, Entity.TurnOn, Entity.TurnOff, _initialAmount);
+        _myEntitesPool = new Pool<Entity>(CreateObject, Entity.TurnOn, Entity.TurnOff, _initialAmount);
     }
 
     public override Entity GetObjectFromPool()
     {
-        return _myEnemiesPool.GetObject();
+        return _myEntitesPool.GetObject();
     }
 
     public override void ReturnObjectToPool(Entity bullet)
     {
-        _myEnemiesPool.ReturnObject(bullet);
+        _myEntitesPool.ReturnObject(bullet);
     }
 }

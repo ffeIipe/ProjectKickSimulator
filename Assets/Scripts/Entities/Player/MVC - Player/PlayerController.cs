@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         
         else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            _model.SetHabilityStrategy(new Shuriken(GameManager.Instance.player.playerHand, _playerStats.ShurikenThrowForce , _playerStats.ShurikenDamage, "Shuriken"));
+            _model.SetHabilityStrategy(new Shuriken(_playerStats.ShurikenThrowForce , _playerStats.ShurikenDamage, "Shuriken"));
         }
 
         else if (_model.IsEnemyInRange() != Vector3.zero)
