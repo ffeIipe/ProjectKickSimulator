@@ -48,14 +48,10 @@ public class PlayerView
 
     public void KickHitSound()
     {
-        PlaySound(_player.playerStats.kickSound);       
+        AudioManager.Instace.PlaySound(_player.playerStats.kickSound);
     }
 
-    private void PlaySound(AudioClip clip)
-    {        
-        _audioSource.clip = clip;
-        _audioSource.Play();
-    }
+  
 
 
 
