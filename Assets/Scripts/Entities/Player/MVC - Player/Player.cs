@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private PlayerView _view;
     private PlayerController _controller;
 
-    public Image HitMarket;
+    public Image ViewInRange;
 
     void Start()
     {

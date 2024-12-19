@@ -152,12 +152,12 @@ public class PlayerModel : Entity
         if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _statsPlayer.PlayerFlyingKickMaxDistance, _statsPlayer.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
-            _player.HitMarket.enabled = true;
+            _player.ViewInRange.enabled = true;
             return hit.point;
         }
         else 
         {
-            _player.HitMarket.enabled = false;
+            _player.ViewInRange.enabled = false;
              return Vector3.zero;
         }
     }
