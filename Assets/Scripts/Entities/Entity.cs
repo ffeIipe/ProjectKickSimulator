@@ -3,12 +3,24 @@
 public abstract class Entity : MonoBehaviour
 {
     [Header("Stats Base")]
-    protected float startHP;
     [SerializeField] protected float currentHP;
+    protected float startHP;
 
-    public abstract void TakeDamage(float value);
+    public static void TurnOn(Entity entity)
+    {
+        entity.gameObject.SetActive(true);
+    }
 
-    protected abstract void Die();
+    public static void TurnOff(Entity entity)
+    {
+        entity.ResetEntity();
+        entity.gameObject.SetActive(false);
+    }
 
-    protected abstract void PauseEntity(bool isPaused);
+    public virtual void SpawnEntity(Vector3 entityPosition) { }
+    public virtual void TakeDamage(float value) { }
+
+    protected virtual void Die() { }
+    protected virtual void PauseEntity(bool isPaused) { }
+    protected virtual void ResetEntity() { }
 }

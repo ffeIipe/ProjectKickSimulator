@@ -5,8 +5,9 @@ public class Player : MonoBehaviour
 {
     public PlayerStats playerStats;
     public Transform playerLookAt;
-
+    public Transform playerHand;
     public PlayerModel Model { get; private set; }
+
     private PlayerView _view;
     private PlayerController _controller;
 
@@ -14,11 +15,12 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        Model = new PlayerModel(this);
+        Model = new PlayerModel(this, playerStats);
         _view = new PlayerView(this);
-        _controller = new PlayerController(Model);
+        _controller = new PlayerController(Model, playerStats);
 
         EventManager.player.OnKick += Model.PerformKick;
+        EventManager.player.OnHability += Model.PerformHability;
 
         Model.OnPlayerStart += _view.LockCursor;
         Model.OnPlayerKick += _view.KickView;

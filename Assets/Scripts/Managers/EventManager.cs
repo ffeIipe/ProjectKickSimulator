@@ -29,6 +29,7 @@ public static class EventManager
         public UnityAction<int, int> OnAmmoUsed;
         public UnityAction<bool> IsAmmoUsed;
         public UnityAction OnKick;
+        public UnityAction OnHability;
         public UnityAction OnPlayerHitted;
         public UnityAction OnPlayerDead;
         public UnityAction OnPlayerStart;

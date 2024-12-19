@@ -8,6 +8,6 @@ public class SpawnPoint : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        enemyController.SpawnEnemy(transform.position);
+        enemyController.SpawnEntity(transform.position);
     }
 }

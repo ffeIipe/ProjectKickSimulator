@@ -19,15 +19,15 @@ public class EnemyShark : EnemyController
         _deadCountdown.Tick(Time.deltaTime);
     }
 
-    public override void SpawnEnemy(Vector3 enemyPosition)
+    public override void SpawnEntity(Vector3 enemyPosition)
     {
-        var newEnemy = SharkFactory.Instance.GetObjectFromPool();
+        var newEnemy = ShurikenFactory.Instance.GetObjectFromPool();
         newEnemy.transform.position = enemyPosition;
     }
 
     protected override void Die()
     {
         base.Die();
-        SharkFactory.Instance.ReturnObjectToPool(this);
+        ShurikenFactory.Instance.ReturnObjectToPool(this);
     }
 }

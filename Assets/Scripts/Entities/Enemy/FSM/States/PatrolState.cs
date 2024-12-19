@@ -5,20 +5,19 @@ public class PatrolState : BaseState
 {
     private Animator m_Animator;
     private NavMeshAgent m_NavMeshAgent;
-    private  CountdownTimer _patrolTimer;
 
     public PatrolState(StateMachine stateMachine, EnemyController enemyController) : base(stateMachine, enemyController)
     {
         m_Animator = enemyController.enemyAnimator;
         m_NavMeshAgent = enemyController.agent;
-        _patrolTimer = new CountdownTimer(2f);
-        _patrolTimer.OnTimerStop += Patrol;
+        _enemyController._patrolTimer = new CountdownTimer(_enemyController.RandomPatrolTime());
+        _enemyController._patrolTimer.OnTimerStop += _enemyController.Patrol;
     }
 
     public override void EnterState()
     {
         _enemyController.enemyAnimator.SetBool("Idle", true);
-        Patrol();
+        _enemyController.Patrol();
     }
 
     public override void ExitState()
@@ -28,18 +27,11 @@ public class PatrolState : BaseState
 
     public override void UpdateState()
     {
-        _patrolTimer.Tick(Time.deltaTime);
+        _enemyController._patrolTimer.Tick(Time.deltaTime);
 
         if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangePursuit && !_enemyController.isDead)
         {
             _stateMachine.ChangeState(new ChaseState(_stateMachine, _enemyController));
         }
-    }
-
-    private void Patrol()
-    {
-        _enemyController.Patrol(_enemyController.transform.position);
-        _patrolTimer.Stop();
-        _patrolTimer.Reset();
     }
 }

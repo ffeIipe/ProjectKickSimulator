@@ -22,6 +22,10 @@ public class PlayerStats : ScriptableObject
     public float PlayerFlyingKickMaxDistance;
     public LayerMask PlayerKickMask;
 
+    [Header("Hability stats")]
+    public int ShurikenDamage;
+    public float ShurikenThrowForce;
+
     [Header("Dashkick stats")]
     public float PlayerKickDashForce;
 

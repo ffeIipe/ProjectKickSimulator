@@ -11,4 +11,5 @@ public class EnemyStats : ScriptableObject
     [field: SerializeField] public float EnemyRangeAttack { get; private set; }
     [field: SerializeField] public float EnemyDamage { get; private set; }
     [field: SerializeField] public float EnemyRangePatrol { get; private set; }
+    [field: SerializeField] public Vector2 EnemyTimeBetweenPatrol { get; private set; }
 }

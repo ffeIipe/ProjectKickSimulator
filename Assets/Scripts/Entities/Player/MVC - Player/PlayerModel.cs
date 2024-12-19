@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerModel : Entity
 {
     private Player _player;
-    private PlayerStats _statsPlayer;
-
+    private PlayerStats _playerStats;
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
     
@@ -18,16 +17,17 @@ public class PlayerModel : Entity
     private Vector3 lastEnemyRaycastHit;
 
     public BaseKickStrategy currentKick { get; private set; }
+    public IHabilities currentHability { get; private set; }
 
     public event Action OnPlayerStart = delegate { };
     public event Action OnPlayerKick = delegate { };
     public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
 
-    public PlayerModel(Player player)
+    public PlayerModel(Player player, PlayerStats playerStats)
     {
         _player = player;
-        _statsPlayer = player.playerStats;
+        _playerStats = playerStats;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
         EventManager.configs.OnSensChanged += UpdateSensitivity;
@@ -44,7 +44,7 @@ public class PlayerModel : Entity
         _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
         _player.playerLookAt.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
 
-        _rotationY += mouseX * _statsPlayer.PlayerSensitivity;
+        _rotationY += mouseX * _playerStats.PlayerSensitivity;
         _player.transform.localRotation = Quaternion.Euler(0f, _rotationY, 0f);
     }
 
@@ -58,7 +58,7 @@ public class PlayerModel : Entity
         if (playerDirection.magnitude > 0)
         {
             playerDirection.Normalize();
-            _playerMovement = playerDirection * _statsPlayer.PlayerSpeed;
+            _playerMovement = playerDirection * _playerStats.PlayerSpeed;
 
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
@@ -66,13 +66,17 @@ public class PlayerModel : Entity
 
     private void UpdateSensitivity(float newSensitivity)
     {
-        _statsPlayer.PlayerSensitivity = newSensitivity;
+        _playerStats.PlayerSensitivity = newSensitivity;
     }
 
     public void SetKickStrategy(BaseKickStrategy newKick)
     {
         currentKick = newKick;
-        
+    }
+    
+    public void SetHabilityStrategy(IHabilities newHability)
+    {
+        currentHability = newHability;
     }
 
     public void PerformKick()
@@ -80,48 +84,14 @@ public class PlayerModel : Entity
         currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
     }
 
-    //public void BaseKick()
-    //{
-    //    Vector3 startPosition = Camera.main.transform.position;
-    //    Vector3 direction = Camera.main.transform.forward;
-    //
-    //    RaycastHit[] hits = Physics.SphereCastAll(startPosition, _statsPlayer.PlayerKickRange, direction, _statsPlayer.PlayerKickDistance, _statsPlayer.PlayerKickMask);
-    //
-    //    foreach (var hit in hits)
-    //    {
-    //        var enemy = hit.collider.GetComponent<EnemyController>();
-    //        if (enemy != null)
-    //        {
-    //            enemy.TakeDamage(_statsPlayer.PlayerKickDamage);
-    //            OnHitEnemy();
-    //            var enemyRigidbody = enemy.GetComponent<Rigidbody>();
-    //            enemyRigidbody.constraints = RigidbodyConstraints.None;
-    //
-    //            if (enemyRigidbody != null)
-    //            {  
-    //                Vector3 forceDirection = (_player.transform.forward * _statsPlayer.PlayerKickForce + _player.transform.up * _statsPlayer.PlayerKickUpForce);
-    //                enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
-    //            }
-    //        }
-    //    }
-    //}
-    //
-    //public void Kick()
-    //{
-    //    BaseKick();
-    //    OnPlayerKick();
-    //}
-    //
-    //public void FlyingKick(Vector3 enemyPosition, Quaternion playerRotation)
-    //{
-    //    BaseKick();
-    //    _playerRigidbody.Move(enemyPosition, playerRotation);
-    //    OnPlayerFlyingKick();
-    //}
+    public void PerformHability()
+    {
+        currentHability?.CastHability(Camera.main.transform.forward);
+    }
 
     public void Jump()
     {
-        _playerRigidbody.AddForce(_player.transform.up * _statsPlayer.PlayerJumpForce, ForceMode.Impulse);
+        _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpForce, ForceMode.Impulse);
     }
 
     public override void TakeDamage(float value)
@@ -149,7 +119,7 @@ public class PlayerModel : Entity
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _statsPlayer.PlayerFlyingKickMaxDistance, _statsPlayer.PlayerKickMask))
+        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _playerStats.PlayerFlyingKickMaxDistance, _playerStats.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
             _player.ViewInRange.enabled = true;
@@ -160,10 +130,5 @@ public class PlayerModel : Entity
             _player.ViewInRange.enabled = false;
              return Vector3.zero;
         }
-    }
-
-    protected override void PauseEntity(bool isPaused)
-    {
-        throw new NotImplementedException();
     }
 }

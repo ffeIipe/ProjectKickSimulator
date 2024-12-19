@@ -19,6 +19,7 @@ public abstract class EnemyController : Entity
 
     protected CountdownTimer _deadCountdown;
     protected CountdownTimer _timerStun;
+    public CountdownTimer _patrolTimer;
 
     protected virtual void Start()
     {
@@ -77,33 +78,26 @@ public abstract class EnemyController : Entity
         agent.enabled = true;
     }
 
-    public void Patrol(Vector3 center)
+    public void Patrol()
     {
+        if (agent.enabled == false) agent.enabled = true;
         Vector3 randomDirection = Random.insideUnitSphere * enemyStats.EnemyRangePatrol;
-        randomDirection += center;
+        randomDirection += transform.position;
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomDirection, out hit, enemyStats.EnemyRangePatrol, NavMesh.AllAreas))
         {
             agent.SetDestination(hit.position);
         }
+        _patrolTimer.Start();
     }
 
-    public static void TurnOn(EnemyController enemy)
+    public float RandomPatrolTime()
     {
-        enemy.gameObject.SetActive(true);
+        return Random.Range(enemyStats.EnemyTimeBetweenPatrol.x, enemyStats.EnemyTimeBetweenPatrol.y);
     }
 
-    public static void TurnOff(EnemyController enemy)
-    {
-        enemy.Reset();
-        enemy.gameObject.SetActive(false);
-
-    }
-
-    public abstract void SpawnEnemy(Vector3 enemyPosition);
-
-    private void Reset()
+    protected override void ResetEntity()
     {
         startHP = enemyStats.StartHP;
         currentHP = startHP;

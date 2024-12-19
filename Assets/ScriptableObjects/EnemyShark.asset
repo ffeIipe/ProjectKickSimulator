@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c0c5bea7ba67848a8df16994035ead, type: 3}
   m_Name: EnemyShark
   m_EditorClassIdentifier: 
-  <StartHP>k__BackingField: 30
+  <StartHP>k__BackingField: 15
   <EnemySpeed>k__BackingField: 2
   <EnemyRangePursuit>k__BackingField: 20
   <EnemyRangeAttack>k__BackingField: 2
   <EnemyDamage>k__BackingField: 5
   <EnemyRangePatrol>k__BackingField: 7
+  <EnemyTimeBetweenPatrol>k__BackingField: {x: 5, y: 8}

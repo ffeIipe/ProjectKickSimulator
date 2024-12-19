@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SharkFactory : Factory
+public class ShurikenFactory : Factory
 {
-    public static SharkFactory Instance { get; private set; }
+    public static ShurikenFactory Instance { get; private set; }
 
     private void Awake()
     {

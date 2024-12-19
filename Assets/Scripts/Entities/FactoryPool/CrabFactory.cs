@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrabFactory : EnemyFactory
+public class CrabFactory : Factory
 {
     public static CrabFactory Instance { get; private set; }
 
@@ -16,16 +16,16 @@ public class CrabFactory : EnemyFactory
 
         Instance = this;
 
-        _myEnemiesPool = new Pool<EnemyController>(CreateObject, EnemyController.TurnOn, EnemyController.TurnOff, _initialAmount);
+        _myEnemiesPool = new Pool<Entity>(CreateObject, Entity.TurnOn, Entity.TurnOff, _initialAmount);
     }
 
-    public override EnemyController GetObjectFromPool()
+    public override Entity GetObjectFromPool()
     {
         return _myEnemiesPool.GetObject();
     }
 
-    public override void ReturnObjectToPool(EnemyController bullet)
+    public override void ReturnObjectToPool(Entity entity)
     {
-        _myEnemiesPool.ReturnObject(bullet);
+        _myEnemiesPool.ReturnObject(entity);
     }
 }

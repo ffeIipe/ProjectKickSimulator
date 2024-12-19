@@ -22,7 +22,7 @@ public class ChaseState : BaseState
 
     public override void UpdateState()
     {
-        if (!_enemyController.isDead)
+        if (!_enemyController.isDead && _agent.enabled == true)
         {
             _agent.SetDestination(_enemyController.target.transform.position);
 
@@ -33,7 +33,7 @@ public class ChaseState : BaseState
 
             else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangePursuit)
             {
-                Debug.Log("Moving to target position");
+                _stateMachine.ChangeState(new PatrolState(_stateMachine, _enemyController));
             }
         }
     }

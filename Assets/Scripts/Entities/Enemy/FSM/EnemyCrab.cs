@@ -20,7 +20,7 @@ public class EnemyCrab : EnemyController
         _deadCountdown.Tick(Time.deltaTime);
     }
 
-    public override void SpawnEnemy(Vector3 enemyPosition)
+    public override void SpawnEntity(Vector3 enemyPosition)
     {
         var newEnemy = CrabFactory.Instance.GetObjectFromPool();
         newEnemy.transform.position = enemyPosition;
