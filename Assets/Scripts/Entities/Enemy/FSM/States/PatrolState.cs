@@ -31,6 +31,5 @@ public class PatrolState : BaseState
 
         if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangePursuit && !_enemyController.isDead && _enemyController.isAlert)        
             _stateMachine.ChangeState(new ChaseState(_stateMachine, _enemyController));
-        
     }
 }
