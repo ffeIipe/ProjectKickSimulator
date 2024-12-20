@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29adebacad44a21469e16aaef36f280d, type: 3}
   m_Name: InputStats
   m_EditorClassIdentifier: 
-  NormalKick: 101
+  NormalKick: 323
   FlyingKick: 102
-  ThrowSmokeBomb: 323
+  ThrowSmokeBomb: 101
   ThrowShuriken: 324
