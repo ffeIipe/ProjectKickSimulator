@@ -1,0 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SmokeBombFactory : Factory
+{
+    public static SmokeBombFactory Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        _myEntitesPool = new Pool<Entity>(CreateObject, Entity.TurnOn, Entity.TurnOff, _initialAmount);
+    }
+
+    public override Entity GetObjectFromPool()
+    {
+        return _myEntitesPool.GetObject();
+    }
+
+    public override void ReturnObjectToPool(Entity entity)
+    {
+        _myEntitesPool.ReturnObject(entity);
+    }
+}

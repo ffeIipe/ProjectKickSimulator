@@ -9,6 +9,7 @@ public abstract class EnemyController : Entity
     public NavMeshAgent agent;
     public bool isDead;
     public bool isStunned;
+    public bool isAlert;
 
     protected StateMachine _stateMachine;
 
@@ -24,7 +25,7 @@ public abstract class EnemyController : Entity
     protected virtual void Start()
     {
         EventManager.ui.IsPaused += PauseEntity;
-        target = GameManager.Instance.player.transform;
+        target = GameManager.Instance.Player.transform;
 
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = false;

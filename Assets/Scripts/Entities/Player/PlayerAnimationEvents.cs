@@ -9,6 +9,12 @@ public class PlayerAnimationEvents : MonoBehaviour
         PlayerModel.canThrow = true;
         EventManager.player.OnHability.Invoke();
     }
+    
+    private void ThrowSmokeBomb()
+    {
+        PlayerModel.canThrow = true;
+        EventManager.player.OnHability.Invoke();
+    }
 
     private void KickEvent()
     {

@@ -16,7 +16,7 @@ public class Shuriken : Entity, IHabilities
         _shurikenThrowForce = force;
         _shurikenDamage = damage;
 
-        _playerAnimator = GameManager.Instance.player.GetComponentInChildren<Animator>();
+        _playerAnimator = GameManager.Instance.Player.GetComponentInChildren<Animator>();
         _playerAnimator.SetTrigger(animString);
     }
 

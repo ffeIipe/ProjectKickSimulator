@@ -4,13 +4,66 @@ using UnityEngine;
 
 public class SmokeBomb : Entity, IHabilities
 {
-    public void CastHability(Vector3 pos, Vector3 playerHand)
+    private Vector3 _playerHandPos;
+    private Rigidbody _smokeRigidbody;
+    private Animator _playerAnimator;
+    private CountdownTimer _smokeTimer;
+    private CountdownTimer _smokeLifetime;
+
+    public SmokeBomb(string animString)
+    {     
+        _playerAnimator = GameManager.Instance.Player.GetComponentInChildren<Animator>();
+        _playerAnimator.SetTrigger(animString);
+    }
+
+    private void Start()
     {
-        throw new System.NotImplementedException();
+        //Timer
+        //_smokeTimer = new CountdownTimer(2f);
+        //_smokeTimer.OnTimerStop += SmokeBehaviour;
+        //_smokeTimer.Start();
+
+        _smokeLifetime = new CountdownTimer(5f);
+        _smokeLifetime.OnTimerStop += ReturnObject;
+        _smokeLifetime.Start();
+    }
+
+    private void Update()
+    {
+        //_smokeTimer.Tick(Time.deltaTime);
+        _smokeLifetime.Tick(Time.deltaTime);
+    }
+
+    public void CastHability(Vector3 direction, Vector3 playerHand)
+    {
+        _playerHandPos = playerHand;
+        //transform.position = playerHand;
+
+        var newSmokeBomb = SmokeBombFactory.Instance.GetObjectFromPool();
+        newSmokeBomb.transform.position = playerHand;
+
+        _smokeRigidbody = newSmokeBomb.GetComponent<Rigidbody>();
+        _smokeRigidbody.AddForce(direction * 30, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision) { SmokeBehaviour(); }
+
+    private void SmokeBehaviour()
+    {
+        var smokeBehaviour = GetComponentInChildren<SmokeBehaviour>();
+        smokeBehaviour.gameObject.GetComponent<SphereCollider>().enabled = true;
+        smokeBehaviour.gameObject.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    private void ReturnObject()
+    {
+        SmokeBombFactory.Instance.ReturnObjectToPool(this);
     }
 
     public override void ResetEntity()
     {
-        throw new System.NotImplementedException();
+        transform.position = _playerHandPos;
+        _smokeRigidbody = GetComponent<Rigidbody>();
+        _smokeRigidbody.velocity = Vector3.zero;
     }
 }

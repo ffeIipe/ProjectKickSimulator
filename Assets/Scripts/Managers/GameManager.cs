@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public Player player;
+    public Player Player;
 
     private void Awake()
     {
@@ -14,6 +14,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        player = FindObjectOfType<Player>();
+        Player = FindObjectOfType<Player>();
     }
 }

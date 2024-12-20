@@ -14,7 +14,7 @@ public class PlayerModel : Entity
     public event Action OnHitEnemy = delegate { };
 
     private Player _player;
-    private PlayerStats _playerStats;
+    public PlayerStats _playerStats { get; private set; }
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
     
