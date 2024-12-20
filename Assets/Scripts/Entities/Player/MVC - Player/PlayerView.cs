@@ -10,7 +10,6 @@ public class PlayerView
     private Animator _playerAnimator;
     private AudioSource _audioSource;
 
-
     public PlayerView(Player player)
     {
         _player = player;
@@ -33,6 +32,11 @@ public class PlayerView
     {
         _playerAnimator.SetTrigger("FlyingKick");
 
+    }
+
+    public void JumpView()
+    {
+        _playerAnimator.SetTrigger("Jump");
     }
 
     public void OnEnablePlayer()

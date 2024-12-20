@@ -23,13 +23,13 @@ public class ChaseState : BaseState
     public override void UpdateState()
     {
         if (_enemyController.isDead && !_agent.enabled) return;
-        
-            if(_enemyController.isAlert == true) _agent.SetDestination(_enemyController.target.transform.position);
 
-            if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeAttack)
-                _stateMachine.ChangeState(new AttackState(_stateMachine, _enemyController));
-            
-            else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangePursuit)            
+        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeAttack)
+            _stateMachine.ChangeState(new AttackState(_stateMachine, _enemyController));
+
+        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangePursuit || !EnemyController.isAlert || _enemyController.isStunned)            
                 _stateMachine.ChangeState(new PatrolState(_stateMachine, _enemyController));
+
+        else if (EnemyController.isAlert) _agent.SetDestination(_enemyController.target.transform.position);
     }
 }

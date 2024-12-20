@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
         Model.OnPlayerStart += _view.LockCursor;
         Model.OnPlayerKick += _view.KickView;
         Model.OnPlayerFlyingKick += _view.FlyingKickView;
+        Model.OnJump += _view.JumpView;
         Model.OnHitEnemy += _view.KickHitSound;
     }
 

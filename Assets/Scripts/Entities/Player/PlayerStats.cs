@@ -25,6 +25,7 @@ public class PlayerStats : ScriptableObject
     [Header("Hability stats")]
     public int ShurikenDamage;
     public float ShurikenThrowForce;
+    public float SmokeBombThrowForce;
 
     [Header("Dashkick stats")]
     public float PlayerKickDashForce;

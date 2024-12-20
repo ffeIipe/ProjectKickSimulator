@@ -12,6 +12,7 @@ public class PlayerModel : Entity
     public event Action OnPlayerKick = delegate { };
     public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
+    public event Action OnJump = delegate { };
 
     private Player _player;
     public PlayerStats _playerStats { get; private set; }
@@ -98,6 +99,7 @@ public class PlayerModel : Entity
     public void Jump()
     {
         _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpForce, ForceMode.Impulse);
+        OnJump();
     }
 
     public override void TakeDamage(float value)

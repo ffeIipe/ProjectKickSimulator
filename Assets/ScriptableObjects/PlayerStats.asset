@@ -15,7 +15,7 @@ MonoBehaviour:
   PlayerSensitivity: 1
   StartHP: 10
   PlayerSpeed: 5
-  PlayerJumpForce: 5
+  PlayerJumpForce: 15
   PlayerKickForce: 1
   PlayerKickUpForce: 0.25
   PlayerKickDamage: 5
@@ -27,5 +27,6 @@ MonoBehaviour:
     m_Bits: 128
   ShurikenDamage: 20
   ShurikenThrowForce: 5
+  SmokeBombThrowForce: 60
   PlayerKickDashForce: 5
   kickSound: {fileID: 8300000, guid: be752011b950df345baccdc88876f1ac, type: 3}

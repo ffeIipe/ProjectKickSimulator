@@ -7,9 +7,12 @@ public abstract class EnemyController : Entity
     public EnemyStats enemyStats;
     public Animator enemyAnimator;
     public NavMeshAgent agent;
+
+    public float stunDuration;
+
     public bool isDead;
     public bool isStunned;
-    public bool isAlert;
+    public static bool isAlert = false;
 
     protected StateMachine _stateMachine;
 
@@ -32,10 +35,10 @@ public abstract class EnemyController : Entity
 
         _enemyRigidBody = GetComponent<Rigidbody>();
 
-        _deadCountdown = new CountdownTimer(3f);
+        _deadCountdown = new CountdownTimer(1.5f);
         _deadCountdown.OnTimerStop += Die;
 
-        _timerStun = new CountdownTimer(2f);
+        _timerStun = new CountdownTimer(stunDuration);
         _timerStun.OnTimerStop += RemoveStun;
 
         currentHP = enemyStats.StartHP;
@@ -109,16 +112,16 @@ public abstract class EnemyController : Entity
     {
         if (isPaused)
         {
-            _deadCountdown.Pause();
+            if (_deadCountdown.IsRunning) _deadCountdown.Pause();
             agent.enabled = false;
             _currentVelocity = _enemyRigidBody.velocity;
             _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             _enemyRigidBody.velocity = Vector3.zero;
             enemyAnimator.speed = 0;
-        }
+        }   
         else
-        {
-            _deadCountdown.Resume();
+        {   
+            if (_deadCountdown.IsRunning) _deadCountdown.Resume();
             agent.enabled = true;
             _enemyRigidBody.constraints = RigidbodyConstraints.None;
             _enemyRigidBody.velocity = _currentVelocity;

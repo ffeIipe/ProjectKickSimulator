@@ -7,10 +7,18 @@ public class SmokeBehaviour : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         var enemy = other.GetComponent<EnemyController>();
-        var player = other.GetComponent<Player>();
-
         if (enemy) enemy.Stun();
 
-        else if (player) enemy.isAlert = false;
+        if (other.GetComponent<Player>()) EnemyController.isAlert = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Player>()) EnemyController.isAlert = true;
+    }
+
+    private void OnDisable()
+    {
+        EnemyController.isAlert = true;
     }
 }

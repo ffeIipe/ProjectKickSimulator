@@ -43,7 +43,8 @@ public class SmokeBomb : Entity, IHabilities
         newSmokeBomb.transform.position = playerHand;
 
         _smokeRigidbody = newSmokeBomb.GetComponent<Rigidbody>();
-        _smokeRigidbody.AddForce(direction * 30, ForceMode.Impulse);
+        _smokeRigidbody.AddForce(direction * GameManager.Instance.Player.playerStats.SmokeBombThrowForce, ForceMode.Impulse);
+        
     }
 
     private void OnCollisionEnter(Collision collision) { SmokeBehaviour(); }

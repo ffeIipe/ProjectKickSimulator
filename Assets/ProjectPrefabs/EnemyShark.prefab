@@ -54,6 +54,7 @@ MonoBehaviour:
   enemyStats: {fileID: 11400000, guid: 4b482f7b83dae784985027042891c3d3, type: 2}
   enemyAnimator: {fileID: 5823242467719282969}
   agent: {fileID: 7470555030654666032}
+  stunDuration: 2
   isDead: 0
   isStunned: 0
 --- !u!195 &7470555030654666032

@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
             _model.SetKickStrategy(new NormalKick("Kick"));
         }
         
-        else if (_model.IsEnemyInRange() != Vector3.zero)
+        if (_model.IsEnemyInRange() != Vector3.zero)
         {
             if (Input.GetKeyDown(_inputStats.FlyingKick))
             {
@@ -32,17 +32,17 @@ public class PlayerController : MonoBehaviour
             }   
         }
 
-        else if (Input.GetKeyDown(_inputStats.ThrowShuriken))
+        if (Input.GetKeyDown(_inputStats.ThrowShuriken))
         {
             _model.SetHabilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce ,_model._playerStats.ShurikenDamage, "Shuriken"));
         }
 
-        else if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
+        if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
         {
             _model.SetHabilityStrategy(new SmokeBomb("SmokeBomb"));
         }
 
-        else if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.Jump();
+        if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.Jump();
 
         _model.CameraMovement();
     }
