@@ -22,6 +22,7 @@ public static class EventManager
         public UnityAction<bool> OnShowInteractMessage;
         public UnityAction<bool> OnShowJumpableMessage;
         public UnityAction<bool> OnShowKickeableMessage;
+        public UnityAction<bool> OnShowKickeableEnemy;
     }
 
     public class PlayerEvents

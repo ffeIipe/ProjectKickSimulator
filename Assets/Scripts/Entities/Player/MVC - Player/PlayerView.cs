@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 public class PlayerView
@@ -55,9 +56,8 @@ public class PlayerView
         AudioManager.Instace.PlaySound(_player.playerStats.kickSound);
     }
 
-  
-
-
-
-
+    public void EnemyInRange(bool param)
+    {
+        EventManager.ui.OnShowKickeableEnemy.Invoke(param);
+    }
 }

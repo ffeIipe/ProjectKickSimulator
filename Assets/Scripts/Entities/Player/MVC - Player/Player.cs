@@ -12,8 +12,6 @@ public class Player : MonoBehaviour
     private PlayerView _view;
     private PlayerController _controller;
 
-    public Image ViewInRange;
-
     void Start()
     {
         Model = new PlayerModel(this, playerStats);
@@ -23,16 +21,19 @@ public class Player : MonoBehaviour
         EventManager.player.OnKick += Model.PerformKick;
         EventManager.player.OnHability += Model.PerformHability;
 
+        Model.OnKickeableEnemy += _view.EnemyInRange;
+
         Model.OnPlayerStart += _view.LockCursor;
         Model.OnPlayerKick += _view.KickView;
         Model.OnPlayerFlyingKick += _view.FlyingKickView;
         Model.OnJump += _view.JumpView;
+
         Model.OnHitEnemy += _view.KickHitSound;
     }
 
     private void Update()
     {
-        Debug.Log(EventManager.ui.IsPaused);
+        Debug.Log(EventManager.ui.OnShowKickeableEnemy);
         _controller.InputUpdate();
     }
 

@@ -29,4 +29,4 @@ MonoBehaviour:
   ShurikenThrowForce: 5
   SmokeBombThrowForce: 60
   PlayerKickDashForce: 5
-  kickSound: {fileID: 8300000, guid: be752011b950df345baccdc88876f1ac, type: 3}
+  kickSound: {fileID: 8300000, guid: 0ba6ec50cdba78c4c8ae845ea21eb95a, type: 3}

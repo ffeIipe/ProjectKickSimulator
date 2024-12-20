@@ -13,6 +13,7 @@ public class PlayerModel : Entity
     public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
+    public event Action<bool> OnKickeableEnemy = delegate { };
 
     private Player _player;
     public PlayerStats _playerStats { get; private set; }
@@ -130,13 +131,14 @@ public class PlayerModel : Entity
         if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _playerStats.PlayerFlyingKickMaxDistance, _playerStats.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
-            _player.ViewInRange.enabled = true;
+            Debug.Log("EXECUTING");
+            OnKickeableEnemy(true);
             return hit.point;
         }
         else 
         {
-            _player.ViewInRange.enabled = false;
-             return Vector3.zero;
+            OnKickeableEnemy(false);
+            return Vector3.zero;
         }
     }
 }

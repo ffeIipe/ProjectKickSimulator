@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public void InputUpdate()
     {
         _model.IsGrounded();
+        _model.IsEnemyInRange();
 
         if (Input.GetKeyDown(_inputStats.NormalKick)) 
         {
