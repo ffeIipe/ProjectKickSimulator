@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeBomb : MonoBehaviour
+public class SmokeBomb : Entity, IHabilities
 {
-    // Start is called before the first frame update
-    void Start()
+    public void CastHability(Vector3 pos, Vector3 playerHand)
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ResetEntity()
     {
-        
+        throw new System.NotImplementedException();
     }
 }

@@ -36,7 +36,7 @@ public class Shuriken : Entity, IHabilities
     {
         _playerHandPos = playerHand;
         var newShuriken = ShurikenFactory.Instance.GetObjectFromPool();
-        newShuriken.transform.position = playerHand;
+        newShuriken.transform.position = _playerHandPos;
 
         _shurikenRigidbody = newShuriken.GetComponent<Rigidbody>();
         _shurikenRigidbody.AddForce(direction * (_shurikenThrowForce * 10), ForceMode.Impulse);
@@ -66,11 +66,9 @@ public class Shuriken : Entity, IHabilities
 
     public override void ResetEntity()
     {
-        base.ResetEntity();
+        transform.position = _playerHandPos;
         _shurikenRigidbody = GetComponent<Rigidbody>();
         _shurikenRigidbody.velocity = Vector3.zero;
-        transform.position = _playerHandPos;
-        Debug.Log(_playerHandPos);
     }
 
     protected override void PauseEntity(bool isPaused)

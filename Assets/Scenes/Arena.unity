@@ -1542,7 +1542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityToInstantiate: {fileID: 5677230150366543487, guid: b7e3e989ad356de4293e529f28ef3c0c,
     type: 3}
-  _initialAmount: 2
+  _initialAmount: 1
 --- !u!114 &806922753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2046,6 +2046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0bf0ff59441c04883131df7155e241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHP: 0
 --- !u!23 &1147686593
 MeshRenderer:
   m_ObjectHideFlags: 0

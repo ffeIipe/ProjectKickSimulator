@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerModel : Entity
 {
-    public static bool _canThrow;
+    public static bool canThrow;
     public BaseKickStrategy currentKick { get; private set; }
     public IHabilities currentHability { get; private set; }
 
@@ -88,8 +88,11 @@ public class PlayerModel : Entity
 
     public void PerformHability()
     {
-        Debug.Log("Hability cast");
-        currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.position);
+        if(canThrow)
+        {
+            currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.transform.position);
+            canThrow = false;
+        }
     }
 
     public void Jump()
