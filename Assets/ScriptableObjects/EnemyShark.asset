@@ -19,3 +19,4 @@ MonoBehaviour:
   <EnemyDamage>k__BackingField: 5
   <EnemyRangePatrol>k__BackingField: 7
   <EnemyTimeBetweenPatrol>k__BackingField: {x: 5, y: 8}
+  <StunDuration>k__BackingField: 1

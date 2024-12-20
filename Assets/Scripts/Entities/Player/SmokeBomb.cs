@@ -16,8 +16,9 @@ public class SmokeBomb : Entity, IHabilities
         _playerAnimator.SetTrigger(animString);
     }
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         //Timer
         //_smokeTimer = new CountdownTimer(2f);
         //_smokeTimer.OnTimerStop += SmokeBehaviour;

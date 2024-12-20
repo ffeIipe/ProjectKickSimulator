@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyShark : EnemyController
 {
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
         _stateMachine = new StateMachine();

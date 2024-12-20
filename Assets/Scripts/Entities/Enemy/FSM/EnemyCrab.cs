@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class EnemyCrab : EnemyController
 {
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
-
         _stateMachine = new StateMachine();
         _stateMachine.Initialize(new PatrolState(_stateMachine, this));
 

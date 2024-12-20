@@ -10,6 +10,7 @@ public class Shuriken : Entity, IHabilities
     private Rigidbody _shurikenRigidbody;
     private Animator _playerAnimator;
     private CountdownTimer _shurikenTimer;
+    private Vector3 _currentVelocity;
 
     public Shuriken(float force, int damage, string animString)
     {
@@ -20,8 +21,9 @@ public class Shuriken : Entity, IHabilities
         _playerAnimator.SetTrigger(animString);
     }
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         _shurikenTimer = new CountdownTimer(1f);
         _shurikenTimer.OnTimerStop += ReturnObject;
         _shurikenTimer.Start();
@@ -73,6 +75,18 @@ public class Shuriken : Entity, IHabilities
 
     protected override void PauseEntity(bool isPaused)
     {
-        throw new System.NotImplementedException();
+        if (isPaused)
+        {
+            if (_shurikenTimer.IsRunning) _shurikenTimer.Pause();
+            _currentVelocity = _shurikenRigidbody.velocity;
+            _shurikenRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            _shurikenRigidbody.velocity = Vector3.zero;
+        }
+        else
+        {
+            if (_shurikenTimer.IsRunning) _shurikenTimer.Resume();
+            _shurikenRigidbody.constraints = RigidbodyConstraints.None;
+            _shurikenRigidbody.velocity = _currentVelocity;
+        }
     }
 }

@@ -17,6 +17,8 @@ public abstract class Entity : MonoBehaviour
         entity.gameObject.SetActive(false);
     }
 
+    public virtual void Start() { EventManager.ui.IsPaused += PauseEntity; }
+
     public virtual void SpawnEntity(Vector3 entityPosition) { }
     public virtual void TakeDamage(float value) { }
 

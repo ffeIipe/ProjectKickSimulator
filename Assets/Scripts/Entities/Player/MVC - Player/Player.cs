@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(EventManager.ui.IsPaused);
         _controller.InputUpdate();
     }
 

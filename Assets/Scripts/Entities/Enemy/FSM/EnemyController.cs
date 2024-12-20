@@ -8,8 +8,6 @@ public abstract class EnemyController : Entity
     public Animator enemyAnimator;
     public NavMeshAgent agent;
 
-    public float stunDuration;
-
     public bool isDead;
     public bool isStunned;
     public static bool isAlert = false;
@@ -25,9 +23,9 @@ public abstract class EnemyController : Entity
     protected CountdownTimer _timerStun;
     public CountdownTimer _patrolTimer;
 
-    protected virtual void Start()
+    public override void Start()
     {
-        EventManager.ui.IsPaused += PauseEntity;
+        base.Start();
         target = GameManager.Instance.Player.transform;
 
         agent = GetComponent<NavMeshAgent>();
@@ -38,7 +36,7 @@ public abstract class EnemyController : Entity
         _deadCountdown = new CountdownTimer(1.5f);
         _deadCountdown.OnTimerStop += Die;
 
-        _timerStun = new CountdownTimer(stunDuration);
+        _timerStun = new CountdownTimer(enemyStats.StunDuration);
         _timerStun.OnTimerStop += RemoveStun;
 
         currentHP = enemyStats.StartHP;
@@ -114,17 +112,19 @@ public abstract class EnemyController : Entity
         {
             if (_deadCountdown.IsRunning) _deadCountdown.Pause();
             agent.enabled = false;
+            _stateMachine.enabled = false;
             _currentVelocity = _enemyRigidBody.velocity;
-            _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
-            _enemyRigidBody.velocity = Vector3.zero;
+            //_enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            //_enemyRigidBody.velocity = Vector3.zero;
             enemyAnimator.speed = 0;
         }   
         else
         {   
             if (_deadCountdown.IsRunning) _deadCountdown.Resume();
             agent.enabled = true;
-            _enemyRigidBody.constraints = RigidbodyConstraints.None;
-            _enemyRigidBody.velocity = _currentVelocity;
+            _stateMachine.enabled = true;
+            //_enemyRigidBody.constraints = RigidbodyConstraints.None;
+            //_enemyRigidBody.velocity = _currentVelocity;
             enemyAnimator.speed = 1;
         }
     }
