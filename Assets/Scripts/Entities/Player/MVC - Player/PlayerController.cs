@@ -4,13 +4,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private PlayerModel _model;
-    private PlayerStats _playerStats;
+    private InputStats _inputStats;
     private Vector3 _playerDirection;
 
-    public PlayerController(PlayerModel model, PlayerStats playerStats)
+    public PlayerController(PlayerModel model, InputStats inputStats)
     {
         _model = model;
-        _playerStats = playerStats;
+        _inputStats = inputStats;
         _playerDirection = Vector3.zero;
     }
 
@@ -18,23 +18,28 @@ public class PlayerController : MonoBehaviour
     {
         _model.IsGrounded();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        if (Input.GetKeyDown(_inputStats.NormalKick)) 
         {
             _model.SetKickStrategy(new NormalKick("Kick"));
         }
         
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            _model.SetHabilityStrategy(new Shuriken(GameManager.Instance.player.playerHand, _playerStats.ShurikenThrowForce , _playerStats.ShurikenDamage, "Shuriken"));
-        }
-
         else if (_model.IsEnemyInRange() != Vector3.zero)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(_inputStats.FlyingKick))
             {
                 var enemyPos = _model.IsEnemyInRange();
                 _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), Quaternion.Euler(_model.IsEnemyInRange()), "FlyingKick"));
             }   
+        }
+
+        else if (Input.GetKeyDown(_inputStats.ThrowShuriken))
+        {
+            _model.SetHabilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce ,_model._playerStats.ShurikenDamage, "Shuriken"));
+        }
+
+        else if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
+        {
+            _model.SetHabilityStrategy(new SmokeBomb("SmokeBomb"));
         }
 
         else if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.Jump();

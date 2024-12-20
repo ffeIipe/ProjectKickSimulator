@@ -9,7 +9,7 @@ public abstract class BaseKickStrategy : IKick
 
     protected BaseKickStrategy()
     {
-        _player = GameManager.Instance.player;
+        _player = GameManager.Instance.Player;
     }
 
     public void ExecuteKick(Vector3 startPosition, Vector3 direction, Action onHit)

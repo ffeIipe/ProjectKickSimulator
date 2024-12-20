@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public PlayerStats playerStats;
+    public InputStats inputStats;
     public Transform playerLookAt;
     public Transform playerHand;
     public PlayerModel Model { get; private set; }
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour
     {
         Model = new PlayerModel(this, playerStats);
         _view = new PlayerView(this);
-        _controller = new PlayerController(Model, playerStats);
+        _controller = new PlayerController(Model, inputStats);
 
         EventManager.player.OnKick += Model.PerformKick;
         EventManager.player.OnHability += Model.PerformHability;

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHabilities
 {
-    void CastHability(Vector3 pos);   
+    void CastHability(Vector3 pos, Vector3 playerHand);   
 }

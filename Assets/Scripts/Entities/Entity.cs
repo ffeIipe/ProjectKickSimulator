@@ -22,5 +22,5 @@ public abstract class Entity : MonoBehaviour
 
     protected virtual void Die() { }
     protected virtual void PauseEntity(bool isPaused) { }
-    protected virtual void ResetEntity() { }
+    public virtual void ResetEntity() { }
 }

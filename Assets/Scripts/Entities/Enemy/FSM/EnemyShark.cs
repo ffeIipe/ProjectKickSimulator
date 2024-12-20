@@ -21,7 +21,7 @@ public class EnemyShark : EnemyController
 
     public override void SpawnEntity(Vector3 enemyPosition)
     {
-        var newEnemy = ShurikenFactory.Instance.GetObjectFromPool();
+        var newEnemy = SharkFactory.Instance.GetObjectFromPool();
         newEnemy.transform.position = enemyPosition;
     }
 

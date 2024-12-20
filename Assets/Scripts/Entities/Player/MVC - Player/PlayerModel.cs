@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class PlayerModel : Entity
 {
+    public static bool canThrow;
+    public BaseKickStrategy currentKick { get; private set; }
+    public IHabilities currentHability { get; private set; }
+
+    public event Action OnPlayerStart = delegate { };
+    public event Action OnPlayerKick = delegate { };
+    public event Action OnPlayerFlyingKick = delegate { };
+    public event Action OnHitEnemy = delegate { };
+
     private Player _player;
-    private PlayerStats _playerStats;
+    public PlayerStats _playerStats { get; private set; }
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
     
@@ -16,13 +25,6 @@ public class PlayerModel : Entity
     private bool _canFlyKick;
     private Vector3 lastEnemyRaycastHit;
 
-    public BaseKickStrategy currentKick { get; private set; }
-    public IHabilities currentHability { get; private set; }
-
-    public event Action OnPlayerStart = delegate { };
-    public event Action OnPlayerKick = delegate { };
-    public event Action OnPlayerFlyingKick = delegate { };
-    public event Action OnHitEnemy = delegate { };
 
     public PlayerModel(Player player, PlayerStats playerStats)
     {
@@ -73,20 +75,24 @@ public class PlayerModel : Entity
     {
         currentKick = newKick;
     }
-    
-    public void SetHabilityStrategy(IHabilities newHability)
-    {
-        currentHability = newHability;
-    }
 
     public void PerformKick()
     {
         currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
     }
 
+    public void SetHabilityStrategy(IHabilities newHability)
+    {
+        currentHability = newHability;
+    }
+
     public void PerformHability()
     {
-        currentHability?.CastHability(Camera.main.transform.forward);
+        if(canThrow)
+        {
+            currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.transform.position);
+            canThrow = false;
+        }
     }
 
     public void Jump()

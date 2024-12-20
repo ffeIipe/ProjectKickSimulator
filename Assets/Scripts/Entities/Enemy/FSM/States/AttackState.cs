@@ -21,7 +21,7 @@ public class AttackState : BaseState
 
     public override void UpdateState()
     {
-        if (Vector3.Distance(_enemyController.transform.position, GameManager.Instance.player.transform.position) > _enemyController.enemyStats.EnemyRangeAttack && !_enemyController.isDead)
+        if (Vector3.Distance(_enemyController.transform.position, GameManager.Instance.Player.transform.position) > _enemyController.enemyStats.EnemyRangeAttack && !_enemyController.isDead)
         {
             _stateMachine.ChangeState(new ChaseState(_stateMachine, _enemyController));
         }

@@ -26,6 +26,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   ShurikenDamage: 20
-  ShurikenThrowForce: 20
+  ShurikenThrowForce: 5
   PlayerKickDashForce: 5
   kickSound: {fileID: 8300000, guid: be752011b950df345baccdc88876f1ac, type: 3}

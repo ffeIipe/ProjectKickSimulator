@@ -2,17 +2,68 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeBomb : MonoBehaviour
+public class SmokeBomb : Entity, IHabilities
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private Vector3 _playerHandPos;
+    private Rigidbody _smokeRigidbody;
+    private Animator _playerAnimator;
+    private CountdownTimer _smokeTimer;
+    private CountdownTimer _smokeLifetime;
+
+    public SmokeBomb(string animString)
+    {     
+        _playerAnimator = GameManager.Instance.Player.GetComponentInChildren<Animator>();
+        _playerAnimator.SetTrigger(animString);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        //Timer
+        //_smokeTimer = new CountdownTimer(2f);
+        //_smokeTimer.OnTimerStop += SmokeBehaviour;
+        //_smokeTimer.Start();
+
+        _smokeLifetime = new CountdownTimer(5f);
+        _smokeLifetime.OnTimerStop += ReturnObject;
+        _smokeLifetime.Start();
+    }
+
+    private void Update()
+    {
+        //_smokeTimer.Tick(Time.deltaTime);
+        _smokeLifetime.Tick(Time.deltaTime);
+    }
+
+    public void CastHability(Vector3 direction, Vector3 playerHand)
+    {
+        _playerHandPos = playerHand;
+        //transform.position = playerHand;
+
+        var newSmokeBomb = SmokeBombFactory.Instance.GetObjectFromPool();
+        newSmokeBomb.transform.position = playerHand;
+
+        _smokeRigidbody = newSmokeBomb.GetComponent<Rigidbody>();
+        _smokeRigidbody.AddForce(direction * 30, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision) { SmokeBehaviour(); }
+
+    private void SmokeBehaviour()
+    {
+        var smokeBehaviour = GetComponentInChildren<SmokeBehaviour>();
+        smokeBehaviour.gameObject.GetComponent<SphereCollider>().enabled = true;
+        smokeBehaviour.gameObject.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    private void ReturnObject()
+    {
+        SmokeBombFactory.Instance.ReturnObjectToPool(this);
+    }
+
+    public override void ResetEntity()
+    {
+        transform.position = _playerHandPos;
+        _smokeRigidbody = GetComponent<Rigidbody>();
+        _smokeRigidbody.velocity = Vector3.zero;
     }
 }

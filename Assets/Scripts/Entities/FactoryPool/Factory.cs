@@ -7,7 +7,7 @@ public abstract class Factory : MonoBehaviour
     [SerializeField] private Entity entityToInstantiate;
     [SerializeField] protected int _initialAmount;
 
-    protected Pool<Entity> _myEnemiesPool;
+    protected Pool<Entity> _myEntitesPool;
 
     protected Entity CreateObject()
     {
