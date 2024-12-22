@@ -7,17 +7,22 @@ public class PlayerAnimationEvents : MonoBehaviour
     private void ThrowShuriken()
     {
         PlayerModel.canThrow = true;
-        EventManager.player.OnHability.Invoke();
+        EventManager.Player.OnHability.Invoke();
     }
     
     private void ThrowSmokeBomb()
     {
         PlayerModel.canThrow = true;
-        EventManager.player.OnHability.Invoke();
+        EventManager.Player.OnHability.Invoke();
     }
 
     private void KickEvent()
     {
-        EventManager.player.OnKick.Invoke();
+        EventManager.Player.OnKick.Invoke();
+    }
+
+    private void Jump()
+    {
+        EventManager.Player.OnJump.Invoke();
     }
 }

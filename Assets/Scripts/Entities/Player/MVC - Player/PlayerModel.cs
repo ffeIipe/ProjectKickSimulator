@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerModel : Entity
 {
     public static bool canThrow;
+    public bool isRunning;
     public BaseKickStrategy currentKick { get; private set; }
     public IHabilities currentHability { get; private set; }
 
@@ -13,6 +14,7 @@ public class PlayerModel : Entity
     public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
+    public event Action<float, float> OnMovement = delegate { };
     public event Action<bool> OnKickeableEnemy = delegate { };
 
     private Player _player;
@@ -54,6 +56,7 @@ public class PlayerModel : Entity
 
     public void Movement(Vector3 playerDirection)
     {
+        isRunning = true;
         float movementX = Input.GetAxisRaw("Horizontal");
         float movementZ = Input.GetAxisRaw("Vertical");
 
@@ -66,6 +69,8 @@ public class PlayerModel : Entity
 
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
+
+        OnMovement(playerDirection.x, playerDirection.z);
     }
 
     private void UpdateSensitivity(float newSensitivity)
@@ -97,10 +102,14 @@ public class PlayerModel : Entity
         }
     }
 
-    public void Jump()
+    public void JumpCall()
+    {
+        OnJump();
+    }
+
+    public void PerformJump()
     {
         _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpForce, ForceMode.Impulse);
-        OnJump();
     }
 
     public override void TakeDamage(float value)
@@ -131,7 +140,6 @@ public class PlayerModel : Entity
         if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _playerStats.PlayerFlyingKickMaxDistance, _playerStats.PlayerKickMask))
         {
             lastEnemyRaycastHit = hit.point;
-            Debug.Log("EXECUTING");
             OnKickeableEnemy(true);
             return hit.point;
         }

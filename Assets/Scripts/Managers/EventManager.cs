@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public static class EventManager
 {
     public static readonly EnemyEvents enemy = new EnemyEvents();
-    public static readonly PlayerEvents player = new PlayerEvents();
+    public static readonly PlayerEvents Player = new PlayerEvents();
     public static readonly LevelEvents level = new LevelEvents();
     public static readonly ConfigsEvents configs = new ConfigsEvents();
     public static readonly UIEvents ui = new UIEvents();
@@ -30,6 +30,7 @@ public static class EventManager
         public UnityAction<int, int> OnAmmoUsed;
         public UnityAction<bool> IsAmmoUsed;
         public UnityAction OnKick;
+        public UnityAction OnJump;
         public UnityAction OnHability;
         public UnityAction OnPlayerHitted;
         public UnityAction OnPlayerDead;

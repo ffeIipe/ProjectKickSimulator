@@ -40,6 +40,12 @@ public class PlayerView
         _playerAnimator.SetTrigger("Jump");
     }
 
+    public void MovementView(float x, float z)
+    {
+        _playerAnimator.SetFloat("x", x);
+        _playerAnimator.SetFloat("y", z);
+    }
+
     public void OnEnablePlayer()
     {
         _playerAnimator = _player.GetComponentInChildren<Animator>();

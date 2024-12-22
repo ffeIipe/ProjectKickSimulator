@@ -3,14 +3,10 @@ using UnityEngine;
 
 public class NormalKick : BaseKickStrategy
 {
-    public NormalKick(string animString)
-    {
-        _player.GetComponentInChildren<Animator>().SetTrigger(animString);
-    }
+    public NormalKick(string animString) { _playerAnimator.SetTrigger(animString); }
 
     protected override void HandleHit(RaycastHit hit, Action onHit)
     {
-        Debug.Log("NormalKick");
         var enemy = hit.collider.GetComponent<EnemyController>();
         if (enemy != null)
         {

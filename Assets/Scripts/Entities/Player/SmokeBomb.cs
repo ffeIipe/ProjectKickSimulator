@@ -54,7 +54,10 @@ public class SmokeBomb : Entity, IHabilities
     {
         var smokeBehaviour = GetComponentInChildren<SmokeBehaviour>();
         smokeBehaviour.gameObject.GetComponent<SphereCollider>().enabled = true;
-        smokeBehaviour.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        var renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (var renderer in renderers)
+            renderer.enabled = true;
     }
 
     private void ReturnObject()

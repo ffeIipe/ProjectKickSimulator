@@ -114,8 +114,8 @@ public abstract class EnemyController : Entity
             agent.enabled = false;
             _stateMachine.enabled = false;
             _currentVelocity = _enemyRigidBody.velocity;
-            //_enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
-            //_enemyRigidBody.velocity = Vector3.zero;
+            _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            _enemyRigidBody.velocity = Vector3.zero;
             enemyAnimator.speed = 0;
         }   
         else
@@ -123,8 +123,8 @@ public abstract class EnemyController : Entity
             if (_deadCountdown.IsRunning) _deadCountdown.Resume();
             agent.enabled = true;
             _stateMachine.enabled = true;
-            //_enemyRigidBody.constraints = RigidbodyConstraints.None;
-            //_enemyRigidBody.velocity = _currentVelocity;
+            _enemyRigidBody.constraints = RigidbodyConstraints.None;
+            _enemyRigidBody.velocity = _currentVelocity;
             enemyAnimator.speed = 1;
         }
     }

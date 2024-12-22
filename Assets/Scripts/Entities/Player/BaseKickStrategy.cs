@@ -3,13 +3,15 @@ using UnityEngine;
 
 public abstract class BaseKickStrategy : IKick
 {
-    protected Vector3 _startPosition;
-    protected Vector3 _direction;
     protected Player _player;
+    protected Rigidbody _playerRigidbody;
+    protected Animator _playerAnimator;
 
     protected BaseKickStrategy()
     {
         _player = GameManager.Instance.Player;
+        _playerRigidbody = _player.GetComponent<Rigidbody>();
+        _playerAnimator = _player.GetComponentInChildren<Animator>();
     }
 
     public void ExecuteKick(Vector3 startPosition, Vector3 direction, Action onHit)

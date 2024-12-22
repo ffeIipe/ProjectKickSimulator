@@ -18,22 +18,26 @@ public class Player : MonoBehaviour
         _view = new PlayerView(this);
         _controller = new PlayerController(Model, inputStats);
 
-        EventManager.player.OnKick += Model.PerformKick;
-        EventManager.player.OnHability += Model.PerformHability;
+        EventManager.Player.OnKick += Model.PerformKick;
+        EventManager.Player.OnHability += Model.PerformHability;
 
+        Model.OnMovement += _view.MovementView;
+        
         Model.OnKickeableEnemy += _view.EnemyInRange;
 
         Model.OnPlayerStart += _view.LockCursor;
+
         Model.OnPlayerKick += _view.KickView;
         Model.OnPlayerFlyingKick += _view.FlyingKickView;
+
         Model.OnJump += _view.JumpView;
+        EventManager.Player.OnJump += Model.PerformJump;
 
         Model.OnHitEnemy += _view.KickHitSound;
     }
 
     private void Update()
     {
-        Debug.Log(EventManager.ui.OnShowKickeableEnemy);
         _controller.InputUpdate();
     }
 

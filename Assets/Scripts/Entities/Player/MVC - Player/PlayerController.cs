@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     {
         _model.IsGrounded();
         _model.IsEnemyInRange();
+        _model.CameraMovement();
+
+        
 
         if (Input.GetKeyDown(_inputStats.NormalKick)) 
         {
@@ -29,7 +32,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(_inputStats.FlyingKick))
             {
                 var enemyPos = _model.IsEnemyInRange();
-                _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), Quaternion.Euler(_model.IsEnemyInRange()), "FlyingKick"));
+                _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), _model.IsEnemyInRange(), "FlyingKick"));
             }   
         }
 
@@ -43,9 +46,7 @@ public class PlayerController : MonoBehaviour
             _model.SetHabilityStrategy(new SmokeBomb("SmokeBomb"));
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.Jump();
-
-        _model.CameraMovement();
+        if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.JumpCall();
     }
 
     public void InputFixedUpdate()

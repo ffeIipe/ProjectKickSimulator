@@ -2,28 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class FlyingKick : BaseKickStrategy
 {
-    private Vector3 _enemyPosition;
-    private Quaternion _playerRotation;
-    private Rigidbody _playerRigidbody;
-
-    public FlyingKick(Vector3 enemyPosition, Quaternion playerRotation, string animString)
+    public FlyingKick(Vector3 enemyPosition, Vector3 playerRotation, string animString)
     {
-        _enemyPosition = enemyPosition;
-        _playerRotation = playerRotation;
-
-        _player.GetComponentInChildren<Animator>().SetTrigger(animString);
-
-        _playerRigidbody = _player.GetComponent<Rigidbody>();
-        _playerRigidbody.Move(_enemyPosition, _playerRotation);
+        _playerAnimator.SetTrigger(animString);
+        _playerRigidbody.Move(enemyPosition, Quaternion.Euler(playerRotation));
     }
 
     protected override void HandleHit(RaycastHit hit, Action onHit)
     {
-        Debug.Log("FlyingKick");
         var enemy = hit.collider.GetComponent<EnemyController>();
         if (enemy != null)
         {

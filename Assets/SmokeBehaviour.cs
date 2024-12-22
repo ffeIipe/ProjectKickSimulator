@@ -7,7 +7,7 @@ public class SmokeBehaviour : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         var enemy = other.GetComponent<EnemyController>();
-        if (enemy) enemy.Stun();
+        if (enemy && !enemy.isStunned) enemy.Stun();
 
         if (other.GetComponent<Player>()) EnemyController.isAlert = false;
     }
