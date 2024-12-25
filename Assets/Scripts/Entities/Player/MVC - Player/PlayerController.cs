@@ -16,32 +16,33 @@ public class PlayerController : MonoBehaviour
 
     public void InputUpdate()
     {
+        Debug.Log(PlayerModel.canThrow);
+        Debug.Log(PlayerModel.canKick);
+
         _model.IsGrounded();
         _model.IsEnemyInRange();
         _model.CameraMovement();
 
-        
-
-        if (Input.GetKeyDown(_inputStats.NormalKick)) 
+        if (Input.GetKeyDown(_inputStats.NormalKick) && PlayerModel.canKick)
         {
             _model.SetKickStrategy(new NormalKick("Kick"));
         }
-        
+
         if (_model.IsEnemyInRange() != Vector3.zero)
         {
-            if (Input.GetKeyDown(_inputStats.FlyingKick))
+            if (Input.GetKeyDown(_inputStats.FlyingKick) && PlayerModel.canKick)
             {
                 var enemyPos = _model.IsEnemyInRange();
                 _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), _model.IsEnemyInRange(), "FlyingKick"));
-            }   
+            }
         }
 
-        if (Input.GetKeyDown(_inputStats.ThrowShuriken))
+        if (Input.GetKeyDown(_inputStats.ThrowShuriken) && PlayerModel.canThrow)
         {
-            _model.SetHabilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce ,_model._playerStats.ShurikenDamage, "Shuriken"));
+            _model.SetHabilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce, _model._playerStats.ShurikenDamage, "Shuriken"));
         }
 
-        if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
+        if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb) && PlayerModel.canThrow)
         {
             _model.SetHabilityStrategy(new SmokeBomb("SmokeBomb"));
         }
@@ -51,6 +52,9 @@ public class PlayerController : MonoBehaviour
 
     public void InputFixedUpdate()
     {
+        _playerDirection.x = Input.GetAxisRaw("Horizontal");
+        _playerDirection.z = Input.GetAxisRaw("Vertical");
+
         _model.Movement(_playerDirection);
     }
 }

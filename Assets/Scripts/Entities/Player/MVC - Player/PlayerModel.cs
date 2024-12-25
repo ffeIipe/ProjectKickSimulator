@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerModel : Entity
 {
-    public static bool canThrow;
+    public static bool canThrow = true;
+    public static bool canKick = true;
+
     public bool isRunning;
-    public BaseKickStrategy currentKick { get; private set; }
-    public IHabilities currentHability { get; private set; }
 
     public event Action OnPlayerStart = delegate { };
     public event Action OnPlayerKick = delegate { };
@@ -17,18 +17,22 @@ public class PlayerModel : Entity
     public event Action<float, float> OnMovement = delegate { };
     public event Action<bool> OnKickeableEnemy = delegate { };
 
-    private Player _player;
+    public BaseKickStrategy currentKick { get; private set; }
+    public IHabilities currentHability { get; private set; }
     public PlayerStats _playerStats { get; private set; }
+
+    private Player _player;
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
     
-    private Vector3 _playerMovement;
     private float _rotationX;
     private float _rotationY;
 
-    private bool _canFlyKick;
-    private Vector3 lastEnemyRaycastHit;
+    private Vector3 _playerMovement;
+    private float _currentX;
+    private float _currentZ;
 
+    private Vector3 lastEnemyRaycastHit;
 
     public PlayerModel(Player player, PlayerStats playerStats)
     {
@@ -57,8 +61,12 @@ public class PlayerModel : Entity
     public void Movement(Vector3 playerDirection)
     {
         isRunning = true;
-        float movementX = Input.GetAxisRaw("Horizontal");
-        float movementZ = Input.GetAxisRaw("Vertical");
+
+        float movementX = 0f;
+        float movementZ = 0f;
+
+        movementX = Input.GetAxisRaw("Horizontal");
+        movementZ = Input.GetAxisRaw("Vertical");
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
@@ -70,7 +78,10 @@ public class PlayerModel : Entity
             _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
         }
 
-        OnMovement(playerDirection.x, playerDirection.z);
+        _currentX = Mathf.Lerp(_currentX, movementX, .5f);
+        _currentZ = Mathf.Lerp(_currentZ, movementZ, .5f);
+
+        OnMovement(_currentX, _currentZ);
     }
 
     private void UpdateSensitivity(float newSensitivity)
@@ -80,6 +91,7 @@ public class PlayerModel : Entity
 
     public void SetKickStrategy(BaseKickStrategy newKick)
     {
+        canKick = false;
         currentKick = newKick;
     }
 
@@ -90,16 +102,13 @@ public class PlayerModel : Entity
 
     public void SetHabilityStrategy(IHabilities newHability)
     {
+        canThrow = false;
         currentHability = newHability;
     }
 
     public void PerformHability()
     {
-        if(canThrow)
-        {
-            currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.transform.position);
-            canThrow = false;
-        }
+        currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.transform.position);
     }
 
     public void JumpCall()

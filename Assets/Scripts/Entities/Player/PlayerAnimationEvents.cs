@@ -6,13 +6,11 @@ public class PlayerAnimationEvents : MonoBehaviour
 {
     private void ThrowShuriken()
     {
-        PlayerModel.canThrow = true;
         EventManager.Player.OnHability.Invoke();
     }
     
     private void ThrowSmokeBomb()
     {
-        PlayerModel.canThrow = true;
         EventManager.Player.OnHability.Invoke();
     }
 
@@ -25,4 +23,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         EventManager.Player.OnJump.Invoke();
     }
+
+    private void CanKick() { PlayerModel.canKick = true; }
+    private void CanHability() { PlayerModel.canThrow = true; }
 }

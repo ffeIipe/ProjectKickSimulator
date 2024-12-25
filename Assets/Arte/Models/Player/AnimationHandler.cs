@@ -25,46 +25,37 @@ public class AnimationHandler : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("EXECUTING");
-
-        // Check if Shift is pressed
         bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
-        // Determine which smoothing factor to use
         float currentSmoothing = isRunning ? runningSmoothing : smoothing;
 
-        // Reset target values
         targetX = 0f;
         targetY = 0f;
 
-        // WASD input handling
         if (Input.GetKey(KeyCode.W))
         {
-            targetY = isRunning ? 1f : 0.5f; // Forward walk or run
+            targetY = isRunning ? 1f : 0.5f;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            targetY = isRunning ? -1f : -0.5f; // Backward walk or run
+            targetY = isRunning ? -1f : -0.5f; 
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            targetX = isRunning ? -1f : -0.5f; // Strafe left walk or run
+            targetX = isRunning ? -1f : -0.5f;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            targetX = isRunning ? 1f : 0.5f; // Strafe right walk or run
+            targetX = isRunning ? 1f : 0.5f;
         }
 
-        // Smoothly interpolate current values towards target values
         currentX = Mathf.Lerp(currentX, targetX, currentSmoothing);
         currentY = Mathf.Lerp(currentY, targetY, currentSmoothing);
 
-        // Apply the smoothed x and y parameters to the Animator
         animator.SetFloat("x", currentX);
         animator.SetFloat("y", currentY);
 
-        // Update shiftHeldBeforeMovement
         shiftHeldBeforeMovement = isRunning && Input.GetKey(KeyCode.W);
     }
 }
