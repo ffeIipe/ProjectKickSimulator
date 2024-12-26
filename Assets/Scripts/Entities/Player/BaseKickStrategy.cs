@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class BaseKickStrategy : IKick
+public abstract class BaseKickStrategy : MonoBehaviour, IKick
 {
     protected Player _player;
     protected Rigidbody _playerRigidbody;

@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class TeleportState : BaseState
 {
-    public TeleportState(StateMachine stateMachine, EnemyController enemyController) : base(stateMachine, enemyController)
-    {
+    private CountdownTimer _delayTimer;
 
-    }
+    public TeleportState(FSM stateMachine, EnemyController enemyController) : base(stateMachine, enemyController) { }
 
     public override void EnterState()
     {
-        
+        _delayTimer = new CountdownTimer(_enemyController.enemyStats.EnemyTeleportDelay);
+        _delayTimer.Start();
+        _delayTimer.OnTimerStop += _enemyController.Teleport;
     }
 
     public override void ExitState()
     {
-        
+
     }
 
     public override void UpdateState()
     {
-        _stateMachine.ChangeState(new AttackState(_stateMachine, _enemyController));
+        _delayTimer.Tick(Time.deltaTime);
+
+        if(!_enemyController.isStunned || !_enemyController.isDead)
+        {
+            if (_delayTimer.IsFinished && Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeAttack)
+            {
+                _fsm.ChangeState("Attack");
+            }
+            else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangeTeleport)
+            {
+                _delayTimer.OnTimerStop -= _enemyController.Teleport;
+                _fsm.ChangeState("Chase");
+            }
+        } 
     }
 }

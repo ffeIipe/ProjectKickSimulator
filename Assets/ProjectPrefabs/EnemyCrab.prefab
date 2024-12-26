@@ -47,14 +47,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7290106900945799621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d22d23af5d5a8242bc1cc5a20f49956, type: 3}
+  m_Script: {fileID: 11500000, guid: 74151904d0deeb544a67bfc9cc2144e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentHP: 0
   enemyStats: {fileID: 11400000, guid: 6aa7a9665506ebb41871e36f0010a9c4, type: 2}
   enemyAnimator: {fileID: 5823242467719282969}
   agent: {fileID: 1309942424127326698}
-  stunDuration: 2
   isDead: 0
   isStunned: 0
 --- !u!195 &1309942424127326698

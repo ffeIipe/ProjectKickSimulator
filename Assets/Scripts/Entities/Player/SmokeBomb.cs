@@ -38,7 +38,6 @@ public class SmokeBomb : Entity, IHabilities
     public void CastHability(Vector3 direction, Vector3 playerHand)
     {
         _playerHandPos = playerHand;
-        //transform.position = playerHand;
 
         var newSmokeBomb = SmokeBombFactory.Instance.GetObjectFromPool();
         newSmokeBomb.transform.position = playerHand;
@@ -71,4 +70,19 @@ public class SmokeBomb : Entity, IHabilities
         _smokeRigidbody = GetComponent<Rigidbody>();
         _smokeRigidbody.velocity = Vector3.zero;
     }
+
+    protected override void PauseEntity(bool isPaused)
+    {
+        if (isPaused)
+        {
+            _smokeLifetime.Pause();
+            _smokeRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        else
+        {
+            _smokeLifetime.Resume();
+            _smokeRigidbody.constraints = RigidbodyConstraints.None;
+        }
+    }
+
 }

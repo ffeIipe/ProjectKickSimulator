@@ -16,9 +16,6 @@ public class PlayerController : MonoBehaviour
 
     public void InputUpdate()
     {
-        Debug.Log(PlayerModel.canThrow);
-        Debug.Log(PlayerModel.canKick);
-
         _model.IsGrounded();
         _model.IsEnemyInRange();
         _model.CameraMovement();
@@ -32,7 +29,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(_inputStats.FlyingKick) && PlayerModel.canKick)
             {
-                var enemyPos = _model.IsEnemyInRange();
                 _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), _model.IsEnemyInRange(), "FlyingKick"));
             }
         }

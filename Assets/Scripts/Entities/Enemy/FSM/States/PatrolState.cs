@@ -3,13 +3,8 @@ using UnityEngine.AI;
 
 public class PatrolState : BaseState
 {
-    private Animator m_Animator;
-    private NavMeshAgent m_NavMeshAgent;
-
-    public PatrolState(StateMachine stateMachine, EnemyController enemyController) : base(stateMachine, enemyController)
+    public PatrolState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController)
     {
-        m_Animator = enemyController.enemyAnimator;
-        m_NavMeshAgent = enemyController.agent;
         _enemyController._patrolTimer = new CountdownTimer(_enemyController.RandomPatrolTime());
         _enemyController._patrolTimer.OnTimerStop += _enemyController.Patrol;
     }
@@ -28,8 +23,10 @@ public class PatrolState : BaseState
     public override void UpdateState()
     {
         _enemyController._patrolTimer.Tick(Time.deltaTime);
-
-        if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangePursuit && !_enemyController.isDead && EnemyController.isAlert)        
-            _stateMachine.ChangeState(new ChaseState(_stateMachine, _enemyController));
+        if (!_enemyController.isStunned || !_enemyController.isDead)
+        {
+            if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeChase && !_enemyController.isDead && EnemyController.isAlert)
+                _fsm.ChangeState("Chase");
+        }
     }
 }
