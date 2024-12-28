@@ -8,6 +8,7 @@ public abstract class EnemyController : Entity
     public EnemyStats enemyStats;
     public Animator enemyAnimator;
     public NavMeshAgent agent;
+    public GameObject ragdoll;
 
     public bool isDead;
     public bool isStunned;
@@ -28,6 +29,8 @@ public abstract class EnemyController : Entity
     {
         base.Start();
         _fsm = new FSM();
+
+        SetRagdoll(false);
 
         target = GameManager.Instance.Player.transform;
 
@@ -70,16 +73,35 @@ public abstract class EnemyController : Entity
     {
         _timerStun.Reset();
         _timerStun.Start();
-        _enemyRigidBody.isKinematic = false;
-        isStunned = true;
+        
+        _fsm.enabled = false; 
+
         agent.enabled = false;
+
+        enemyAnimator.enabled = false;
+        
+        SetRagdoll(true);
+        
+        _enemyRigidBody.isKinematic = false;
+        
+        isStunned = true;
     }
 
     public void RemoveStun()
     {
+        _enemyRigidBody.position = Vector3.zero;
+        _enemyRigidBody.rotation = Quaternion.identity;
         _enemyRigidBody.isKinematic = true;
-        isStunned = false;
+
+        _fsm.enabled = true;
+
         agent.enabled = true;
+
+        SetRagdoll(false);
+
+        enemyAnimator.enabled = true;
+
+        isStunned = false;
     }
 
     public void Patrol()
@@ -114,7 +136,7 @@ public abstract class EnemyController : Entity
         {
             if (_deadCountdown.IsRunning) _deadCountdown.Pause();
             agent.enabled = false;
-            _fsm.enable = false;
+            _fsm.enabled = false;
             _currentVelocity = _enemyRigidBody.velocity;
             _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             _enemyRigidBody.velocity = Vector3.zero;
@@ -124,7 +146,7 @@ public abstract class EnemyController : Entity
         {
             if (_deadCountdown.IsRunning) _deadCountdown.Resume();
             agent.enabled = true;
-            _fsm.enable = true;
+            _fsm.enabled = true;
             _enemyRigidBody.constraints = RigidbodyConstraints.None;
             _enemyRigidBody.velocity = _currentVelocity;
             enemyAnimator.speed = 1;
@@ -136,6 +158,18 @@ public abstract class EnemyController : Entity
         Vector3 randomPos = Random.insideUnitSphere * enemyStats.EnemyRangeAttack;
         randomPos += target.transform.position;
         transform.position = randomPos;
+    }
+
+    private void SetRagdoll(bool b)
+    {
+        foreach (Rigidbody r in ragdoll.GetComponents<Rigidbody>())
+        {
+            r.isKinematic = !b;
+        }
+        foreach (Collider c in ragdoll.GetComponents<Collider>())
+        {
+            c.enabled = b;
+        }
     }
 
     #region Debug 

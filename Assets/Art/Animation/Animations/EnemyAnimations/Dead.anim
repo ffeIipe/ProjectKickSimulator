@@ -43,8 +43,8 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._DissolveValue
-    path: 
-    classID: 23
+    path: Ch36
+    classID: 137
     script: {fileID: 0}
     flags: 0
   m_PPtrCurves: []
@@ -56,10 +56,10 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 3589292798
       attribute: 2346623285
       script: {fileID: 0}
-      typeID: 23
+      typeID: 137
       customType: 22
       isPPtrCurve: 0
       isIntCurve: 0
@@ -112,8 +112,8 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._DissolveValue
-    path: 
-    classID: 23
+    path: Ch36
+    classID: 137
     script: {fileID: 0}
     flags: 0
   m_EulerEditorCurves: []

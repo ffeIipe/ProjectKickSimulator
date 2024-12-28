@@ -11,13 +11,13 @@ public class PatrolState : BaseState
 
     public override void EnterState()
     {
-        _enemyController.enemyAnimator.SetBool("Idle", true);
+        //_enemyController.enemyAnimator.SetBool("Idle", true);
         _enemyController.Patrol();
     }
 
     public override void ExitState()
     {
-        _enemyController.enemyAnimator.SetBool("Idle", false);
+        //_enemyController.enemyAnimator.SetBool("Idle", false);
     }
 
     public override void UpdateState()

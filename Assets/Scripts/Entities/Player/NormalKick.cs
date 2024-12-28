@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NormalKick : BaseKickStrategy
 {
@@ -14,12 +15,12 @@ public class NormalKick : BaseKickStrategy
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
 
             var enemyRigidbody = enemy.GetComponent<Rigidbody>();
-            enemyRigidbody.constraints = RigidbodyConstraints.None;
+            
 
             if (enemyRigidbody != null)
             {
                 onHit();
-                Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10) + _player.transform.up * (_player.playerStats.PlayerKickUpForce * 10));
+                Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10));
                 enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
             }
         }

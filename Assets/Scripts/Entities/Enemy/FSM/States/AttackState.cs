@@ -6,12 +6,13 @@ public class AttackState : BaseState
 
     public override void EnterState()
     {
-        _enemyAnimator.SetTrigger("Attack");
+        _enemyController.enemyAnimator.SetTrigger("Attack");
+        Debug.Log(_enemyController.enemyAnimator);
     }
 
     public override void ExitState()
     {
-        //ResetTrigger?
+        //_enemyAnimator.ResetTrigger("Attack");
     }
 
     public override void UpdateState()

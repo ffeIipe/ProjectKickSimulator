@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class BaseState : MonoBehaviour
+public abstract class BaseState
 {
     protected FSM _fsm;
     protected EnemyController _enemyController;
@@ -12,7 +12,7 @@ public abstract class BaseState : MonoBehaviour
     {
         _fsm = fsm;
         _enemyController = enemyController;
-        _enemyAnimator = _enemyController.GetComponent<Animator>();
+        _enemyAnimator = _enemyController.gameObject.GetComponentInChildren<Animator>();
         _agent = _enemyController.GetComponent<NavMeshAgent>();
     }
 

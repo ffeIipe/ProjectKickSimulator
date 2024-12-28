@@ -7,7 +7,7 @@ public class FSM
     Dictionary<string, BaseState> _states = new Dictionary<string, BaseState>();
     Dictionary<int, BaseState> _fase = new Dictionary<int, BaseState>();
     BaseState _actualState;
-    public bool enable = true;
+    public bool enabled = true;
     public void CreateState(string name, BaseState state)
     {
         if (!_states.ContainsKey(name))
@@ -22,7 +22,7 @@ public class FSM
 
     public void Execute()
     {
-        if(enable)
+        if(enabled)
         {
             _actualState.UpdateState();
         }
@@ -30,7 +30,7 @@ public class FSM
 
     public void ChangeState(string name)
     {
-        if (_states.ContainsKey(name) && enable)
+        if (_states.ContainsKey(name) && enabled)
         {
             if (_actualState != null)
                 _actualState.ExitState();
@@ -42,7 +42,7 @@ public class FSM
 
     public void ChangeState(int name)
     {
-        if (_fase.ContainsKey(name) && enable)
+        if (_fase.ContainsKey(name) && enabled)
         {
             if (_actualState != null)
                 _actualState.ExitState();

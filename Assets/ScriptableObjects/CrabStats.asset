@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c0c5bea7ba67848a8df16994035ead, type: 3}
   m_Name: CrabStats
   m_EditorClassIdentifier: 
-  <StartHP>k__BackingField: 10
+  <StartHP>k__BackingField: 100
   <EnemySpeed>k__BackingField: 6
   <EnemyRangePatrol>k__BackingField: 4
   <EnemyRangeChase>k__BackingField: 15
