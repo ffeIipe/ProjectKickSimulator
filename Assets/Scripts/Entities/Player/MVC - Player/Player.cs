@@ -5,8 +5,8 @@ public class Player : MonoBehaviour
 {
     public PlayerStats playerStats;
     public InputStats inputStats;
-    public Transform playerLookAt;
-    public Transform playerHand;
+    public Transform playerLookAt, playerHand, pivotModel;
+    public AnimatorOverrideController playerAnimOverride;
     public PlayerModel Model { get; private set; }
 
     private PlayerView _view;
@@ -32,6 +32,9 @@ public class Player : MonoBehaviour
 
         Model.OnJump += _view.JumpView;
         EventManager.Player.OnJump += Model.PerformJump;
+
+        Model.OnRoll += _view.RollView;
+        EventManager.Player.OnRoll += Model.ReturnFromRoll;
 
         Model.OnHitEnemy += _view.KickHitSound;
     }

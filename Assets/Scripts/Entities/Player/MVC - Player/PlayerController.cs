@@ -20,6 +20,11 @@ public class PlayerController : MonoBehaviour
         _model.IsEnemyInRange();
         _model.CameraMovement();
 
+        _playerDirection.x = Input.GetAxisRaw("Horizontal");
+        _playerDirection.z = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.LeftControl) && _model.IsGrounded()) _model.Roll(_playerDirection);
+
         if (Input.GetKeyDown(_inputStats.NormalKick) && PlayerModel.canKick)
         {
             _model.SetKickStrategy(new NormalKick("Kick"));
@@ -48,9 +53,6 @@ public class PlayerController : MonoBehaviour
 
     public void InputFixedUpdate()
     {
-        _playerDirection.x = Input.GetAxisRaw("Horizontal");
-        _playerDirection.z = Input.GetAxisRaw("Vertical");
-
-        _model.Movement(_playerDirection);
+        _model.Movement(_playerDirection);   
     }
 }

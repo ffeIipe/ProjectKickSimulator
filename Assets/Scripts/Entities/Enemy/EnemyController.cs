@@ -10,8 +10,10 @@ public abstract class EnemyController : Entity
     public NavMeshAgent agent;
     public GameObject ragdoll;
 
+    public bool isAttacking;
     public bool isDead;
     public bool isStunned;
+    public bool isTeleporting = false;
     public static bool isAlert = false;
 
     protected FSM _fsm;
@@ -21,14 +23,17 @@ public abstract class EnemyController : Entity
     private Vector3 _currentVelocity;
     private Vector3 _currentPosition;
 
+    public CountdownTimer _patrolTimer;
     protected CountdownTimer _deadCountdown;
     protected CountdownTimer _timerStun;
-    public CountdownTimer _patrolTimer;
+    protected CountdownTimer _delayTeleport;
 
     public override void Start()
     {
         base.Start();
         _fsm = new FSM();
+
+        enemyAnimator.runtimeAnimatorController = enemyStats.EnemyAnimator;
 
         SetRagdoll(false);
 
@@ -39,34 +44,40 @@ public abstract class EnemyController : Entity
 
         _enemyRigidBody = GetComponent<Rigidbody>();
 
-        _deadCountdown = new CountdownTimer(1.5f);
+        _deadCountdown = new CountdownTimer(2);
         _deadCountdown.OnTimerStop += Die;
 
         _timerStun = new CountdownTimer(enemyStats.StunDuration);
         _timerStun.OnTimerStop += RemoveStun;
 
+        _delayTeleport = new CountdownTimer(enemyStats.EnemyTeleportDelay);
+        _delayTeleport.OnTimerStop += FinishTeleport;
+
         currentHP = enemyStats.StartHP;
         agent.speed = enemyStats.EnemySpeed;
     }
 
+    #region Actionables
     public override void TakeDamage(float value)
     {
         currentHP -= value;
 
         if (currentHP <= 0)
         {
-            _deadCountdown.Reset();
+            isDead = true;
+            _fsm.enabled = false;
+            enemyAnimator.enabled = false;
+            SetRagdoll(true);
+            StartCoroutine(LerpDeadMaterial(2f));
             _deadCountdown.Start();
-            enemyAnimator.SetTrigger("Dead");
         }
 
         if (currentHP > startHP) currentHP = startHP;
     }
 
-    protected override void Die()
+    public void SetKickState()
     {
-        isDead = true;
-        transform.position = Vector3.zero;
+        isAttacking = false;
     }
 
     public void Stun()
@@ -78,32 +89,29 @@ public abstract class EnemyController : Entity
 
         agent.enabled = false;
 
-        enemyAnimator.enabled = false;
-        
-        SetRagdoll(true);
-        
-        _enemyRigidBody.isKinematic = false;
-        
+        enemyAnimator.SetTrigger("Stun");
+
         isStunned = true;
     }
 
     public void RemoveStun()
     {
-        _enemyRigidBody.position = Vector3.zero;
-        _enemyRigidBody.rotation = Quaternion.identity;
-        _enemyRigidBody.isKinematic = true;
-
         _fsm.enabled = true;
 
         agent.enabled = true;
 
-        SetRagdoll(false);
-
-        enemyAnimator.enabled = true;
+        enemyAnimator.ResetTrigger("Stun");
 
         isStunned = false;
     }
 
+    protected override void Die()
+    {
+        transform.position = Vector3.zero;
+    }
+    #endregion
+
+    #region Behaviours
     public void Patrol()
     {
         if (agent.enabled == false) agent.enabled = true;
@@ -123,6 +131,29 @@ public abstract class EnemyController : Entity
         return Random.Range(enemyStats.EnemyTimeBetweenPatrol.x, enemyStats.EnemyTimeBetweenPatrol.y);
     }
 
+    public void Teleport()
+    {
+        if (isTeleporting) return;
+
+        _delayTeleport.Start();
+        isTeleporting = true;
+        agent.speed = 0;
+        enemyAnimator.SetTrigger("Teleport");
+    }
+
+    public void ExecuteTeleport() 
+    {
+        agent.speed = enemyStats.EnemySpeed;
+        Vector3 randomPos = Random.insideUnitSphere * enemyStats.EnemyRangeAttack;
+        randomPos.x += target.transform.position.x;
+        randomPos.z += target.transform.position.z;
+        transform.position = randomPos;
+    }
+
+    private void FinishTeleport() { isTeleporting = false; }
+    #endregion
+
+    #region Entity
     public override void ResetEntity()
     {
         startHP = enemyStats.StartHP;
@@ -152,12 +183,26 @@ public abstract class EnemyController : Entity
             enemyAnimator.speed = 1;
         }
     }
+    #endregion
 
-    public void Teleport()
+    #region FX
+    private IEnumerator LerpDeadMaterial(float duration)
     {
-        Vector3 randomPos = Random.insideUnitSphere * enemyStats.EnemyRangeAttack;
-        randomPos += target.transform.position;
-        transform.position = randomPos;
+        var mat = GetComponentInChildren<SkinnedMeshRenderer>().material;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            float value = Mathf.Lerp(0f, 1f, t);
+
+            mat.SetFloat("_DissolveValue", value);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        mat.SetFloat("_DissolveValue", 1f);
     }
 
     private void SetRagdoll(bool b)
@@ -171,6 +216,7 @@ public abstract class EnemyController : Entity
             c.enabled = b;
         }
     }
+    #endregion
 
     #region Debug 
     private void OnDrawGizmos()

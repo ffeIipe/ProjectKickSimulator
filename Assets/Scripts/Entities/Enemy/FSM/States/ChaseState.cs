@@ -19,10 +19,10 @@ public class ChaseState : BaseState
     {
         if (_enemyController.isDead && !_agent.enabled) return;
 
-        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeAttack)
+        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeAttack)
             _fsm.ChangeState("Attack");
 
-        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeTeleport)
+        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeTeleport && !_enemyController.isTeleporting)
             _fsm.ChangeState("Teleport");
 
         else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangeChase || !EnemyController.isAlert || _enemyController.isStunned)

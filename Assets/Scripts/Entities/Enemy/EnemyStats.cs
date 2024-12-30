@@ -15,4 +15,5 @@ public class EnemyStats : ScriptableObject
     [field: SerializeField] public Vector2 EnemyTimeBetweenPatrol { get; private set; }
     [field: SerializeField] public float StunDuration { get; private set; }
     [field: SerializeField] public float EnemyTeleportDelay { get; private set; }
+    [field: SerializeField] public AnimatorOverrideController EnemyAnimator { get; private set; }
 }

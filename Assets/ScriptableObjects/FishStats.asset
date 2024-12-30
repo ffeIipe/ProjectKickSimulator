@@ -16,9 +16,11 @@ MonoBehaviour:
   <EnemySpeed>k__BackingField: 4
   <EnemyRangePatrol>k__BackingField: 7
   <EnemyRangeChase>k__BackingField: 20
-  <EnemyRangeTeleport>k__BackingField: 4
-  <EnemyRangeAttack>k__BackingField: 2
+  <EnemyRangeTeleport>k__BackingField: 5
+  <EnemyRangeAttack>k__BackingField: 1.5
   <EnemyDamage>k__BackingField: 5
   <EnemyTimeBetweenPatrol>k__BackingField: {x: 3, y: 5}
   <StunDuration>k__BackingField: 2
-  <EnemyTeleportDelay>k__BackingField: 1
+  <EnemyTeleportDelay>k__BackingField: 3
+  <EnemyAnimator>k__BackingField: {fileID: 22100000, guid: 1b77b1f3269aaed46b2db2d8efda8c08,
+    type: 2}

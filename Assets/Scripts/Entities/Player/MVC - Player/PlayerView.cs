@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-
 
 public class PlayerView
 {
@@ -16,6 +11,7 @@ public class PlayerView
         _player = player;
         _playerAnimator = player.GetComponentInChildren<Animator>();
         _audioSource = player.GetComponent<AudioSource>();
+        Debug.Log("Start Player View");
     }
 
     public void LockCursor()
@@ -25,8 +21,7 @@ public class PlayerView
 
     public void KickView()
     {
-        _playerAnimator.SetTrigger("Kick");
-
+        RandomAnimations();
     }
 
     public void FlyingKickView()
@@ -44,6 +39,11 @@ public class PlayerView
     {
         _playerAnimator.SetFloat("x", x);
         _playerAnimator.SetFloat("y", z);
+    }
+
+    public void RollView()
+    {
+        _playerAnimator.SetTrigger("Roll");
     }
 
     public void OnEnablePlayer()
@@ -65,5 +65,15 @@ public class PlayerView
     public void EnemyInRange(bool param)
     {
         EventManager.ui.OnShowKickeableEnemy.Invoke(param);
+    }
+
+    private void RandomAnimations()
+    {
+        var chance = Random.Range(0f, 1f);
+        Debug.Log(chance);
+        if (chance >= 0.5f)
+        {
+            _playerAnimator.runtimeAnimatorController = _player.playerAnimOverride;
+        }
     }
 }

@@ -5,7 +5,7 @@ public class EnemyShark : EnemyController
     public override void Start()
     {
         base.Start();
-
+        
         _fsm.CreateState("Patrol", new PatrolState(_fsm, this));
         _fsm.CreateState("Chase", new ChaseState(_fsm, this));
         _fsm.CreateState("Attack", new AttackState(_fsm, this));

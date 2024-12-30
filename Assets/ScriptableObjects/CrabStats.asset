@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c0c5bea7ba67848a8df16994035ead, type: 3}
   m_Name: CrabStats
   m_EditorClassIdentifier: 
-  <StartHP>k__BackingField: 100
+  <StartHP>k__BackingField: 10
   <EnemySpeed>k__BackingField: 6
   <EnemyRangePatrol>k__BackingField: 4
   <EnemyRangeChase>k__BackingField: 15
   <EnemyRangeTeleport>k__BackingField: 0
-  <EnemyRangeAttack>k__BackingField: 2
+  <EnemyRangeAttack>k__BackingField: 1.5
   <EnemyDamage>k__BackingField: 2
   <EnemyTimeBetweenPatrol>k__BackingField: {x: 3, y: 5}
   <StunDuration>k__BackingField: 2
   <EnemyTeleportDelay>k__BackingField: 0
+  <EnemyAnimator>k__BackingField: {fileID: 22100000, guid: 0dcbe0402f8b21448816728db2510605,
+    type: 2}

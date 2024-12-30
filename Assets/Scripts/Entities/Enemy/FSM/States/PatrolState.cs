@@ -25,7 +25,7 @@ public class PatrolState : BaseState
         _enemyController._patrolTimer.Tick(Time.deltaTime);
         if (!_enemyController.isStunned || !_enemyController.isDead)
         {
-            if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) < _enemyController.enemyStats.EnemyRangeChase && !_enemyController.isDead && EnemyController.isAlert)
+            if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeChase && !_enemyController.isDead && EnemyController.isAlert)
                 _fsm.ChangeState("Chase");
         }
     }

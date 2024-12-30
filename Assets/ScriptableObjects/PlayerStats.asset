@@ -14,19 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSensitivity: 1
   StartHP: 10
-  PlayerSpeed: 5
-  PlayerJumpForce: 15
+  PlayerSpeed: 50
+  PlayerJumpForce: 200
+  PlayerRollForce: 500
   PlayerKickForce: 0.25
   PlayerKickUpForce: 1
   PlayerKickDamage: 5
   PlayerKickDistance: 2
-  PlayerKickRange: 2
+  PlayerKickRange: 1.5
   PlayerFlyingKickMaxDistance: 30
   PlayerKickMask:
     serializedVersion: 2
     m_Bits: 128
   ShurikenDamage: 20
   ShurikenThrowForce: 5
-  SmokeBombThrowForce: 60
+  SmokeBombThrowForce: 20
   PlayerKickDashForce: 5
   kickSound: {fileID: 8300000, guid: 0ba6ec50cdba78c4c8ae845ea21eb95a, type: 3}

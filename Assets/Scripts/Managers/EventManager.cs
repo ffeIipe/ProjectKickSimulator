@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -35,7 +36,7 @@ public static class EventManager
         public UnityAction OnPlayerHitted;
         public UnityAction OnPlayerDead;
         public UnityAction OnPlayerStart;
-
+        public UnityAction OnRoll;
     }
 
     public class ConfigsEvents

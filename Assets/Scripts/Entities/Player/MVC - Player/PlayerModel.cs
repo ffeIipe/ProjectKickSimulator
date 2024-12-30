@@ -14,6 +14,7 @@ public class PlayerModel : Entity
     public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
+    public event Action OnRoll = delegate { };
     public event Action<float, float> OnMovement = delegate { };
     public event Action<bool> OnKickeableEnemy = delegate { };
 
@@ -31,6 +32,10 @@ public class PlayerModel : Entity
     private Vector3 _playerMovement;
     private float _currentX;
     private float _currentZ;
+
+    private bool isRolling = false;
+    private float _collHeight;
+    private Quaternion _actualRot;
 
     private Vector3 lastEnemyRaycastHit;
 
@@ -65,8 +70,8 @@ public class PlayerModel : Entity
         float movementX = 0f;
         float movementZ = 0f;
 
-        movementX = Input.GetAxisRaw("Horizontal");
-        movementZ = Input.GetAxisRaw("Vertical");
+        movementX = playerDirection.x;
+        movementZ = playerDirection.z;
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
@@ -82,6 +87,40 @@ public class PlayerModel : Entity
         _currentZ = Mathf.Lerp(_currentZ, movementZ, .5f);
 
         OnMovement(_currentX, _currentZ);
+    }
+
+    public void Roll(Vector3 playerDirection)
+    {
+        if (isRolling) return;
+
+        isRolling = true;
+        var coll = _player.GetComponent<CapsuleCollider>();
+        _collHeight = coll.height;
+        coll.height = 0.8f;
+
+        float movementX = 0f;
+        float movementZ = 0f;
+
+        movementX = playerDirection.x;
+        movementZ = playerDirection.z;
+
+        _player.pivotModel.transform.localRotation = Quaternion.LookRotation(playerDirection);
+
+        playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
+
+        _playerRigidbody.AddForce(playerDirection.normalized * _playerStats.PlayerRollForce * 10);
+
+        OnRoll();
+    }
+
+    public void ReturnFromRoll()
+    {
+        var coll = _player.GetComponent<CapsuleCollider>();
+        coll.height = _collHeight;
+
+        _player.pivotModel.localRotation = Quaternion.Euler(0, 0, 0);
+
+        isRolling = false;
     }
 
     private void UpdateSensitivity(float newSensitivity)
