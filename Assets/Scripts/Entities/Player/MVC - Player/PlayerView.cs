@@ -27,12 +27,6 @@ public class PlayerView
     public void FlyingKickView()
     {
         _playerAnimator.SetTrigger("FlyingKick");
-
-    }
-
-    public void JumpView()
-    {
-        _playerAnimator.SetTrigger("Jump");
     }
 
     public void MovementView(float x, float z)
@@ -41,9 +35,19 @@ public class PlayerView
         _playerAnimator.SetFloat("y", z);
     }
 
+    public void JumpView()
+    {
+        _playerAnimator.SetTrigger("Jump");
+    }
+
     public void RollView()
     {
         _playerAnimator.SetTrigger("Roll");
+    }
+
+    public void SlideView()
+    {
+        _playerAnimator.SetTrigger("Slide");
     }
 
     public void OnEnablePlayer()

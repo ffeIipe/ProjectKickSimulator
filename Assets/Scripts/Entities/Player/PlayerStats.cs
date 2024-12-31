@@ -12,6 +12,7 @@ public class PlayerStats : ScriptableObject
 
     [Header("Jump stats")]
     public float PlayerJumpForce;
+    public float PlayerJumpUpForce;
 
     [Header("Roll stats")]
     public float PlayerRollForce;

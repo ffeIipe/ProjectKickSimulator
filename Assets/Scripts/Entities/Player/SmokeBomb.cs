@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeBomb : Entity, IHabilities
+public class SmokeBomb : Entity, IAbilities
 {
     private Vector3 _playerHandPos;
     private Rigidbody _smokeRigidbody;
@@ -35,7 +35,7 @@ public class SmokeBomb : Entity, IHabilities
         _smokeLifetime.Tick(Time.deltaTime);
     }
 
-    public void CastHability(Vector3 direction, Vector3 playerHand)
+    public void CastAbility(Vector3 direction, Vector3 playerHand)
     {
         _playerHandPos = playerHand;
 

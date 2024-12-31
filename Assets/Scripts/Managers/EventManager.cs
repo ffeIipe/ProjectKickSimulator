@@ -32,11 +32,12 @@ public static class EventManager
         public UnityAction<bool> IsAmmoUsed;
         public UnityAction OnKick;
         public UnityAction OnJump;
+        public UnityAction OnRoll;
+        public UnityAction OnSlide;
         public UnityAction OnHability;
         public UnityAction OnPlayerHitted;
         public UnityAction OnPlayerDead;
         public UnityAction OnPlayerStart;
-        public UnityAction OnRoll;
     }
 
     public class ConfigsEvents

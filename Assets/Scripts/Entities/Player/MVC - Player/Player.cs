@@ -31,10 +31,12 @@ public class Player : MonoBehaviour
         Model.OnPlayerFlyingKick += _view.FlyingKickView;
 
         Model.OnJump += _view.JumpView;
-        EventManager.Player.OnJump += Model.PerformJump;
+
+        Model.OnSlide += _view.SlideView;
+        EventManager.Player.OnSlide += Model.ReturnFromAction;
 
         Model.OnRoll += _view.RollView;
-        EventManager.Player.OnRoll += Model.ReturnFromRoll;
+        EventManager.Player.OnRoll += Model.ReturnFromAction;
 
         Model.OnHitEnemy += _view.KickHitSound;
     }

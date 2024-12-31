@@ -82,6 +82,8 @@ public abstract class EnemyController : Entity
 
     public void Stun()
     {
+        isStunned = true;
+
         _timerStun.Reset();
         _timerStun.Start();
         
@@ -90,8 +92,6 @@ public abstract class EnemyController : Entity
         agent.enabled = false;
 
         enemyAnimator.SetTrigger("Stun");
-
-        isStunned = true;
     }
 
     public void RemoveStun()

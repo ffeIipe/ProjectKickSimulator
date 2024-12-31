@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shuriken : Entity, IHabilities
+public class Shuriken : Entity, IAbilities
 {
     private float _shurikenThrowForce;
     private int _shurikenDamage;
@@ -34,7 +34,7 @@ public class Shuriken : Entity, IHabilities
         _shurikenTimer.Tick(Time.deltaTime);
     }
 
-    public void CastHability(Vector3 direction, Vector3 playerHand)
+    public void CastAbility(Vector3 direction, Vector3 playerHand)
     {
         _playerHandPos = playerHand;
         var newShuriken = ShurikenFactory.Instance.GetObjectFromPool();

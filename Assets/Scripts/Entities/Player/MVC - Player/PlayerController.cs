@@ -16,39 +16,49 @@ public class PlayerController : MonoBehaviour
 
     public void InputUpdate()
     {
-        _model.IsGrounded();
-        _model.IsEnemyInRange();
+        bool isGrounded = _model.IsGrounded();
+        bool canKick = PlayerModel.canKick;
+        bool canThrow = PlayerModel.canAbility;
+        bool canAction = PlayerModel.canAction;
+        Vector3 enemyDirection = _model.IsEnemyInRange();
+
         _model.CameraMovement();
 
         _playerDirection.x = Input.GetAxisRaw("Horizontal");
         _playerDirection.z = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && _model.IsGrounded()) _model.Roll(_playerDirection);
-
-        if (Input.GetKeyDown(_inputStats.NormalKick) && PlayerModel.canKick)
+        //Kicks
+        if (canKick)
         {
-            _model.SetKickStrategy(new NormalKick("Kick"));
+            if (Input.GetKeyDown(_inputStats.NormalKick))
+                _model.SetKickStrategy(new NormalKick("Kick"));
+
+            if (Input.GetKeyDown(_inputStats.FlyingKick) && enemyDirection != Vector3.zero)
+                _model.SetKickStrategy(new FlyingKick(enemyDirection, enemyDirection, "FlyingKick"));
         }
 
-        if (_model.IsEnemyInRange() != Vector3.zero)
+        //Abilities
+        if (canThrow)
         {
-            if (Input.GetKeyDown(_inputStats.FlyingKick) && PlayerModel.canKick)
-            {
-                _model.SetKickStrategy(new FlyingKick(_model.IsEnemyInRange(), _model.IsEnemyInRange(), "FlyingKick"));
-            }
+            if (Input.GetKeyDown(_inputStats.ThrowShuriken))
+                _model.SetAbilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce, _model._playerStats.ShurikenDamage, "Shuriken"));
+
+            if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
+                _model.SetAbilityStrategy(new SmokeBomb("SmokeBomb"));
         }
 
-        if (Input.GetKeyDown(_inputStats.ThrowShuriken) && PlayerModel.canThrow)
+        //Actions
+        if (canAction)
         {
-            _model.SetHabilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce, _model._playerStats.ShurikenDamage, "Shuriken"));
-        }
+            if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
+                _model.Roll(_playerDirection);
 
-        if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb) && PlayerModel.canThrow)
-        {
-            _model.SetHabilityStrategy(new SmokeBomb("SmokeBomb"));
-        }
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+                _model.PerformJump();
 
-        if (Input.GetKeyDown(KeyCode.Space) && _model.IsGrounded()) _model.JumpCall();
+            if (Input.GetKey(KeyCode.LeftShift))
+                _model.Slide(_playerDirection);
+        }
     }
 
     public void InputFixedUpdate()

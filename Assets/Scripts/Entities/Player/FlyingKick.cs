@@ -42,17 +42,14 @@ public class FlyingKick : BaseKickStrategy
         var enemy = hit.collider.GetComponent<EnemyController>();
         if (enemy != null)
         {
-            var enemyRigidbody = enemy.GetComponent<Rigidbody>();
-            
             enemy.Stun();
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
 
-            if (enemyRigidbody != null)
-            {
-                onHit();
-                Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10));
-                enemyRigidbody.AddForce(forceDirection, ForceMode.Force);
-            }
+            onHit();
+            
+            Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10));
+
+           enemy.transform.position += forceDirection;
         }
     }
 }

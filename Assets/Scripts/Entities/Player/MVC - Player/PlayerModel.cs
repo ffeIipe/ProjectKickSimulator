@@ -1,11 +1,13 @@
 using System;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerModel : Entity
 {
-    public static bool canThrow = true;
+    public static bool canAbility = true;
     public static bool canKick = true;
+    public static bool canAction = true;
 
     public bool isRunning;
 
@@ -15,11 +17,12 @@ public class PlayerModel : Entity
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
     public event Action OnRoll = delegate { };
+    public event Action OnSlide = delegate { };
     public event Action<float, float> OnMovement = delegate { };
     public event Action<bool> OnKickeableEnemy = delegate { };
 
     public BaseKickStrategy currentKick { get; private set; }
-    public IHabilities currentHability { get; private set; }
+    public IAbilities currentHability { get; private set; }
     public PlayerStats _playerStats { get; private set; }
 
     private Player _player;
@@ -33,7 +36,6 @@ public class PlayerModel : Entity
     private float _currentX;
     private float _currentZ;
 
-    private bool isRolling = false;
     private float _collHeight;
     private Quaternion _actualRot;
 
@@ -45,10 +47,12 @@ public class PlayerModel : Entity
         _playerStats = playerStats;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
+
         EventManager.configs.OnSensChanged += UpdateSensitivity;
         UpdateSensitivity(PlayerPrefs.GetFloat("MouseSens", 1f));
     }
 
+    #region Movement
     public void CameraMovement()
     {
         OnPlayerStart();
@@ -89,14 +93,56 @@ public class PlayerModel : Entity
         OnMovement(_currentX, _currentZ);
     }
 
+    private void UpdateSensitivity(float newSensitivity)
+    {
+        _playerStats.PlayerSensitivity = newSensitivity;
+    }
+    #endregion
+
+    #region Kicks
+    public void SetKickStrategy(BaseKickStrategy newKick)
+    {
+        canKick = false;
+        currentKick = newKick;
+    }
+
+    public void PerformKick()
+    {
+        if (!canKick) return;
+
+        currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
+    }
+    #endregion
+
+    #region Abilities
+    public void SetAbilityStrategy(IAbilities newAbility)
+    {
+        canAbility = false;
+        currentHability = newAbility;
+    }
+
+    public void PerformHability()
+    {
+        if (!canAction) return;
+
+        currentHability?.CastAbility(Camera.main.transform.forward, _player.playerHand.transform.position);
+    }
+    #endregion
+
+    #region Actions
+    public void PerformJump()
+    {
+        if (!canAction) return;
+
+        _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpUpForce + _player.transform.forward* _playerStats.PlayerJumpForce, ForceMode.Impulse);
+        OnJump();
+    }
+
     public void Roll(Vector3 playerDirection)
     {
-        if (isRolling) return;
+        if (!canAction) return;
 
-        isRolling = true;
-        var coll = _player.GetComponent<CapsuleCollider>();
-        _collHeight = coll.height;
-        coll.height = 0.8f;
+        canAction = false;
 
         float movementX = 0f;
         float movementZ = 0f;
@@ -113,53 +159,35 @@ public class PlayerModel : Entity
         OnRoll();
     }
 
-    public void ReturnFromRoll()
+    public void Slide(Vector3 playerDirection)
     {
-        var coll = _player.GetComponent<CapsuleCollider>();
-        coll.height = _collHeight;
+        if (!canAction) return;
 
+        canAction = false;
+
+        float movementX = 0f;
+        float movementZ = 0f;
+
+        movementX = playerDirection.x;
+        movementZ = playerDirection.z;
+
+        _player.pivotModel.transform.localRotation = Quaternion.LookRotation(playerDirection);
+
+        playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
+
+        _playerRigidbody.AddForce(playerDirection.normalized * _playerStats.PlayerRollForce * 10);
+
+        OnSlide();
+    }
+
+    public void ReturnFromAction()
+    {
         _player.pivotModel.localRotation = Quaternion.Euler(0, 0, 0);
-
-        isRolling = false;
+        canAction = true;
     }
+    #endregion
 
-    private void UpdateSensitivity(float newSensitivity)
-    {
-        _playerStats.PlayerSensitivity = newSensitivity;
-    }
-
-    public void SetKickStrategy(BaseKickStrategy newKick)
-    {
-        canKick = false;
-        currentKick = newKick;
-    }
-
-    public void PerformKick()
-    {
-        currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
-    }
-
-    public void SetHabilityStrategy(IHabilities newHability)
-    {
-        canThrow = false;
-        currentHability = newHability;
-    }
-
-    public void PerformHability()
-    {
-        currentHability?.CastHability(Camera.main.transform.forward, _player.playerHand.transform.position);
-    }
-
-    public void JumpCall()
-    {
-        OnJump();
-    }
-
-    public void PerformJump()
-    {
-        _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpForce, ForceMode.Impulse);
-    }
-
+    #region Entity
     public override void TakeDamage(float value)
     {
         currentHP -= value;
@@ -173,7 +201,9 @@ public class PlayerModel : Entity
     {
         throw new System.NotImplementedException();
     }
+    #endregion
 
+    #region Verifiers
     public bool IsGrounded()
     {
         float groundCheckDistance = 1.1f;
@@ -197,4 +227,10 @@ public class PlayerModel : Entity
             return Vector3.zero;
         }
     }
+    #endregion
+
+    private void CanKick() { canKick = true; }
+    private void CanAbility() { canAbility = true; }
+    private void CanAction() { canAction = true; }
+
 }
