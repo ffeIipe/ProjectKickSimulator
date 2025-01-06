@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79cc9e7ff38729c4ab9f734364495b65, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  PlayerSensitivity: 1
+  PlayerSensitivity: 0.97914314
   StartHP: 10
   PlayerSpeed: 60
-  PlayerJumpForce: 75
+  PlayerJumpForce: 100
   PlayerJumpUpForce: 200
   PlayerRollForce: 500
   PlayerKickForce: 0.25
