@@ -46,10 +46,6 @@ public class FlyingKick : BaseKickStrategy
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
 
             onHit();
-            
-            Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10));
-
-           enemy.transform.position += forceDirection;
         }
     }
 }

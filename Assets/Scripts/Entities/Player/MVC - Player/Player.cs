@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     public PlayerStats playerStats;
     public InputStats inputStats;
     public Transform playerLookAt, playerHand, pivotModel;
-    public AnimatorOverrideController playerAnimOverride;
+    public Animator _playerAnimator;
     public PlayerModel Model { get; private set; }
 
     private PlayerView _view;
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         Model = new PlayerModel(this, playerStats);
-        _view = new PlayerView(this);
+        _view = new PlayerView(this, _playerAnimator);
         _controller = new PlayerController(Model, inputStats);
 
         EventManager.Player.OnKick += Model.PerformKick;
@@ -26,9 +26,6 @@ public class Player : MonoBehaviour
         Model.OnKickeableEnemy += _view.EnemyInRange;
 
         Model.OnPlayerStart += _view.LockCursor;
-
-        Model.OnPlayerKick += _view.KickView;
-        Model.OnPlayerFlyingKick += _view.FlyingKickView;
 
         Model.OnJump += _view.JumpView;
 
@@ -53,7 +50,7 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _view = new PlayerView(this);
+        _view = new PlayerView(this, _playerAnimator);
         _view.OnEnablePlayer();
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,8 +13,6 @@ public class PlayerModel : Entity
     public bool isRunning;
 
     public event Action OnPlayerStart = delegate { };
-    public event Action OnPlayerKick = delegate { };
-    public event Action OnPlayerFlyingKick = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
     public event Action OnRoll = delegate { };
@@ -38,6 +37,7 @@ public class PlayerModel : Entity
 
     private float _collHeight;
     private Quaternion _actualRot;
+    private Vector3 _cameraPos;
 
     private Vector3 lastEnemyRaycastHit;
 
@@ -108,8 +108,6 @@ public class PlayerModel : Entity
 
     public void PerformKick()
     {
-        if (!canKick) return;
-
         currentKick?.ExecuteKick(Camera.main.transform.position, Camera.main.transform.forward, OnHitEnemy);
     }
     #endregion
@@ -123,7 +121,7 @@ public class PlayerModel : Entity
 
     public void PerformHability()
     {
-        if (!canAction) return;
+        if (!canAbility) return;
 
         currentHability?.CastAbility(Camera.main.transform.forward, _player.playerHand.transform.position);
     }
@@ -228,9 +226,4 @@ public class PlayerModel : Entity
         }
     }
     #endregion
-
-    private void CanKick() { canKick = true; }
-    private void CanAbility() { canAbility = true; }
-    private void CanAction() { canAction = true; }
-
 }

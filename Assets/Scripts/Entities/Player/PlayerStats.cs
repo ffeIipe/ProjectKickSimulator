@@ -36,5 +36,4 @@ public class PlayerStats : ScriptableObject
 
     [Header("Sound Effects")]
     public AudioClip kickSound;
-
 }

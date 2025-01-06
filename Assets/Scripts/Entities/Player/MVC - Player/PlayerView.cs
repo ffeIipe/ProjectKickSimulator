@@ -3,30 +3,20 @@ using UnityEngine;
 public class PlayerView
 {
     private Player _player;
-    private Animator _playerAnimator;
+    private Animator _playerAnimator, _cameraAnimator;
     private AudioSource _audioSource;
 
-    public PlayerView(Player player)
+    public PlayerView(Player player, Animator playerAnimator)
     {
         _player = player;
-        _playerAnimator = player.GetComponentInChildren<Animator>();
+        _playerAnimator = playerAnimator;
+        _cameraAnimator = Camera.main.GetComponentInParent<Animator>();
         _audioSource = player.GetComponent<AudioSource>();
-        Debug.Log("Start Player View");
     }
 
     public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    public void KickView()
-    {
-        RandomAnimations();
-    }
-
-    public void FlyingKickView()
-    {
-        _playerAnimator.SetTrigger("FlyingKick");
     }
 
     public void MovementView(float x, float z)
@@ -43,11 +33,13 @@ public class PlayerView
     public void RollView()
     {
         _playerAnimator.SetTrigger("Roll");
+        _cameraAnimator.SetTrigger("Down");
     }
 
     public void SlideView()
     {
         _playerAnimator.SetTrigger("Slide");
+        _cameraAnimator.SetTrigger("Down");
     }
 
     public void OnEnablePlayer()
@@ -69,15 +61,5 @@ public class PlayerView
     public void EnemyInRange(bool param)
     {
         EventManager.ui.OnShowKickeableEnemy.Invoke(param);
-    }
-
-    private void RandomAnimations()
-    {
-        var chance = Random.Range(0f, 1f);
-        Debug.Log(chance);
-        if (chance >= 0.5f)
-        {
-            _playerAnimator.runtimeAnimatorController = _player.playerAnimOverride;
-        }
     }
 }

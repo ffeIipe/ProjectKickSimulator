@@ -13,16 +13,8 @@ public class NormalKick : BaseKickStrategy
         {
             enemy.Stun();
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
-
-            var enemyRigidbody = enemy.GetComponent<Rigidbody>();
             
-
-            if (enemyRigidbody != null)
-            {
-                onHit();
-                Vector3 forceDirection = (_player.transform.forward * (_player.playerStats.PlayerKickForce * 10));
-                enemyRigidbody.AddForce(forceDirection, ForceMode.VelocityChange);
-            }
+            onHit();
         }
     }
 }
