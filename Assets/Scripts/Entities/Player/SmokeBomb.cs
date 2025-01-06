@@ -12,7 +12,7 @@ public class SmokeBomb : Entity, IAbilities
 
     public SmokeBomb(string animString)
     {     
-        _playerAnimator = GameManager.Instance.Player.GetComponentInChildren<Animator>();
+        _playerAnimator = GameManager.Instance.Player.playerAnimator;
         _playerAnimator.SetTrigger(animString);
     }
 

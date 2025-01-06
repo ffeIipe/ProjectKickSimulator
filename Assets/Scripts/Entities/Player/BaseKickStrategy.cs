@@ -11,7 +11,7 @@ public abstract class BaseKickStrategy : MonoBehaviour, IKick
     {
         _player = GameManager.Instance.Player;
         _playerRigidbody = _player.GetComponent<Rigidbody>();
-        _playerAnimator = _player.GetComponentInChildren<Animator>();
+        _playerAnimator = _player.playerAnimator;
     }
 
     public void ExecuteKick(Vector3 startPosition, Vector3 direction, Action onHit)
