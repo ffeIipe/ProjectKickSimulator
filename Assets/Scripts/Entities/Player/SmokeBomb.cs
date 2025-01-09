@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmokeBomb : Entity, IAbilities
+public class SmokeBomb : Ability, IAbilities
 {
-    private Vector3 _playerHandPos;
     private Rigidbody _smokeRigidbody;
-    private Animator _playerAnimator;
     private CountdownTimer _smokeTimer;
     private CountdownTimer _smokeLifetime;
 
     public SmokeBomb(string animString)
     {     
-        _playerAnimator = GameManager.Instance.Player.playerAnimator;
         _playerAnimator.SetTrigger(animString);
     }
 
     public override void Start()
     {
         base.Start();
-        //Timer
-        //_smokeTimer = new CountdownTimer(2f);
-        //_smokeTimer.OnTimerStop += SmokeBehaviour;
-        //_smokeTimer.Start();
 
         _smokeLifetime = new CountdownTimer(5f);
         _smokeLifetime.OnTimerStop += ReturnObject;
@@ -31,7 +24,6 @@ public class SmokeBomb : Entity, IAbilities
 
     private void Update()
     {
-        //_smokeTimer.Tick(Time.deltaTime);
         _smokeLifetime.Tick(Time.deltaTime);
     }
 
@@ -43,7 +35,7 @@ public class SmokeBomb : Entity, IAbilities
         newSmokeBomb.transform.position = playerHand;
 
         _smokeRigidbody = newSmokeBomb.GetComponent<Rigidbody>();
-        _smokeRigidbody.AddForce(direction * GameManager.Instance.Player.playerStats.SmokeBombThrowForce, ForceMode.Impulse);
+        _smokeRigidbody.AddForce(direction * _playerStats.SmokeBombThrowForce, ForceMode.Impulse);
         
     }
 
@@ -84,5 +76,4 @@ public class SmokeBomb : Entity, IAbilities
             _smokeRigidbody.constraints = RigidbodyConstraints.None;
         }
     }
-
 }

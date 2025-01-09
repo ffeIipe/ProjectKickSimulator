@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController
 {
     private PlayerModel _model;
     private InputStats _inputStats;
@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour
         //Kicks
         if (canKick)
         {
-            if (Input.GetKeyDown(_inputStats.NormalKick))
-                _model.SetKickStrategy(new NormalKick("Kick"));
+            //if (Input.GetKeyDown(_inputStats.NormalKick))
+            //    _model.SetKickStrategy(new NormalKick("Kick"));
 
             if (Input.GetKeyDown(_inputStats.FlyingKick) && enemyDirection != Vector3.zero)
                 _model.SetKickStrategy(new FlyingKick(enemyDirection, enemyDirection, "FlyingKick"));
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         if (canThrow)
         {
             if (Input.GetKeyDown(_inputStats.ThrowShuriken))
-                _model.SetAbilityStrategy(new Shuriken(_model._playerStats.ShurikenThrowForce, _model._playerStats.ShurikenDamage, "Shuriken"));
+                _model.SetAbilityStrategy(new Shuriken("Shuriken"));
 
             if (Input.GetKeyDown(_inputStats.ThrowSmokeBomb))
                 _model.SetAbilityStrategy(new SmokeBomb("SmokeBomb"));
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
                 _model.PerformJump();
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
                 _model.Slide(_playerDirection);
         }
     }

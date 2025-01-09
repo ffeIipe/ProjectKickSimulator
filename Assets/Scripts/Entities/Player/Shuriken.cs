@@ -2,28 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shuriken : Entity, IAbilities
+public class Shuriken : Ability, IAbilities
 {
-    private float _shurikenThrowForce;
-    private int _shurikenDamage;
-    private Vector3 _playerHandPos;
-    private Rigidbody _shurikenRigidbody;
-    private Animator _playerAnimator;
+    private Rigidbody _shurikenRigidbody;   
     private CountdownTimer _shurikenTimer;
     private Vector3 _currentVelocity;
 
-    public Shuriken(float force, int damage, string animString)
+    public Shuriken(string animString)
     {
-        _shurikenThrowForce = force;
-        _shurikenDamage = damage;
-
-        _playerAnimator = GameManager.Instance.Player.playerAnimator;
         _playerAnimator.SetTrigger(animString);
     }
 
     public override void Start()
     {
         base.Start();
+
         _shurikenTimer = new CountdownTimer(1f);
         _shurikenTimer.OnTimerStop += ReturnObject;
         _shurikenTimer.Start();
@@ -41,22 +34,17 @@ public class Shuriken : Entity, IAbilities
         newShuriken.transform.position = _playerHandPos;
 
         _shurikenRigidbody = newShuriken.GetComponent<Rigidbody>();
-        _shurikenRigidbody.AddForce(direction * (_shurikenThrowForce * 10), ForceMode.Impulse);
+        _shurikenRigidbody.AddForce(direction * (_playerStats.ShurikenThrowForce * 10), ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<Player>();
+        var enemy = other.GetComponent<EnemyController>();
 
-        if (!player)
+        if (enemy)
         {
-            var enemy = other.GetComponent<EnemyController>();
-
-            if (enemy)
-            {
-                enemy.Stun();
-                enemy.TakeDamage(_shurikenDamage);
-            }
+            enemy.Stun();
+            enemy.TakeDamage(GameManager.Instance.Player.playerStats.ShurikenDamage);
         }
     }
 

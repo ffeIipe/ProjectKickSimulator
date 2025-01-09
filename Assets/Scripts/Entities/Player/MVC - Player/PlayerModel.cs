@@ -12,7 +12,9 @@ public class PlayerModel : Entity
 
     public bool isRunning;
 
+    public event Action<bool> OnRagdollState = delegate { };
     public event Action OnPlayerStart = delegate { };
+    public event Action<float> OnTakeDamage = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
     public event Action OnRoll = delegate { };
@@ -47,6 +49,10 @@ public class PlayerModel : Entity
         _playerStats = playerStats;
         _playerCamera = Camera.main;
         _playerRigidbody = player.GetComponent<Rigidbody>();
+
+        currentHP = playerStats.StartHP;
+
+        SetRagdollState(false);
 
         EventManager.configs.OnSensChanged += UpdateSensitivity;
         UpdateSensitivity(PlayerPrefs.GetFloat("MouseSens", 1f));
@@ -115,13 +121,13 @@ public class PlayerModel : Entity
     #region Abilities
     public void SetAbilityStrategy(IAbilities newAbility)
     {
-        canAbility = false;
+        if (!canAbility) return;
         currentHability = newAbility;
     }
 
     public void PerformHability()
     {
-        if (!canAbility) return;
+        canAbility = false;
 
         currentHability?.CastAbility(Camera.main.transform.forward, _player.playerHand.transform.position);
     }
@@ -130,18 +136,12 @@ public class PlayerModel : Entity
     #region Actions
     public void PerformJump()
     {
-        if (!canAction) return;
-
         _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpUpForce + _player.transform.forward* _playerStats.PlayerJumpForce, ForceMode.Impulse);
         OnJump();
     }
 
     public void Roll(Vector3 playerDirection)
     {
-        if (!canAction) return;
-
-        canAction = false;
-
         float movementX = 0f;
         float movementZ = 0f;
 
@@ -152,17 +152,13 @@ public class PlayerModel : Entity
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
-        _playerRigidbody.AddForce(playerDirection.normalized * _playerStats.PlayerRollForce * 10);
+        _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerRollForce * 10), ForceMode.Impulse);
 
         OnRoll();
     }
 
     public void Slide(Vector3 playerDirection)
     {
-        if (!canAction) return;
-
-        canAction = false;
-
         float movementX = 0f;
         float movementZ = 0f;
 
@@ -173,7 +169,7 @@ public class PlayerModel : Entity
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
-        _playerRigidbody.AddForce(playerDirection.normalized * _playerStats.PlayerRollForce * 10);
+        _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerSlideForce * 10), ForceMode.Impulse);
 
         OnSlide();
     }
@@ -186,18 +182,36 @@ public class PlayerModel : Entity
     #endregion
 
     #region Entity
+    public void SetRagdollState(bool b)
+    {
+        OnRagdollState.Invoke(b);
+
+        foreach(Rigidbody r in _player.playerRagdoll.GetComponentsInChildren<Rigidbody>())
+        {
+            r.isKinematic = !b;
+            r.useGravity = b;
+        }
+
+        foreach(Collider c in _player.playerRagdoll.GetComponentsInChildren<Collider>())
+        {
+            c.enabled = b;
+        }
+    }
+
     public override void TakeDamage(float value)
     {
         currentHP -= value;
 
         if (currentHP <= 0) Die();
 
-        if (currentHP > startHP) currentHP = startHP;
+        if (currentHP > _playerStats.StartHP) currentHP = _playerStats.StartHP;
     }
 
     protected override void Die()
     {
-        throw new System.NotImplementedException();
+        _player.enabled = false;
+        SetRagdollState(true);
+        EventManager.ui.IsPlayerDead.Invoke(true);
     }
     #endregion
 

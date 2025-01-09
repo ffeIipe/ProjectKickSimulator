@@ -3,10 +3,12 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public float currentHP;
     public PlayerStats playerStats;
     public InputStats inputStats;
     public Transform playerLookAt, playerHand, pivotModel;
     public Animator playerAnimator;
+    public GameObject playerRagdoll;
     public PlayerModel Model { get; private set; }
 
     private PlayerView _view;
@@ -20,6 +22,8 @@ public class Player : MonoBehaviour
 
         EventManager.Player.OnKick += Model.PerformKick;
         EventManager.Player.OnHability += Model.PerformHability;
+
+        Model.OnRagdollState += delegate { playerAnimator.enabled = false; };
 
         Model.OnMovement += _view.MovementView;
         
@@ -40,6 +44,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        currentHP = Model.currentHP;
         _controller.InputUpdate();
     }
 

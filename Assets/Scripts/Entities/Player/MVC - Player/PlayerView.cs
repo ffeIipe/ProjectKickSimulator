@@ -44,7 +44,6 @@ public class PlayerView
 
     public void OnEnablePlayer()
     {
-        _playerAnimator = _player.GetComponentInChildren<Animator>();
         _playerAnimator.speed = 1;
     }
 
@@ -55,7 +54,7 @@ public class PlayerView
 
     public void KickHitSound()
     {
-        AudioManager.Instace.PlaySound(_player.playerStats.kickSound);
+        AudioManager.Instace.PlaySound(_player.playerStats.KickSound);
     }
 
     public void EnemyInRange(bool param)

@@ -2,19 +2,37 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NormalKick : BaseKickStrategy
+public class NormalKick : MonoBehaviour
 {
-    public NormalKick(string animString) { _playerAnimator.SetTrigger(animString); }
+    private Player _player;
 
-    protected override void HandleHit(RaycastHit hit, Action onHit)
+    private void Start()
     {
-        var enemy = hit.collider.GetComponent<EnemyController>();
-        if (enemy != null)
+        _player = GameManager.Instance.Player;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var enemy = other.GetComponent<EnemyController>();
+
+        if (enemy)
         {
             enemy.Stun();
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
-            
-            onHit();
         }
     }
+
+    //public NormalKick(string animString) { _playerAnimator.SetTrigger(animString); }
+    //
+    //protected override void HandleHit(RaycastHit hit, Action onHit)
+    //{
+    //    var enemy = hit.collider.GetComponent<EnemyController>();
+    //    if (enemy != null)
+    //    {
+    //        enemy.Stun();
+    //        enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
+    //        
+    //        onHit();
+    //    }
+    //}
 }

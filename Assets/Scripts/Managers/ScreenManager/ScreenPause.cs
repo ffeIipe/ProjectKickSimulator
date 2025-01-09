@@ -1,11 +1,12 @@
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ScreenPause : MonoBehaviour, IScreen
 {
-    Button[] _buttons;
-    [SerializeField] private GameObject pauseGameObject, optionsGameObject, quitGameObject;
+    private Button[] _buttons;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private GameObject quitMenu;
 
     private void Awake()
     {
@@ -17,8 +18,21 @@ public class ScreenPause : MonoBehaviour, IScreen
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            TogglePause();
+        }
+    }
+
+    private void TogglePause()
+    {
+        if (ScreenManager.Instance.CurrentScreen().Equals(this))
+        {
             BTN_Resume();
-            
+        }
+        else
+        {
+            ScreenManager.Instance.Push(this);
+            Cursor.lockState = CursorLockMode.None;
+            EventManager.ui.IsPaused?.Invoke(true);
         }
     }
 
@@ -28,31 +42,27 @@ public class ScreenPause : MonoBehaviour, IScreen
         Cursor.lockState = CursorLockMode.Locked;
         EventManager.ui.IsPaused?.Invoke(false);
     }
-    
+
     public void BTN_Options()
     {
-        pauseGameObject.SetActive(false);
-        optionsGameObject.SetActive(true);
+        SwitchMenu(optionsMenu);
     }
 
     public void BTN_Quit()
     {
-        pauseGameObject.SetActive(false);
-        quitGameObject.SetActive(true);
+        SwitchMenu(quitMenu);
     }
 
     public void BTN_Back()
     {
-        quitGameObject.SetActive(false);
-        optionsGameObject.SetActive(false);
-        pauseGameObject.SetActive(true);
+        SwitchMenu(pauseMenu);
     }
 
     public void BTN_QuitYes()
     {
         Application.Quit();
     }
-    
+
     public void BTN_QuitNo()
     {
         BTN_Back();
@@ -62,11 +72,12 @@ public class ScreenPause : MonoBehaviour, IScreen
     {
         gameObject.SetActive(true);
         ActivateButtons(true);
+        SwitchMenu(pauseMenu);
     }
 
     public void Deactivate()
     {
-       gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void Free()
@@ -79,6 +90,18 @@ public class ScreenPause : MonoBehaviour, IScreen
         foreach (var button in _buttons)
         {
             button.interactable = enable;
+        }
+    }
+
+    private void SwitchMenu(GameObject targetMenu)
+    {
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
+        quitMenu.SetActive(false);
+
+        if (targetMenu != null)
+        {
+            targetMenu.SetActive(true);
         }
     }
 }

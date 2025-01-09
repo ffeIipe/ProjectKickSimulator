@@ -3,7 +3,7 @@
 public abstract class Entity : MonoBehaviour
 {
     [Header("Stats Base")]
-    [SerializeField] protected float currentHP;
+    [SerializeField] public float currentHP;
     protected float startHP;
 
     public static void TurnOn(Entity entity)

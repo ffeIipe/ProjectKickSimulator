@@ -3,13 +3,22 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CapsuleCollider))]
+
 public abstract class EnemyController : Entity
 {
     public EnemyStats enemyStats;
     public Animator enemyAnimator;
     public NavMeshAgent agent;
     public GameObject ragdoll;
+    public Collider excludeCollider;
 
+
+    public bool isIdle;
+    public bool isPatrol;
     public bool isAttacking;
     public bool isDead;
     public bool isStunned;
@@ -24,6 +33,7 @@ public abstract class EnemyController : Entity
     private Vector3 _currentPosition;
 
     public CountdownTimer _patrolTimer;
+    public CountdownTimer _idleTimer;
     protected CountdownTimer _deadCountdown;
     protected CountdownTimer _timerStun;
     protected CountdownTimer _delayTeleport;
@@ -43,6 +53,9 @@ public abstract class EnemyController : Entity
         agent.enabled = false;
 
         _enemyRigidBody = GetComponent<Rigidbody>();
+
+        _idleTimer = new CountdownTimer(1f);
+        _idleTimer.OnTimerStop += delegate { Idle(false); };
 
         _deadCountdown = new CountdownTimer(2);
         _deadCountdown.OnTimerStop += Die;
@@ -64,24 +77,16 @@ public abstract class EnemyController : Entity
 
         if (currentHP <= 0)
         {
-            isDead = true;
-            _fsm.enabled = false;
-            enemyAnimator.enabled = false;
-            SetRagdoll(true);
-            StartCoroutine(LerpDeadMaterial(2f));
-            _deadCountdown.Start();
+            BeforeDead();
         }
 
         if (currentHP > startHP) currentHP = startHP;
     }
 
-    public void SetKickState()
-    {
-        isAttacking = false;
-    }
-
     public void Stun()
     {
+        if (RandomChance(-.1f, 1f) <= .9f) return;
+
         isStunned = true;
 
         _timerStun.Reset();
@@ -112,9 +117,22 @@ public abstract class EnemyController : Entity
     #endregion
 
     #region Behaviours
-    public void Patrol()
+
+    public void Idle(bool b)
     {
-        if (agent.enabled == false) agent.enabled = true;
+        isIdle = b;
+        enemyAnimator.SetBool("Idle", b);
+        agent.isStopped = b;
+        if (b) { _idleTimer.Reset(); _idleTimer.Start(); }
+        else return;
+    }
+
+    public void Patrol(bool b)
+    {
+        if (!agent.enabled) agent.enabled = b;
+        isPatrol = b;
+        enemyAnimator.SetBool("Patrol",b);
+
         Vector3 randomDirection = Random.insideUnitSphere * enemyStats.EnemyRangePatrol;
         randomDirection += transform.position;
 
@@ -123,7 +141,17 @@ public abstract class EnemyController : Entity
         {
             agent.SetDestination(hit.position);
         }
-        _patrolTimer.Start();
+        if (b) _patrolTimer.Start();
+        else return;
+    }
+
+    public void Attack(bool b)
+    {
+        isAttacking = b;
+
+        if (b == true) { agent.isStopped = b; }
+
+        else { agent.isStopped = b; }
     }
 
     public float RandomPatrolTime()
@@ -144,13 +172,32 @@ public abstract class EnemyController : Entity
     public void ExecuteTeleport() 
     {
         agent.speed = enemyStats.EnemySpeed;
-        Vector3 randomPos = Random.insideUnitSphere * enemyStats.EnemyRangeAttack;
+        Vector3 randomPos = Random.insideUnitSphere * 1;
         randomPos.x += target.transform.position.x;
         randomPos.z += target.transform.position.z;
         transform.position = randomPos;
     }
 
+    private void BeforeDead()
+    {
+        var col = gameObject.GetComponentsInChildren<Collider>();
+        foreach (var go in col) { go.gameObject.layer = 9; }
+        isDead = true;
+        _fsm.enabled = false;
+        enemyAnimator.enabled = false;
+        SetRagdoll(true);
+        StartCoroutine(LerpDeadMaterial(2f));
+        _deadCountdown.Start();
+    }
+
     private void FinishTeleport() { isTeleporting = false; }
+
+    private void FinishAttack() { isAttacking = false; }
+
+    private float RandomChance(float a, float b)
+    {
+        return Random.Range(a, b);
+    }
     #endregion
 
     #region Entity
@@ -211,15 +258,18 @@ public abstract class EnemyController : Entity
         {
             r.isKinematic = !b;
         }
-        foreach (Collider c in ragdoll.GetComponents<Collider>())
+        foreach (Collider col in ragdoll.GetComponents<Collider>())
         {
-            c.enabled = b;
+            if (col != excludeCollider)
+            {
+                col.enabled = b;
+            }
         }
     }
     #endregion
 
     #region Debug 
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (enemyStats != null)
         {

@@ -24,6 +24,7 @@ public static class EventManager
         public UnityAction<bool> OnShowJumpableMessage;
         public UnityAction<bool> OnShowKickeableMessage;
         public UnityAction<bool> OnShowKickeableEnemy;
+        public UnityAction<bool> IsPlayerDead;
     }
 
     public class PlayerEvents
