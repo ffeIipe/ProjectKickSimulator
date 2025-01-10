@@ -7,6 +7,7 @@ public class ChaseState : BaseState
 
     public override void EnterState()
     {
+        _agent.speed = _enemyController.enemyStats.EnemyChaseSpeed;
         _agent.SetDestination(_enemyController.target.transform.position);
         _enemyController.enemyAnimator.SetBool("Chase", true);
     }

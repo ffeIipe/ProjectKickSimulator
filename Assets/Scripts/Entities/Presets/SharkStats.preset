@@ -30,8 +30,12 @@ Preset:
     value: 35
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: EnemySpeed
-    value: 3
+    propertyPath: EnemyPatrolSpeed
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: EnemyChaseSpeed
+    value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: StunDuration
@@ -46,16 +50,16 @@ Preset:
     value: 0.5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: EnemyTimeBetweenIdle.x
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: EnemyTimeBetweenIdle.y
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: EnemyRangePatrol
     value: 5
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EnemyTimeBetweenPatrol.x
-    value: 5
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EnemyTimeBetweenPatrol.y
-    value: 7
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EnemyRangeChase

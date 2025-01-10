@@ -6,14 +6,13 @@ public class IdleState : BaseState
 {
     public CountdownTimer _idleTimer;
 
-    public IdleState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController)
-    {
-        _idleTimer = new CountdownTimer(1f);
-    }
+    public IdleState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController) { }
 
     public override void EnterState()
     {
-        _idleTimer.OnTimerStop += delegate { Idle(false); };
+        _idleTimer = new CountdownTimer(RandomIdleTime());
+
+        _idleTimer.OnTimerStop += () => _fsm.ChangeState("Patrol");
         Idle(true);
     }
 
@@ -30,17 +29,19 @@ public class IdleState : BaseState
 
         if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.transform.position) <= _enemyController.enemyStats.EnemyRangeChase)
             _fsm.ChangeState("Chase");
-
-        if (!isIdle)
-            _fsm.ChangeState("Patrol");
     }
 
     public void Idle(bool b)
     {
+        if (b) { _idleTimer.Start(); }
+
         isIdle = b;
         _enemyController.enemyAnimator.SetBool("Idle", b);
         _enemyController.agent.isStopped = b;
-        if (b) { _idleTimer.Reset(); _idleTimer.Start(); }
-        else return;
+    }
+
+    public float RandomIdleTime()
+    {
+        return Mathf.Round((Random.Range(_enemyController.enemyStats.EnemyTimeBetweenIdle.x, _enemyController.enemyStats.EnemyTimeBetweenIdle.y)) * 10) / 10;
     }
 }

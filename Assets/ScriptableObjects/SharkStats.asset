@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: SharkStats
   m_EditorClassIdentifier: 
   StartHP: 35
-  EnemySpeed: 3
+  EnemyPatrolSpeed: 2
+  EnemyChaseSpeed: 4
   StunDuration: 1
   SwordDamage: 10
   SwordRadiusDamage: 0.5
+  EnemyTimeBetweenIdle: {x: 5, y: 7}
   EnemyRangePatrol: 5
-  EnemyTimeBetweenPatrol: {x: 5, y: 7}
   EnemyRangeChase: 6
   EnemyRangeTeleport: 0
   EnemyTeleportDelay: 5

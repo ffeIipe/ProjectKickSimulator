@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: CrabStats
   m_EditorClassIdentifier: 
   StartHP: 20
-  EnemySpeed: 4
+  EnemyPatrolSpeed: 2
+  EnemyChaseSpeed: 4
   StunDuration: 1
   SwordDamage: 10
-  EnemyRangePatrol: 3
-  EnemyTimeBetweenPatrol: {x: 2, y: 5}
+  SwordRadiusDamage: 0
+  EnemyTimeBetweenIdle: {x: 1, y: 3}
+  EnemyRangePatrol: 10
   EnemyRangeChase: 6
   EnemyRangeTeleport: 0
   EnemyTeleportDelay: 5

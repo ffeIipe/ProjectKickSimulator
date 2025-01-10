@@ -52,7 +52,7 @@ public abstract class EnemyController : Entity
         _timerStun.OnTimerStop += RemoveStun;
 
         currentHP = enemyStats.StartHP;
-        agent.speed = enemyStats.EnemySpeed;
+        agent.speed = enemyStats.EnemyPatrolSpeed;
     }
 
     #region Actionables
@@ -105,7 +105,7 @@ public abstract class EnemyController : Entity
     #region Behaviours
     private void ExecuteTeleport() 
     {
-        agent.speed = enemyStats.EnemySpeed;
+        agent.speed = enemyStats.EnemyPatrolSpeed;
         Vector3 randomPos = Random.insideUnitSphere * 1;
         randomPos.x += target.transform.position.x;
         randomPos.z += target.transform.position.z;

@@ -5,14 +5,17 @@ public class EnemyStats : ScriptableObject
 {
     [Header("Basic stats")]
     public int StartHP;
-    public float EnemySpeed;
+    public float EnemyPatrolSpeed;
+    public float EnemyChaseSpeed;
     public float StunDuration;
     public float SwordDamage;
     public float SwordRadiusDamage;
 
+    [Header("Idle state stats")]
+    public Vector2 EnemyTimeBetweenIdle;
+
     [Header("Patrol state stats")]
     public float EnemyRangePatrol;
-    public Vector2 EnemyTimeBetweenPatrol;
 
     [Header("Chase state stats")]
     public float EnemyRangeChase;

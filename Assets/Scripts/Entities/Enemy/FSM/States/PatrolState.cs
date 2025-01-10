@@ -3,13 +3,7 @@ using UnityEngine.AI;
 
 public class PatrolState : BaseState
 {
-    public CountdownTimer _patrolTimer;
-
-    public PatrolState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController)
-    {
-        _patrolTimer = new CountdownTimer(RandomPatrolTime());
-        _patrolTimer.OnTimerStop += () => _fsm.ChangeState("Idle");
-    }
+    public PatrolState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController) { }
 
     public override void EnterState()
     {
@@ -24,8 +18,6 @@ public class PatrolState : BaseState
     public override void UpdateState()
     {
         //Debug.Log("I'm " + _enemyController.name + " and I'm in Patrol");
-        
-        _patrolTimer.Tick(Time.deltaTime);
 
         if (HasReachedDestination())
             _fsm.ChangeState("Idle");
@@ -46,7 +38,10 @@ public class PatrolState : BaseState
     public void Patrol(bool b)
     {
         if (!_enemyController.agent.enabled) _enemyController.agent.enabled = b;
+
         isPatrol = b;
+
+        _agent.speed = _enemyController.enemyStats.EnemyPatrolSpeed;
         _enemyController.enemyAnimator.SetBool("Patrol", b);
 
         Vector3 randomDirection = Random.insideUnitSphere * _enemyController.enemyStats.EnemyRangePatrol;
@@ -57,12 +52,5 @@ public class PatrolState : BaseState
         {
             _enemyController.agent.SetDestination(hit.position);
         }
-        if (b) _patrolTimer.Start();
-        else return;
-    }
-
-    public float RandomPatrolTime()
-    {
-        return Random.Range(_enemyController.enemyStats.EnemyTimeBetweenPatrol.x, _enemyController.enemyStats.EnemyTimeBetweenPatrol.y);
     }
 }

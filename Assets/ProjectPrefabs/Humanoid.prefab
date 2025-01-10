@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 1641903633277203990}
   - component: {fileID: 4210408223438109370}
   - component: {fileID: 3632347511820669488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Humanoid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -678,12 +678,6 @@ MonoBehaviour:
   agent: {fileID: 3304222654354784933}
   ragdoll: {fileID: 716802637058017748}
   excludeCollider: {fileID: 5182345355531423059}
-  isIdle: 0
-  isPatrol: 0
-  isAttacking: 0
-  isDead: 0
-  isStunned: 0
-  isTeleporting: 0
   _areaDmgPoint: {fileID: 7354157518310084663}
 --- !u!195 &3304222654354784933
 NavMeshAgent:

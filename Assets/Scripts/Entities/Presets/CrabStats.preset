@@ -30,7 +30,11 @@ Preset:
     value: 20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: EnemySpeed
+    propertyPath: EnemyPatrolSpeed
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: EnemyChaseSpeed
     value: 4
     objectReference: {fileID: 0}
   - target: {fileID: 0}
@@ -42,16 +46,20 @@ Preset:
     value: 10
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: EnemyRangePatrol
+    propertyPath: SwordRadiusDamage
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: EnemyTimeBetweenIdle.x
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: EnemyTimeBetweenIdle.y
     value: 3
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: EnemyTimeBetweenPatrol.x
-    value: 2
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: EnemyTimeBetweenPatrol.y
-    value: 5
+    propertyPath: EnemyRangePatrol
+    value: 10
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: EnemyRangeChase

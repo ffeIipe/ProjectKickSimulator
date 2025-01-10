@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: FishStats
   m_EditorClassIdentifier: 
   StartHP: 10
-  EnemySpeed: 4
+  EnemyPatrolSpeed: 2
+  EnemyChaseSpeed: 4
   StunDuration: 1
   SwordDamage: 10
+  SwordRadiusDamage: 0
+  EnemyTimeBetweenIdle: {x: 2, y: 4}
   EnemyRangePatrol: 3
-  EnemyTimeBetweenPatrol: {x: 2, y: 5}
   EnemyRangeChase: 6
   EnemyRangeTeleport: 3
   EnemyTeleportDelay: 5
