@@ -16,27 +16,18 @@ public abstract class EnemyController : Entity
     public GameObject ragdoll;
     public Collider excludeCollider;
 
-
-    public bool isIdle;
-    public bool isPatrol;
-    public bool isAttacking;
-    public bool isDead;
-    public bool isStunned;
-    public bool isTeleporting = false;
     public static bool isAlert = false;
+    public bool isStunned {  get; private set; }
+    public bool isDead { get; private set; }
+    public Transform target { get; private set; }
 
     protected FSM _fsm;
+    protected CountdownTimer _deadCountdown;
+    protected CountdownTimer _timerStun;
 
-    public Transform target { get; private set; }
     private Rigidbody _enemyRigidBody;
     private Vector3 _currentVelocity;
     private Vector3 _currentPosition;
-
-    public CountdownTimer _patrolTimer;
-    public CountdownTimer _idleTimer;
-    protected CountdownTimer _deadCountdown;
-    protected CountdownTimer _timerStun;
-    protected CountdownTimer _delayTeleport;
 
     public override void Start()
     {
@@ -54,17 +45,11 @@ public abstract class EnemyController : Entity
 
         _enemyRigidBody = GetComponent<Rigidbody>();
 
-        _idleTimer = new CountdownTimer(1f);
-        _idleTimer.OnTimerStop += delegate { Idle(false); };
-
         _deadCountdown = new CountdownTimer(2);
         _deadCountdown.OnTimerStop += Die;
 
         _timerStun = new CountdownTimer(enemyStats.StunDuration);
         _timerStun.OnTimerStop += RemoveStun;
-
-        _delayTeleport = new CountdownTimer(enemyStats.EnemyTeleportDelay);
-        _delayTeleport.OnTimerStop += FinishTeleport;
 
         currentHP = enemyStats.StartHP;
         agent.speed = enemyStats.EnemySpeed;
@@ -85,21 +70,27 @@ public abstract class EnemyController : Entity
 
     public void Stun()
     {
-        if (RandomChance(-.1f, 1f) <= .9f) return;
+        if (RandomChance(-.1f, 1f, .9f))
+        {
+            isStunned = true;
 
-        isStunned = true;
+            _timerStun.Reset();
+            _timerStun.Start();
 
-        _timerStun.Reset();
-        _timerStun.Start();
-        
-        _fsm.enabled = false; 
+            _fsm.enabled = false;
 
-        agent.enabled = false;
+            agent.enabled = false;
 
-        enemyAnimator.SetTrigger("Stun");
+            enemyAnimator.SetTrigger("Stun");
+        }  
     }
 
-    public void RemoveStun()
+    protected override void Die()
+    {
+        transform.position = Vector3.zero;
+    }
+
+    private void RemoveStun()
     {
         _fsm.enabled = true;
 
@@ -109,67 +100,10 @@ public abstract class EnemyController : Entity
 
         isStunned = false;
     }
-
-    protected override void Die()
-    {
-        transform.position = Vector3.zero;
-    }
     #endregion
 
     #region Behaviours
-
-    public void Idle(bool b)
-    {
-        isIdle = b;
-        enemyAnimator.SetBool("Idle", b);
-        agent.isStopped = b;
-        if (b) { _idleTimer.Reset(); _idleTimer.Start(); }
-        else return;
-    }
-
-    public void Patrol(bool b)
-    {
-        if (!agent.enabled) agent.enabled = b;
-        isPatrol = b;
-        enemyAnimator.SetBool("Patrol",b);
-
-        Vector3 randomDirection = Random.insideUnitSphere * enemyStats.EnemyRangePatrol;
-        randomDirection += transform.position;
-
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDirection, out hit, enemyStats.EnemyRangePatrol, NavMesh.AllAreas))
-        {
-            agent.SetDestination(hit.position);
-        }
-        if (b) _patrolTimer.Start();
-        else return;
-    }
-
-    public void Attack(bool b)
-    {
-        isAttacking = b;
-
-        if (b == true) { agent.isStopped = b; }
-
-        else { agent.isStopped = b; }
-    }
-
-    public float RandomPatrolTime()
-    {
-        return Random.Range(enemyStats.EnemyTimeBetweenPatrol.x, enemyStats.EnemyTimeBetweenPatrol.y);
-    }
-
-    public void Teleport()
-    {
-        if (isTeleporting) return;
-
-        _delayTeleport.Start();
-        isTeleporting = true;
-        agent.speed = 0;
-        enemyAnimator.SetTrigger("Teleport");
-    }
-
-    public void ExecuteTeleport() 
+    private void ExecuteTeleport() 
     {
         agent.speed = enemyStats.EnemySpeed;
         Vector3 randomPos = Random.insideUnitSphere * 1;
@@ -190,13 +124,15 @@ public abstract class EnemyController : Entity
         _deadCountdown.Start();
     }
 
-    private void FinishTeleport() { isTeleporting = false; }
+    private void FinishAttack() { BaseState.isAttacking = false; }
 
-    private void FinishAttack() { isAttacking = false; }
-
-    private float RandomChance(float a, float b)
+    private bool RandomChance(float a, float b, float chance)
     {
-        return Random.Range(a, b);
+        float x = Random.Range(a, b);
+
+        if (x < chance) return false;
+
+        else return true;
     }
     #endregion
 
@@ -254,11 +190,11 @@ public abstract class EnemyController : Entity
 
     private void SetRagdoll(bool b)
     {
-        foreach (Rigidbody r in ragdoll.GetComponents<Rigidbody>())
+        foreach (Rigidbody r in ragdoll.GetComponentsInChildren<Rigidbody>())
         {
             r.isKinematic = !b;
         }
-        foreach (Collider col in ragdoll.GetComponents<Collider>())
+        foreach (Collider col in ragdoll.GetComponentsInChildren<Collider>())
         {
             if (col != excludeCollider)
             {

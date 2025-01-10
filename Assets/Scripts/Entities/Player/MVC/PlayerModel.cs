@@ -14,7 +14,6 @@ public class PlayerModel : Entity
 
     public event Action<bool> OnRagdollState = delegate { };
     public event Action OnPlayerStart = delegate { };
-    public event Action<float> OnTakeDamage = delegate { };
     public event Action OnHitEnemy = delegate { };
     public event Action OnJump = delegate { };
     public event Action OnRoll = delegate { };
@@ -54,7 +53,6 @@ public class PlayerModel : Entity
 
         SetRagdollState(false);
 
-        EventManager.configs.OnSensChanged += UpdateSensitivity;
         UpdateSensitivity(PlayerPrefs.GetFloat("MouseSens", 1f));
     }
 
@@ -65,7 +63,7 @@ public class PlayerModel : Entity
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        _rotationX -= mouseY;
+        _rotationX -= mouseY * _playerStats.PlayerSensitivity;
         _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
         _player.playerLookAt.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
 
@@ -99,8 +97,9 @@ public class PlayerModel : Entity
         OnMovement(_currentX, _currentZ);
     }
 
-    private void UpdateSensitivity(float newSensitivity)
+    public void UpdateSensitivity(float newSensitivity)
     {
+        newSensitivity = Mathf.Round(newSensitivity * 10f) / 10f;
         _playerStats.PlayerSensitivity = newSensitivity;
     }
     #endregion
@@ -205,6 +204,8 @@ public class PlayerModel : Entity
         if (currentHP <= 0) Die();
 
         if (currentHP > _playerStats.StartHP) currentHP = _playerStats.StartHP;
+
+        EventManager.Player.OnHPChanged.Invoke(currentHP);
     }
 
     protected override void Die()

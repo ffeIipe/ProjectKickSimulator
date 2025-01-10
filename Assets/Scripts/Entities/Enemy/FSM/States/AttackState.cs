@@ -7,13 +7,13 @@ public class AttackState : BaseState
     public override void EnterState()
     {
         _enemyController.enemyAnimator.SetTrigger("Attack");
-        _enemyController.Attack(true);
+        Attack(true);
     }
 
     public override void ExitState()
     {
         _enemyAnimator.ResetTrigger("Attack");
-        _enemyController.Attack(false);
+        Attack(false);
     }
 
     public override void UpdateState()
@@ -33,5 +33,14 @@ public class AttackState : BaseState
                 _fsm.ChangeState("Attack");
             }
         }
+    }
+
+    public void Attack(bool b)
+    {
+        isAttacking = b;
+
+        if (b == true) { _enemyController.agent.isStopped = b; }
+
+        else { _enemyController.agent.isStopped = b; }
     }
 }

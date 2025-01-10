@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class DeadMenu : MonoBehaviour, IScreen
+public class ScreenDead : MonoBehaviour, IScreen
 {
     private Button[] _buttons;
     [SerializeField] private GameObject deadMenu;
@@ -11,35 +12,34 @@ public class DeadMenu : MonoBehaviour, IScreen
     {
         _buttons = GetComponentsInChildren<Button>();
         ActivateButtons(true);
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            TogglePause();
-        }
-    }
-
-    private void TogglePause()
-    {
-        if (ScreenManager.Instance.CurrentScreen().Equals(this))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             BTN_Retry();
         }
-        else
-        {
-            ScreenManager.Instance.Push(this);
-            Cursor.lockState = CursorLockMode.None;
-            EventManager.ui.IsPaused?.Invoke(true);
-        }
     }
+
+    //private void TogglePause()
+    //{
+    //    if (ScreenManager.Instance.CurrentScreen().Equals(this))
+    //    {
+    //        BTN_Retry();
+    //    }
+    //    else
+    //    {
+    //        ScreenManager.Instance.Push(this);
+    //        Cursor.lockState = CursorLockMode.None;
+    //        EventManager.ui.IsPaused?.Invoke(true);
+    //    }
+    //}
 
     public void BTN_Retry()
     {
-        ScreenManager.Instance.Pop();
-        Cursor.lockState = CursorLockMode.Locked;
-        EventManager.ui.IsPaused?.Invoke(false);
+        SceneManager.LoadScene(0);
     }
 
     public void BTN_Quit()

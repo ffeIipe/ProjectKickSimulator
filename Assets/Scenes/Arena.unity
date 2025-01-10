@@ -1503,6 +1503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitMarkerImage: {fileID: 976149023}
+  deadMenu: {fileID: 1837464840}
 --- !u!1 &1543197247
 GameObject:
   m_ObjectHideFlags: 0
@@ -2009,6 +2010,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1837464840 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8742906075442165501, guid: 0a53407fe9bf53e42b95bdc0dbb630b5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1768026030013631569}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a66b19098b9561f4c9e0126907b9f1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1880596046
 GameObject:
   m_ObjectHideFlags: 0

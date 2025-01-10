@@ -20,9 +20,6 @@ public static class EventManager
     public class UIEvents
     {
         public UnityAction<bool> IsPaused;
-        public UnityAction<bool> OnShowInteractMessage;
-        public UnityAction<bool> OnShowJumpableMessage;
-        public UnityAction<bool> OnShowKickeableMessage;
         public UnityAction<bool> OnShowKickeableEnemy;
         public UnityAction<bool> IsPlayerDead;
     }
@@ -37,6 +34,7 @@ public static class EventManager
         public UnityAction OnSlide;
         public UnityAction OnHability;
         public UnityAction OnPlayerHitted;
+        public UnityAction<float> OnHPChanged;
         public UnityAction OnPlayerDead;
         public UnityAction OnPlayerStart;
     }

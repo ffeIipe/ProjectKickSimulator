@@ -5,7 +5,7 @@ public class PlayerStats : ScriptableObject
 {
     [Header("Basic stats")]
     public float PlayerSensitivity;
-    public int StartHP;
+    public float StartHP;
     public float PlayerSpeed;
 
     [Header("Kick stats")]

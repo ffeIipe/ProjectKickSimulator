@@ -27,7 +27,7 @@ public class ChaseState : BaseState
             _agent.SetDestination(_enemyController.target.transform.position);
             _fsm.ChangeState("Attack");
         }
-        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeTeleport && !_enemyController.isTeleporting)
+        else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeTeleport && !isTeleporting)
             _fsm.ChangeState("Teleport");
 
         else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangeChase || !EnemyController.isAlert || _enemyController.isStunned)

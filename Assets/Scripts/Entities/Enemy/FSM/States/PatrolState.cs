@@ -3,27 +3,29 @@ using UnityEngine.AI;
 
 public class PatrolState : BaseState
 {
+    public CountdownTimer _patrolTimer;
+
     public PatrolState(FSM fsm, EnemyController enemyController) : base(fsm, enemyController)
     {
-        _enemyController._patrolTimer = new CountdownTimer(_enemyController.RandomPatrolTime());
-        _enemyController._patrolTimer.OnTimerStop += () => _fsm.ChangeState("Idle");//delegate { _enemyController.Patrol(false); };
+        _patrolTimer = new CountdownTimer(RandomPatrolTime());
+        _patrolTimer.OnTimerStop += () => _fsm.ChangeState("Idle");
     }
 
     public override void EnterState()
     {
-        _enemyController.Patrol(true);
+        Patrol(true);
     }
 
     public override void ExitState()
     {
-        _enemyController.Patrol(false);
+        Patrol(false);
     }
 
     public override void UpdateState()
     {
         //Debug.Log("I'm " + _enemyController.name + " and I'm in Patrol");
         
-        _enemyController._patrolTimer.Tick(Time.deltaTime);
+        _patrolTimer.Tick(Time.deltaTime);
 
         if (HasReachedDestination())
             _fsm.ChangeState("Idle");
@@ -41,4 +43,26 @@ public class PatrolState : BaseState
                _enemyController.agent.remainingDistance <= _enemyController.agent.stoppingDistance;
     }
 
+    public void Patrol(bool b)
+    {
+        if (!_enemyController.agent.enabled) _enemyController.agent.enabled = b;
+        isPatrol = b;
+        _enemyController.enemyAnimator.SetBool("Patrol", b);
+
+        Vector3 randomDirection = Random.insideUnitSphere * _enemyController.enemyStats.EnemyRangePatrol;
+        randomDirection += _enemyController.transform.position;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, _enemyController.enemyStats.EnemyRangePatrol, NavMesh.AllAreas))
+        {
+            _enemyController.agent.SetDestination(hit.position);
+        }
+        if (b) _patrolTimer.Start();
+        else return;
+    }
+
+    public float RandomPatrolTime()
+    {
+        return Random.Range(_enemyController.enemyStats.EnemyTimeBetweenPatrol.x, _enemyController.enemyStats.EnemyTimeBetweenPatrol.y);
+    }
 }

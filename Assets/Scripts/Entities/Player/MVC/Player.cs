@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
 
         EventManager.Player.OnKick += Model.PerformKick;
         EventManager.Player.OnHability += Model.PerformHability;
+        EventManager.configs.OnSensChanged += Model.UpdateSensitivity;
 
         Model.OnRagdollState += delegate { playerAnimator.enabled = false; };
 
