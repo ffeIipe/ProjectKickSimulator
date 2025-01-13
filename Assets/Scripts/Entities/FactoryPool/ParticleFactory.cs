@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
+
+public class ParticleFactory : Factory
+{
+    public static ParticleFactory Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        _myEntitesPool = new Pool<Entity>(CreateObject, Entity.TurnOn, Entity.TurnOff, _initialAmount);
+    }
+
+    public override Entity GetObjectFromPool()
+    {
+        return _myEntitesPool.GetObject();
+    }
+
+    public override void ReturnObjectToPool(Entity entity)
+    {
+        _myEntitesPool.ReturnObject(entity);
+    }
+}

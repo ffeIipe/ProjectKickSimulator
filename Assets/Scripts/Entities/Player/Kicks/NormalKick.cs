@@ -21,11 +21,11 @@ public class NormalKick : MonoBehaviour
 
             foreach (var hit in hits)
             {
-                var particle = Instantiate(_player.playerStats.HitEffect, hit.transform.position, Quaternion.identity);
+                var particle = ParticleFactory.Instance.GetObjectFromPool();
+                particle.transform.SetPositionAndRotation(hit.transform.position, Quaternion.identity);
                 particle.GetComponent<ParticleSystem>().Play();
             }
 
-            Debug.Log("I deal " + _player.playerStats.PlayerKickDamage + " points of damage.");
             enemy.Stun();
             enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
         }

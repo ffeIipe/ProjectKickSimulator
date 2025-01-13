@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 806922754}
   - component: {fileID: 806922752}
   - component: {fileID: 806922755}
+  - component: {fileID: 806922757}
   m_Layer: 0
   m_Name: FactoryPool
   m_TagString: Untagged
@@ -708,6 +709,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityToInstantiate: {fileID: 8951671031342502589, guid: bffc456f0ee97214b91dbe2fcf2608ca,
+    type: 3}
+  _initialAmount: 10
+--- !u!114 &806922757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806922749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 107f05e2b4ec43c4c99e0e76402a8d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityToInstantiate: {fileID: -1049275967913866518, guid: bb3345b2c4d14154b84307508ac8b56b,
     type: 3}
   _initialAmount: 10
 --- !u!1 &832575517

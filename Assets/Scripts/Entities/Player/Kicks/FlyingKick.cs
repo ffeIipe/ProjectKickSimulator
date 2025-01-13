@@ -9,8 +9,7 @@ public class FlyingKick : BaseKickStrategy
     {
         Debug.Log("Flying Kick");
         _playerAnimator.SetTrigger(animString);
-        //_playerRigidbody.Move(enemyPosition, Quaternion.Euler(playerRotation));
-        _player.StartCoroutine(LerpToPosition(enemyPosition, Quaternion.Euler(playerRotation), .1f));
+        _player.StartCoroutine(LerpToPosition(enemyPosition, Quaternion.Euler(playerRotation), .05f));
     }
 
     private IEnumerator LerpToPosition(Vector3 enemyPosition, Quaternion playerRotation, float duration)
