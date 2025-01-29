@@ -7,6 +7,7 @@ public class ScreenPause : MonoBehaviour, IScreen
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private GameObject quitMenu;
+    
 
     private void Awake()
     {
@@ -30,6 +31,7 @@ public class ScreenPause : MonoBehaviour, IScreen
         }
         else
         {
+            
             ScreenManager.Instance.Push(this);
             Cursor.lockState = CursorLockMode.None;
             EventManager.ui.IsPaused?.Invoke(true);
@@ -38,6 +40,7 @@ public class ScreenPause : MonoBehaviour, IScreen
 
     public void BTN_Resume()
     {
+        
         ScreenManager.Instance.Pop();
         Cursor.lockState = CursorLockMode.Locked;
         EventManager.ui.IsPaused?.Invoke(false);
@@ -104,4 +107,8 @@ public class ScreenPause : MonoBehaviour, IScreen
             targetMenu.SetActive(true);
         }
     }
+
+    private void OnEnable() { GameManager.Instance.IsPaused = true; }
+
+    private void OnDisable() { GameManager.Instance.IsPaused = false; }
 }

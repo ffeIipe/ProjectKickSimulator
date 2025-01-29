@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -17,17 +18,17 @@ public abstract class EnemyController : Entity
     public Collider excludeCollider;
 
     public static bool isAlert = false;
-    public bool isStunned {  get; private set; }
+    public bool isStunned { get; private set; }
     public bool isDead { get; private set; }
     public Transform target { get; private set; }
 
     protected FSM _fsm;
-    protected CountdownTimer _deadCountdown;
     protected CountdownTimer _timerStun;
 
     private Rigidbody _enemyRigidBody;
     private Vector3 _currentVelocity;
     private Vector3 _currentPosition;
+    public bool prueba = true;
 
     public override void Start()
     {
@@ -44,9 +45,6 @@ public abstract class EnemyController : Entity
         agent.enabled = false;
 
         _enemyRigidBody = GetComponent<Rigidbody>();
-
-        _deadCountdown = new CountdownTimer(2);
-        _deadCountdown.OnTimerStop += Die;
 
         _timerStun = new CountdownTimer(enemyStats.StunDuration);
         _timerStun.OnTimerStop += RemoveStun;
@@ -82,12 +80,7 @@ public abstract class EnemyController : Entity
             agent.enabled = false;
 
             enemyAnimator.SetTrigger("Stun");
-        }  
-    }
-
-    protected override void Die()
-    {
-        transform.position = Vector3.zero;
+        }
     }
 
     private void RemoveStun()
@@ -103,7 +96,7 @@ public abstract class EnemyController : Entity
     #endregion
 
     #region Behaviours
-    private void ExecuteTeleport() 
+    private void ExecuteTeleport()
     {
         agent.speed = enemyStats.EnemyPatrolSpeed;
         Vector3 randomPos = Random.insideUnitSphere * 1;
@@ -112,16 +105,21 @@ public abstract class EnemyController : Entity
         transform.position = randomPos;
     }
 
-    private void BeforeDead()
+    protected virtual void BeforeDead()
     {
         var col = gameObject.GetComponentsInChildren<Collider>();
         foreach (var go in col) { go.gameObject.layer = 9; }
+        col.First().enabled = false;
+
         isDead = true;
         _fsm.enabled = false;
         enemyAnimator.enabled = false;
+
         SetRagdoll(true);
+
         StartCoroutine(LerpDeadMaterial(2f));
-        _deadCountdown.Start();
+
+        Die();
     }
 
     private void FinishAttack() { BaseState.isAttacking = false; }
@@ -148,9 +146,9 @@ public abstract class EnemyController : Entity
     {
         if (isPaused)
         {
-            if (_deadCountdown.IsRunning) _deadCountdown.Pause();
             agent.enabled = false;
             _fsm.enabled = false;
+            ragdoll.SetActive(false);
             _currentVelocity = _enemyRigidBody.velocity;
             _enemyRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             _enemyRigidBody.velocity = Vector3.zero;
@@ -158,9 +156,9 @@ public abstract class EnemyController : Entity
         }
         else
         {
-            if (_deadCountdown.IsRunning) _deadCountdown.Resume();
             agent.enabled = true;
             _fsm.enabled = true;
+            ragdoll.SetActive(true);
             _enemyRigidBody.constraints = RigidbodyConstraints.None;
             _enemyRigidBody.velocity = _currentVelocity;
             enemyAnimator.speed = 1;
@@ -176,13 +174,20 @@ public abstract class EnemyController : Entity
 
         while (elapsedTime < duration)
         {
-            float t = elapsedTime / duration;
-            float value = Mathf.Lerp(0f, 1f, t);
+            if (GameManager.Instance.IsPaused)
+            {
+                yield return null;
+            }
+            else
+            {
+                float t = elapsedTime / duration;
+                float value = Mathf.Lerp(0f, 1f, t);
 
-            mat.SetFloat("_DissolveValue", value);
+                mat.SetFloat("_DissolveValue", value);
 
-            elapsedTime += Time.deltaTime;
-            yield return null;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }    
         }
 
         mat.SetFloat("_DissolveValue", 1f);

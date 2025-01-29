@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
         Model.OnRoll += _view.RollView;
         EventManager.Player.OnRoll += Model.ReturnFromAction;
 
+        Model.OnHang += _view.HangView;
+
         Model.OnHitEnemy += _view.KickHitSound;
     }
 

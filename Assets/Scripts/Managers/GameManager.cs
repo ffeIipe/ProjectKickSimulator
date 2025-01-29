@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public Player Player;
+    public bool IsPaused = false;
 
     private void Awake()
     {

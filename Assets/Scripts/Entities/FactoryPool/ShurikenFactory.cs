@@ -24,8 +24,8 @@ public class ShurikenFactory : Factory
         return _myEntitesPool.GetObject();
     }
 
-    public override void ReturnObjectToPool(Entity bullet)
+    public override void ReturnObjectToPool(Entity entity, float time)
     {
-        _myEntitesPool.ReturnObject(bullet);
+        StartCoroutine(Wait(entity, time));
     }
 }

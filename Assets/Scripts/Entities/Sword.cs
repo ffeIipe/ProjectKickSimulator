@@ -4,22 +4,19 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
 
-public class Sword : MonoBehaviour
+public class Sword : MeleeWeapon
 {
-    private EnemyController enemyController;
+    public SwordStats swordStats;
 
     private void Start()
     {
-        enemyController = GetComponentInParent<EnemyController>();
+        damage = swordStats.SwordDamage;
+        animatorOverride = swordStats.AnimatorOverride;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void Pick()
     {
-        var player = other.GetComponent<Player>();
-
-        if (player)
-        {
-            player.Model.TakeDamage(enemyController.enemyStats.SwordDamage);
-        }
+        base.Pick();
+        player.playerAnimator.runtimeAnimatorController = animatorOverride;
     }
 }

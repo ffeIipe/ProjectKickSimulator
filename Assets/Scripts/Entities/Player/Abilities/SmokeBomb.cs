@@ -5,8 +5,6 @@ using UnityEngine;
 public class SmokeBomb : Ability, IAbilities
 {
     private Rigidbody _smokeRigidbody;
-    private CountdownTimer _smokeTimer;
-    private CountdownTimer _smokeLifetime;
 
     public SmokeBomb(string animString)
     {     
@@ -16,15 +14,7 @@ public class SmokeBomb : Ability, IAbilities
     public override void Start()
     {
         base.Start();
-
-        _smokeLifetime = new CountdownTimer(5f);
-        _smokeLifetime.OnTimerStop += ReturnObject;
-        _smokeLifetime.Start();
-    }
-
-    private void Update()
-    {
-        _smokeLifetime.Tick(Time.deltaTime);
+        SmokeBombFactory.Instance.ReturnObjectToPool(this, 5f);
     }
 
     public void CastAbility(Vector3 direction, Vector3 playerHand)
@@ -51,11 +41,6 @@ public class SmokeBomb : Ability, IAbilities
             renderer.enabled = true;
     }
 
-    private void ReturnObject()
-    {
-        SmokeBombFactory.Instance.ReturnObjectToPool(this);
-    }
-
     public override void ResetEntity()
     {
         transform.position = _playerHandPos;
@@ -66,14 +51,9 @@ public class SmokeBomb : Ability, IAbilities
     protected override void PauseEntity(bool isPaused)
     {
         if (isPaused)
-        {
-            _smokeLifetime.Pause();
             _smokeRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        }
+     
         else
-        {
-            _smokeLifetime.Resume();
             _smokeRigidbody.constraints = RigidbodyConstraints.None;
-        }
     }
 }

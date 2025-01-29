@@ -23,7 +23,6 @@ public class EnemyShark : EnemyController
         _fsm.Execute();
 
         _timerStun.Tick(Time.deltaTime);
-        _deadCountdown.Tick(Time.deltaTime);
     }
 
     public override void SpawnEntity(Vector3 enemyPosition)
@@ -34,8 +33,7 @@ public class EnemyShark : EnemyController
 
     protected override void Die()
     {
-        base.Die();
-        SharkFactory.Instance.ReturnObjectToPool(this);
+        SharkFactory.Instance.ReturnObjectToPool(this,2f);
     }
 
     private void AreaDamage()

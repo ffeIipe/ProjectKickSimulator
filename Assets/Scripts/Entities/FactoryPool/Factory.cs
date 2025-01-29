@@ -16,5 +16,24 @@ public abstract class Factory : MonoBehaviour
 
     public abstract Entity GetObjectFromPool();
 
-    public abstract void ReturnObjectToPool(Entity bullet);
+    public abstract void ReturnObjectToPool(Entity entity, float time);
+
+    protected IEnumerator Wait(Entity entity, float time)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < time)
+        {
+            if (GameManager.Instance.IsPaused)
+            {
+                yield return null;
+            }
+            else
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        _myEntitesPool.ReturnObject(entity);
+    }
 }

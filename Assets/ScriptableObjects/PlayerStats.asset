@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79cc9e7ff38729c4ab9f734364495b65, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  PlayerSensitivity: 2
+  PlayerSensitivity: 1
   StartHP: 100
-  PlayerSpeed: 35
+  PlayerSpeed: 40
+  PlayerInteractMaxDistance: 5
   PlayerKickForce: 0.25
   PlayerKickUpForce: 1
-  PlayerKickDamage: 5
+  PlayerKickDamage: 10
   PlayerKickDistance: 2
   PlayerKickRange: 1.5
   PlayerFlyingKickMaxDistance: 30
@@ -25,12 +26,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   ShurikenDamage: 20
-  ShurikenThrowForce: 5
+  ShurikenThrowForce: 20
   SmokeBombThrowForce: 20
-  PlayerJumpForce: 75
-  PlayerJumpUpForce: 200
+  PlayerJumpForce: 50
+  PlayerJumpUpForce: 150
   PlayerRollForce: 10
-  PlayerSlideForce: 20
+  PlayerSlideForce: 10
+  PlayerHangForce: 20
+  PlayerMaxHangDistance: 52.2
   PlayerKickDashForce: 5
   KickSound: {fileID: 8300000, guid: 0ba6ec50cdba78c4c8ae845ea21eb95a, type: 3}
   HitEffect: {fileID: 7739341553591263376, guid: bb3345b2c4d14154b84307508ac8b56b,

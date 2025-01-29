@@ -27,7 +27,6 @@ public class PlayerController
         _playerDirection.x = Input.GetAxisRaw("Horizontal");
         _playerDirection.z = Input.GetAxisRaw("Vertical");
 
-        //Kicks
         if (canKick)
         {
             //if (Input.GetKeyDown(_inputStats.NormalKick))
@@ -37,7 +36,6 @@ public class PlayerController
                 _model.SetKickStrategy(new FlyingKick(enemyDirection, enemyDirection, "FlyingKick"));
         }
 
-        //Abilities
         if (canThrow)
         {
             if (Input.GetKeyDown(_inputStats.ThrowShuriken))
@@ -47,18 +45,20 @@ public class PlayerController
                 _model.SetAbilityStrategy(new SmokeBomb("SmokeBomb"));
         }
 
-        //Actions
         if (canAction)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
-                _model.Roll(_playerDirection);
+            if (Input.GetKeyDown(_inputStats.Dodge) && isGrounded)
+                _model.Dodge(_playerDirection);
 
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            if (Input.GetKeyDown(_inputStats.Jump) && isGrounded)
                 _model.PerformJump();
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(_inputStats.Slide))
                 _model.Slide(_playerDirection);
         }
+
+        if (Input.GetKeyDown(_inputStats.Interact))
+            _model.LookForPickeables();
     }
 
     public void InputFixedUpdate()

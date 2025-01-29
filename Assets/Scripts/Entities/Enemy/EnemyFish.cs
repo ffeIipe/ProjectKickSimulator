@@ -21,7 +21,6 @@ public class EnemyFish : EnemyController
         _fsm.Execute();
 
         _timerStun.Tick(Time.deltaTime);
-        _deadCountdown.Tick(Time.deltaTime);
     }
 
     public override void SpawnEntity(Vector3 enemyPosition)
@@ -32,7 +31,6 @@ public class EnemyFish : EnemyController
 
     protected override void Die()
     {
-        base.Die();
-        FishFactory.Instance.ReturnObjectToPool(this);
+        FishFactory.Instance.ReturnObjectToPool(this, 2f);
     }
 }
