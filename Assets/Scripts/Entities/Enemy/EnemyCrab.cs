@@ -18,10 +18,10 @@ public class EnemyCrab : EnemyController
 
     private void Update()
     {
+
         _fsm.Execute();
         
         _timerStun.Tick(Time.deltaTime);
-        _deadCountdown.Tick(Time.deltaTime);
     }
 
     public override void SpawnEntity(Vector3 enemyPosition)
@@ -32,7 +32,6 @@ public class EnemyCrab : EnemyController
 
     protected override void Die()
     {
-        base.Die();
-        CrabFactory.Instance.ReturnObjectToPool(this);
+        CrabFactory.Instance.ReturnObjectToPool(this, 2f);
     }
 }

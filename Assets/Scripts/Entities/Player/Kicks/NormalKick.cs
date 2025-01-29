@@ -27,7 +27,7 @@ public class NormalKick : MonoBehaviour
             }
 
             enemy.Stun();
-            enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
+            enemy.TakeDamage(_player.playerStats.PlayerKickDamage * _player.Model.damageMult);
         }
 
         //public NormalKick(string animString) { _playerAnimator.SetTrigger(animString); }

@@ -39,8 +39,8 @@ public class AttackState : BaseState
     {
         isAttacking = b;
 
-        if (b == true) { _enemyController.agent.isStopped = b; }
-
-        else { _enemyController.agent.isStopped = b; }
+        _agent.updatePosition = !b;
+        _agent.updateRotation = !b;
+        _agent.isStopped = b;
     }
 }

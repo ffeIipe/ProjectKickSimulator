@@ -25,8 +25,8 @@ public class ParticleFactory : Factory
         return _myEntitesPool.GetObject();
     }
 
-    public override void ReturnObjectToPool(Entity entity)
+    public override void ReturnObjectToPool(Entity entity, float time)
     {
-        _myEntitesPool.ReturnObject(entity);
+        StartCoroutine(Wait(entity, time));
     }
 }

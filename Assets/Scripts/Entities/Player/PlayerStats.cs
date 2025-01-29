@@ -7,6 +7,7 @@ public class PlayerStats : ScriptableObject
     public float PlayerSensitivity;
     public float StartHP;
     public float PlayerSpeed;
+    public float PlayerInteractMaxDistance;
 
     [Header("Kick stats")]
     public float PlayerKickForce;
@@ -27,6 +28,8 @@ public class PlayerStats : ScriptableObject
     public float PlayerJumpUpForce;
     public float PlayerRollForce;
     public float PlayerSlideForce;
+    public float PlayerHangForce;
+    public float PlayerMaxHangDistance;
 
     [Header("Dashkick stats")]
     public float PlayerKickDashForce;
@@ -34,4 +37,5 @@ public class PlayerStats : ScriptableObject
     [Header("Effects")]
     public AudioClip KickSound;
     public ParticleSystem HitEffect;
+
 }

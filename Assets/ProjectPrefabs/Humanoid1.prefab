@@ -406,7 +406,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 6fb34e0a46210cd4596aa72efedd3f2b, type: 2}
   m_Controller: {fileID: 9100000, guid: 76957d08b05d0894fb68237dfb89b33f, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -434,7 +434,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4451905
+  m_Radius: 0.23870263
   m_Height: 1.7741486
   m_Direction: 1
   m_Center: {x: 0, y: 0.8870743, z: 0}

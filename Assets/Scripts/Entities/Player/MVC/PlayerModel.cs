@@ -9,8 +9,11 @@ public class PlayerModel : Entity
     public static bool canAbility = true;
     public static bool canKick = true;
     public static bool canAction = true;
-
     public bool isRunning;
+
+    public float damageMult = 1;
+
+    public event Action Pickeable = delegate { };
 
     public event Action<bool> OnRagdollState = delegate { };
     public event Action OnPlayerStart = delegate { };
@@ -18,6 +21,7 @@ public class PlayerModel : Entity
     public event Action OnJump = delegate { };
     public event Action OnRoll = delegate { };
     public event Action OnSlide = delegate { };
+    public event Action OnHang = delegate { };
     public event Action<float, float> OnMovement = delegate { };
     public event Action<bool> OnKickeableEnemy = delegate { };
 
@@ -28,7 +32,7 @@ public class PlayerModel : Entity
     private Player _player;
     private Rigidbody _playerRigidbody;
     private Camera _playerCamera;
-    
+
     private float _rotationX;
     private float _rotationY;
 
@@ -38,9 +42,14 @@ public class PlayerModel : Entity
 
     private float _collHeight;
     private Quaternion _actualRot;
-    private Vector3 _cameraPos;
 
     private Vector3 lastEnemyRaycastHit;
+    private float maxSlopeAngle = 60f;
+    private RaycastHit slopeHit;
+
+    private float maxHangDistance;
+
+    
 
     public PlayerModel(Player player, PlayerStats playerStats)
     {
@@ -75,21 +84,32 @@ public class PlayerModel : Entity
     {
         isRunning = true;
 
-        float movementX = 0f;
-        float movementZ = 0f;
-
-        movementX = playerDirection.x;
-        movementZ = playerDirection.z;
+        float movementX = playerDirection.x;
+        float movementZ = playerDirection.z;
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
+        playerDirection.Normalize();
 
-        if (playerDirection.magnitude > 0)
+        if (_playerRigidbody.velocity.magnitude < 8)
         {
-            playerDirection.Normalize();
-            _playerMovement = playerDirection * _playerStats.PlayerSpeed;
+            if (OnSlope())
+            {
+                Vector3 slopeDirection = GetSlopeDirection(playerDirection);
 
-            _playerRigidbody.AddForce(_playerMovement * 10, ForceMode.Force);
+
+                _playerRigidbody.AddForce(slopeDirection * _playerStats.PlayerSpeed * 10, ForceMode.Force);
+
+                if (_playerRigidbody.velocity.y > 0)
+                    _playerRigidbody.AddForce(Vector3.down * 40f, ForceMode.Force);
+            }
+            else
+            {
+                _playerRigidbody.AddForce(playerDirection * _playerStats.PlayerSpeed * 10, ForceMode.Force);
+            }
         }
+            
+
+        _playerRigidbody.useGravity = !OnSlope();
 
         _currentX = Mathf.Lerp(_currentX, movementX, .5f);
         _currentZ = Mathf.Lerp(_currentZ, movementZ, .5f);
@@ -133,13 +153,28 @@ public class PlayerModel : Entity
     #endregion
 
     #region Actions
+    public void LookForPickeables()
+    {
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, _playerStats.PlayerInteractMaxDistance))
+        {
+            var pickeable = hit.collider.GetComponent<IPickable>();
+
+            if (pickeable != null)
+            {
+                pickeable.Pick();
+                Debug.Log("IPickeable found.");
+            }
+            else pickeable = null;
+        }
+    }
+
     public void PerformJump()
     {
         _playerRigidbody.AddForce(_player.transform.up * _playerStats.PlayerJumpUpForce + _player.transform.forward* _playerStats.PlayerJumpForce, ForceMode.Impulse);
         OnJump();
     }
 
-    public void Roll(Vector3 playerDirection)
+    public void Dodge(Vector3 playerDirection)
     {
         float movementX = 0f;
         float movementZ = 0f;
@@ -168,7 +203,8 @@ public class PlayerModel : Entity
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
-        _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerSlideForce * 10), ForceMode.Impulse);
+        if (_playerRigidbody.velocity.magnitude < 10)
+            _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerSlideForce * 10), ForceMode.Force);
 
         OnSlide();
     }
@@ -217,6 +253,22 @@ public class PlayerModel : Entity
     #endregion
 
     #region Verifiers
+    
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(_player.transform.position, Vector3.down, out slopeHit, 1.9f * .5f + .3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeDirection(Vector3 dir)
+    {
+        return Vector3.ProjectOnPlane(dir, slopeHit.normal).normalized;
+    }
+
     public bool IsGrounded()
     {
         float groundCheckDistance = 1.1f;
@@ -241,4 +293,24 @@ public class PlayerModel : Entity
         }
     }
     #endregion
+
+    private IEnumerator LerpToPosition(Vector3 startPosition, Vector3 endPosition, float duration)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            t = Mathf.Clamp01(t);
+
+            Vector3 interpolatedPosition = Vector3.Lerp(startPosition, endPosition, t);
+
+            _playerRigidbody.Move(interpolatedPosition, Quaternion.identity);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        _playerRigidbody.Move(endPosition, Quaternion.identity);
+    }
 }

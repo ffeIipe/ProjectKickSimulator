@@ -39,7 +39,7 @@ public class FlyingKick : BaseKickStrategy
         if (enemy != null)
         {
             enemy.Stun();
-            enemy.TakeDamage(_player.playerStats.PlayerKickDamage);
+            enemy.TakeDamage(_player.playerStats.PlayerKickDamage * _player.Model.damageMult);
 
             onHit();
         }

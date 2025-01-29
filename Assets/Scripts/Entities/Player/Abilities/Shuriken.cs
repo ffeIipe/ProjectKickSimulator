@@ -5,7 +5,6 @@ using UnityEngine;
 public class Shuriken : Ability, IAbilities
 {
     private Rigidbody _shurikenRigidbody;   
-    private CountdownTimer _shurikenTimer;
     private Vector3 _currentVelocity;
 
     public Shuriken(string animString)
@@ -16,15 +15,7 @@ public class Shuriken : Ability, IAbilities
     public override void Start()
     {
         base.Start();
-
-        _shurikenTimer = new CountdownTimer(1f);
-        _shurikenTimer.OnTimerStop += ReturnObject;
-        _shurikenTimer.Start();
-    }
-
-    private void Update()
-    {
-        _shurikenTimer.Tick(Time.deltaTime);
+        ShurikenFactory.Instance.ReturnObjectToPool(this, 1f);
     }
 
     public void CastAbility(Vector3 direction, Vector3 playerHand)
@@ -44,14 +35,8 @@ public class Shuriken : Ability, IAbilities
         if (enemy)
         {
             enemy.Stun();
-            enemy.TakeDamage(GameManager.Instance.Player.playerStats.ShurikenDamage);
+            enemy.TakeDamage(GameManager.Instance.Player.playerStats.ShurikenDamage * GameManager.Instance.Player.Model.damageMult);
         }
-    }
-
-    private void ReturnObject()
-    {
-        ShurikenFactory.Instance.ReturnObjectToPool(this);
-        _shurikenTimer.Start();
     }
 
     public override void ResetEntity()
@@ -65,14 +50,12 @@ public class Shuriken : Ability, IAbilities
     {
         if (isPaused)
         {
-            if (_shurikenTimer.IsRunning) _shurikenTimer.Pause();
             _currentVelocity = _shurikenRigidbody.velocity;
             _shurikenRigidbody.constraints = RigidbodyConstraints.FreezeAll;
             _shurikenRigidbody.velocity = Vector3.zero;
         }
         else
         {
-            if (_shurikenTimer.IsRunning) _shurikenTimer.Resume();
             _shurikenRigidbody.constraints = RigidbodyConstraints.None;
             _shurikenRigidbody.velocity = _currentVelocity;
         }
