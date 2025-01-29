@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class TeleportState : BaseState
 {
-    public TeleportState(FSM stateMachine, EnemyController enemyController) : base(stateMachine, enemyController) { }
+    protected CountdownTimer _delayTeleport;
+
+    public TeleportState(FSM stateMachine, EnemyController enemyController) : base(stateMachine, enemyController)
+    {
+        _delayTeleport = new CountdownTimer(_enemyController.enemyStats.EnemyTeleportDelay);
+        _delayTeleport.OnTimerStop += FinishTeleport;
+    }
 
     public override void EnterState()
     {
-        _enemyController.Teleport();
-        //_delayTimer = new CountdownTimer(_enemyController.enemyStats.EnemyTeleportDelay);
-        //_delayTimer.Start();
-        //_delayTimer.OnTimerStop += _enemyController.ExecuteTeleport;
+        Teleport();
     }
 
     public override void ExitState()
@@ -21,19 +24,27 @@ public class TeleportState : BaseState
 
     public override void UpdateState()
     {
-        //_delayTimer.Tick(Time.deltaTime);
+        _delayTeleport.Tick(Time.deltaTime);
 
-        if(!_enemyController.isStunned || !_enemyController.isDead)
-        {
-            if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) <= _enemyController.enemyStats.EnemyRangeAttack)
-            {
-                _fsm.ChangeState("Attack");
-            }
-            else if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.position) > _enemyController.enemyStats.EnemyRangeTeleport)
-            {
-                //_delayTimer.OnTimerStop -= _enemyController.Teleport;
-                _fsm.ChangeState("Chase");
-            }
-        } 
+        if (_enemyController.isStunned || _enemyController.isDead || isTeleporting) return;
+
+        _agent.SetDestination(_enemyController.target.transform.position);
+        _fsm.ChangeState("Chase");
+    }
+
+    public void Teleport()
+    {
+        if (isTeleporting) return;
+
+        _delayTeleport.Start();
+        isTeleporting = true;
+        _enemyController.agent.isStopped = true;
+        _enemyController.enemyAnimator.SetTrigger("Teleport");
+    }
+
+    private void FinishTeleport() 
+    { 
+        isTeleporting = false; 
+        _enemyController.agent.isStopped = false;
     }
 }

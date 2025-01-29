@@ -12,15 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c0c5bea7ba67848a8df16994035ead, type: 3}
   m_Name: SharkStats
   m_EditorClassIdentifier: 
-  <StartHP>k__BackingField: 15
-  <EnemySpeed>k__BackingField: 2
-  <EnemyRangePatrol>k__BackingField: 7
-  <EnemyRangeChase>k__BackingField: 15
-  <EnemyRangeTeleport>k__BackingField: 0
-  <EnemyRangeAttack>k__BackingField: 2
-  <EnemyDamage>k__BackingField: 5
-  <EnemyTimeBetweenPatrol>k__BackingField: {x: 5, y: 8}
-  <StunDuration>k__BackingField: 2
-  <EnemyTeleportDelay>k__BackingField: 0
-  <EnemyAnimator>k__BackingField: {fileID: 22100000, guid: 44d6139bd4c2d924e865a7828c2cbb08,
-    type: 2}
+  StartHP: 35
+  EnemyPatrolSpeed: 2
+  EnemyChaseSpeed: 4
+  StunDuration: 1
+  SwordDamage: 10
+  SwordRadiusDamage: 0.5
+  EnemyTimeBetweenIdle: {x: 5, y: 7}
+  EnemyRangePatrol: 5
+  EnemyRangeChase: 6
+  EnemyRangeTeleport: 0
+  EnemyTeleportDelay: 5
+  EnemyRangeAttack: 1.5
+  EnemyDamage: 10
+  EnemyAnimator: {fileID: 22100000, guid: 44d6139bd4c2d924e865a7828c2cbb08, type: 2}
+  HitEffect: {fileID: 7120308771650782092, guid: bb3345b2c4d14154b84307508ac8b56b,
+    type: 3}

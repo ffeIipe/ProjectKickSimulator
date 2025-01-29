@@ -3,6 +3,11 @@ using UnityEngine.AI;
 
 public abstract class BaseState
 {
+    public static bool isIdle;
+    public static bool isPatrol;
+    public static bool isAttacking;
+    public static bool isTeleporting = false;
+
     protected FSM _fsm;
     protected EnemyController _enemyController;
     protected Animator _enemyAnimator;

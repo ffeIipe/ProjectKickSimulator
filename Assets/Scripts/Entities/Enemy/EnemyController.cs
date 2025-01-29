@@ -3,30 +3,31 @@ using UnityEngine;
 using UnityEngine.AI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CapsuleCollider))]
+
 public abstract class EnemyController : Entity
 {
     public EnemyStats enemyStats;
     public Animator enemyAnimator;
     public NavMeshAgent agent;
     public GameObject ragdoll;
+    public Collider excludeCollider;
 
-    public bool isAttacking;
-    public bool isDead;
-    public bool isStunned;
-    public bool isTeleporting = false;
     public static bool isAlert = false;
+    public bool isStunned {  get; private set; }
+    public bool isDead { get; private set; }
+    public Transform target { get; private set; }
 
     protected FSM _fsm;
+    protected CountdownTimer _deadCountdown;
+    protected CountdownTimer _timerStun;
 
-    public Transform target { get; private set; }
     private Rigidbody _enemyRigidBody;
     private Vector3 _currentVelocity;
     private Vector3 _currentPosition;
-
-    public CountdownTimer _patrolTimer;
-    protected CountdownTimer _deadCountdown;
-    protected CountdownTimer _timerStun;
-    protected CountdownTimer _delayTeleport;
 
     public override void Start()
     {
@@ -50,11 +51,8 @@ public abstract class EnemyController : Entity
         _timerStun = new CountdownTimer(enemyStats.StunDuration);
         _timerStun.OnTimerStop += RemoveStun;
 
-        _delayTeleport = new CountdownTimer(enemyStats.EnemyTeleportDelay);
-        _delayTeleport.OnTimerStop += FinishTeleport;
-
         currentHP = enemyStats.StartHP;
-        agent.speed = enemyStats.EnemySpeed;
+        agent.speed = enemyStats.EnemyPatrolSpeed;
     }
 
     #region Actionables
@@ -64,37 +62,35 @@ public abstract class EnemyController : Entity
 
         if (currentHP <= 0)
         {
-            isDead = true;
-            _fsm.enabled = false;
-            enemyAnimator.enabled = false;
-            SetRagdoll(true);
-            StartCoroutine(LerpDeadMaterial(2f));
-            _deadCountdown.Start();
+            BeforeDead();
         }
 
         if (currentHP > startHP) currentHP = startHP;
     }
 
-    public void SetKickState()
-    {
-        isAttacking = false;
-    }
-
     public void Stun()
     {
-        isStunned = true;
+        if (RandomChance(-.1f, 1f, .9f))
+        {
+            isStunned = true;
 
-        _timerStun.Reset();
-        _timerStun.Start();
-        
-        _fsm.enabled = false; 
+            _timerStun.Reset();
+            _timerStun.Start();
 
-        agent.enabled = false;
+            _fsm.enabled = false;
 
-        enemyAnimator.SetTrigger("Stun");
+            agent.enabled = false;
+
+            enemyAnimator.SetTrigger("Stun");
+        }  
     }
 
-    public void RemoveStun()
+    protected override void Die()
+    {
+        transform.position = Vector3.zero;
+    }
+
+    private void RemoveStun()
     {
         _fsm.enabled = true;
 
@@ -104,53 +100,40 @@ public abstract class EnemyController : Entity
 
         isStunned = false;
     }
-
-    protected override void Die()
-    {
-        transform.position = Vector3.zero;
-    }
     #endregion
 
     #region Behaviours
-    public void Patrol()
+    private void ExecuteTeleport() 
     {
-        if (agent.enabled == false) agent.enabled = true;
-        Vector3 randomDirection = Random.insideUnitSphere * enemyStats.EnemyRangePatrol;
-        randomDirection += transform.position;
-
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDirection, out hit, enemyStats.EnemyRangePatrol, NavMesh.AllAreas))
-        {
-            agent.SetDestination(hit.position);
-        }
-        _patrolTimer.Start();
-    }
-
-    public float RandomPatrolTime()
-    {
-        return Random.Range(enemyStats.EnemyTimeBetweenPatrol.x, enemyStats.EnemyTimeBetweenPatrol.y);
-    }
-
-    public void Teleport()
-    {
-        if (isTeleporting) return;
-
-        _delayTeleport.Start();
-        isTeleporting = true;
-        agent.speed = 0;
-        enemyAnimator.SetTrigger("Teleport");
-    }
-
-    public void ExecuteTeleport() 
-    {
-        agent.speed = enemyStats.EnemySpeed;
-        Vector3 randomPos = Random.insideUnitSphere * enemyStats.EnemyRangeAttack;
+        agent.speed = enemyStats.EnemyPatrolSpeed;
+        Vector3 randomPos = Random.insideUnitSphere * 1;
         randomPos.x += target.transform.position.x;
         randomPos.z += target.transform.position.z;
         transform.position = randomPos;
     }
 
-    private void FinishTeleport() { isTeleporting = false; }
+    private void BeforeDead()
+    {
+        var col = gameObject.GetComponentsInChildren<Collider>();
+        foreach (var go in col) { go.gameObject.layer = 9; }
+        isDead = true;
+        _fsm.enabled = false;
+        enemyAnimator.enabled = false;
+        SetRagdoll(true);
+        StartCoroutine(LerpDeadMaterial(2f));
+        _deadCountdown.Start();
+    }
+
+    private void FinishAttack() { BaseState.isAttacking = false; }
+
+    private bool RandomChance(float a, float b, float chance)
+    {
+        float x = Random.Range(a, b);
+
+        if (x < chance) return false;
+
+        else return true;
+    }
     #endregion
 
     #region Entity
@@ -207,19 +190,22 @@ public abstract class EnemyController : Entity
 
     private void SetRagdoll(bool b)
     {
-        foreach (Rigidbody r in ragdoll.GetComponents<Rigidbody>())
+        foreach (Rigidbody r in ragdoll.GetComponentsInChildren<Rigidbody>())
         {
             r.isKinematic = !b;
         }
-        foreach (Collider c in ragdoll.GetComponents<Collider>())
+        foreach (Collider col in ragdoll.GetComponentsInChildren<Collider>())
         {
-            c.enabled = b;
+            if (col != excludeCollider)
+            {
+                col.enabled = b;
+            }
         }
     }
     #endregion
 
     #region Debug 
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (enemyStats != null)
         {

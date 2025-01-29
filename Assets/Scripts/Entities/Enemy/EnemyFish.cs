@@ -20,7 +20,6 @@ public class EnemyFish : EnemyController
     {
         _fsm.Execute();
 
-        _delayTeleport.Tick(Time.deltaTime);
         _timerStun.Tick(Time.deltaTime);
         _deadCountdown.Tick(Time.deltaTime);
     }

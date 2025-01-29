@@ -8,4 +8,6 @@ AnimatorOverrideController:
   m_PrefabAsset: {fileID: 0}
   m_Name: OverrideCrab
   m_Controller: {fileID: 9100000, guid: 76957d08b05d0894fb68237dfb89b33f, type: 2}
-  m_Clips: []
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 474553550e8dbea45852190f1eb3c52c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4cfdc86d12c350a4d8aef162443fbc0b, type: 2}

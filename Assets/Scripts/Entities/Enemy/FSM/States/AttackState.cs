@@ -7,29 +7,40 @@ public class AttackState : BaseState
     public override void EnterState()
     {
         _enemyController.enemyAnimator.SetTrigger("Attack");
-        _enemyController.isAttacking = true;
+        Attack(true);
     }
 
     public override void ExitState()
     {
         _enemyAnimator.ResetTrigger("Attack");
+        Attack(false);
     }
 
     public override void UpdateState()
     {
+        //Debug.Log("I'm " + _enemyController.name + " and I'm in Attack");
+
         if (!_enemyController.isStunned || !_enemyController.isDead)
-        {   
+        {
             if (Vector3.Distance(_enemyController.transform.position, _enemyController.target.transform.position) > _enemyController.enemyStats.EnemyRangeAttack && !_enemyController.isDead)
             {
                 _fsm.ChangeState("Teleport");
                 _fsm.ChangeState("Chase");
             }
 
-            else if (!_enemyController.isAttacking)
+            else
             {
-                _enemyAnimator.SetTrigger("Attack");
-                _enemyController.isAttacking = true;
+                _fsm.ChangeState("Attack");
             }
         }
+    }
+
+    public void Attack(bool b)
+    {
+        isAttacking = b;
+
+        if (b == true) { _enemyController.agent.isStopped = b; }
+
+        else { _enemyController.agent.isStopped = b; }
     }
 }
