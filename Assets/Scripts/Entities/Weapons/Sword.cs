@@ -8,15 +8,11 @@ public class Sword : MeleeWeapon
 {
     public SwordStats swordStats;
 
-    private void Start()
-    {
-        damage = swordStats.SwordDamage;
-        animatorOverride = swordStats.AnimatorOverride;
-    }
-
     public override void Pick()
     {
         base.Pick();
-        player.playerAnimator.runtimeAnimatorController = animatorOverride;
+
+        damage = swordStats.SwordDamage;
+        player.playerAnimator.runtimeAnimatorController = swordStats.AnimatorOverride;
     }
 }

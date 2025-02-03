@@ -35,6 +35,7 @@ MonoBehaviour:
   PlayerHangForce: 20
   PlayerMaxHangDistance: 52.2
   PlayerKickDashForce: 5
+  DefaultAnimations: {fileID: 22100000, guid: 96b2637dc88dacf4b90d1ae70107ccc9, type: 2}
   KickSound: {fileID: 8300000, guid: 0ba6ec50cdba78c4c8ae845ea21eb95a, type: 3}
   HitEffect: {fileID: 7739341553591263376, guid: bb3345b2c4d14154b84307508ac8b56b,
     type: 3}

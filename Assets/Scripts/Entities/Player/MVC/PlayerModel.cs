@@ -12,6 +12,7 @@ public class PlayerModel : Entity
     public bool isRunning;
 
     public float damageMult = 1;
+    public float speedMult = 10;
 
     public event Action Pickeable = delegate { };
 
@@ -46,10 +47,6 @@ public class PlayerModel : Entity
     private Vector3 lastEnemyRaycastHit;
     private float maxSlopeAngle = 60f;
     private RaycastHit slopeHit;
-
-    private float maxHangDistance;
-
-    
 
     public PlayerModel(Player player, PlayerStats playerStats)
     {
@@ -97,14 +94,14 @@ public class PlayerModel : Entity
                 Vector3 slopeDirection = GetSlopeDirection(playerDirection);
 
 
-                _playerRigidbody.AddForce(slopeDirection * _playerStats.PlayerSpeed * 10, ForceMode.Force);
+                _playerRigidbody.AddForce(slopeDirection * _playerStats.PlayerSpeed * speedMult, ForceMode.Force);
 
                 if (_playerRigidbody.velocity.y > 0)
                     _playerRigidbody.AddForce(Vector3.down * 40f, ForceMode.Force);
             }
             else
             {
-                _playerRigidbody.AddForce(playerDirection * _playerStats.PlayerSpeed * 10, ForceMode.Force);
+                _playerRigidbody.AddForce(playerDirection * _playerStats.PlayerSpeed * speedMult, ForceMode.Force);
             }
         }
             
@@ -186,7 +183,7 @@ public class PlayerModel : Entity
 
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
-        _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerRollForce * 10), ForceMode.Impulse);
+        _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerRollForce * speedMult), ForceMode.Impulse);
 
         OnRoll();
     }
@@ -204,7 +201,7 @@ public class PlayerModel : Entity
         playerDirection = _player.transform.right * movementX + _player.transform.forward * movementZ;
 
         if (_playerRigidbody.velocity.magnitude < 10)
-            _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerSlideForce * 10), ForceMode.Force);
+            _playerRigidbody.AddForce(playerDirection.normalized * (_playerStats.PlayerSlideForce * speedMult), ForceMode.Force);
 
         OnSlide();
     }

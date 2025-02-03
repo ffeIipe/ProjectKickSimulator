@@ -35,7 +35,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerSpeed
-    value: 35
+    value: 40
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: PlayerInteractMaxDistance
+    value: 5
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerKickForce
@@ -47,7 +51,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerKickDamage
-    value: 5
+    value: 10
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerKickDistance
@@ -71,7 +75,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: ShurikenThrowForce
-    value: 5
+    value: 20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: SmokeBombThrowForce
@@ -79,11 +83,11 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerJumpForce
-    value: 75
+    value: 50
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerJumpUpForce
-    value: 200
+    value: 150
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerRollForce
@@ -91,20 +95,24 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerSlideForce
-    value: 20
+    value: 10
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerHangForce
-    value: 50
+    value: 20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerMaxHangDistance
-    value: 0
+    value: 52.2
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: PlayerKickDashForce
     value: 5
     objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: DefaultAnimations
+    value: 
+    objectReference: {fileID: 22100000, guid: 96b2637dc88dacf4b90d1ae70107ccc9, type: 2}
   - target: {fileID: 0}
     propertyPath: KickSound
     value: 

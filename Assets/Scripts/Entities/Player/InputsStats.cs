@@ -16,6 +16,4 @@ public class InputStats : ScriptableObject
     public KeyCode Dodge = KeyCode.LeftControl;
     public KeyCode Slide = KeyCode.LeftShift;
     public KeyCode Interact = KeyCode.E;
-
-    
 }

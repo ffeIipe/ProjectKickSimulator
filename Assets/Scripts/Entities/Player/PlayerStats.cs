@@ -35,7 +35,7 @@ public class PlayerStats : ScriptableObject
     public float PlayerKickDashForce;
 
     [Header("Effects")]
+    public AnimatorOverrideController DefaultAnimations;
     public AudioClip KickSound;
     public ParticleSystem HitEffect;
-
 }
